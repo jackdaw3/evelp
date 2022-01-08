@@ -1,0 +1,22 @@
+app:
+  serverPort: 8080
+
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  database: eve
+  username: root
+  password: changeit
+  charset: utf8
+  loc: Asia/Shanghai
+  maxIdleConn: 10
+  maxOpenConn: 100
+  connMaxLifetime: 600
+  autoMigrate: false
+
+data: 
+  refreshStaticData: false
+  staticDataPath: /opt/data/sde
+  refreshRemoteData: false
+  remoteDataAddress: https://esi.evetech.net/latest
+  remoteDataSource: tranquility
