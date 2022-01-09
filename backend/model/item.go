@@ -7,10 +7,9 @@ import (
 )
 
 type Item struct {
-	ItemId      int         `gorm:"type:int;not null;primary_key;autoIncrement:false"`
-	Name        Name        `gorm:"type:text" yaml:"name"`
-	Description Description `gorm:"type:text" yaml:"description"`
-	Volume      float64     `gorm:"type:double" yaml:"volume"`
+	ItemId int     `gorm:"type:int;not null;primary_key;autoIncrement:false"`
+	Name   Name    `gorm:"type:text" yaml:"name"`
+	Volume float64 `gorm:"type:double" yaml:"volume"`
 }
 
 type Items []Item

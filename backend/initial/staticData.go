@@ -22,8 +22,8 @@ func staticData() error {
 	corporationsInit.FilePath = global.Conf.Data.StaticDataPath + global.CorporationsFileName
 
 	bluePrintsInit := new(sde.BluePrintsInit)
-	bluePrintsInit.ProductFilePath = global.Conf.Data.StaticDataPath + global.BluePrintProducts
-	bluePrintsInit.MaterialFilePath = global.Conf.Data.StaticDataPath + global.BluePrintMaterials
+	bluePrintsInit.ProductFilePath = global.Conf.Data.StaticDataPath + global.BluePrintProductsFileName
+	bluePrintsInit.MaterialFilePath = global.Conf.Data.StaticDataPath + global.BluePrintMaterialsFileName
 
 	initializers := []sde.StaticDataInit{typeIDsInit, factionsInit, corporationsInit, bluePrintsInit}
 	for _, itinitializer := range initializers {

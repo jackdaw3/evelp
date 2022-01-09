@@ -7,9 +7,8 @@ import (
 )
 
 type Faction struct {
-	FactionId   int         `gorm:"type:int;not null;primary_key;autoIncrement:false"`
-	Name        Name        `gorm:"type:text" yaml:"nameID"`
-	Description Description `gorm:"type:text" yaml:"descriptionID"`
+	FactionId int  `gorm:"type:int;not null;primary_key;autoIncrement:false"`
+	Name      Name `gorm:"type:text" yaml:"nameID"`
 }
 
 type Factions []Faction
@@ -24,6 +23,12 @@ func GetFaction(id int) (*Faction, error) {
 	var faction Faction
 	result := global.DB.First(&faction, id)
 	return &faction, result.Error
+}
+
+func GetFactions() (*Factions, error) {
+	var factions Factions
+	result := global.DB.Find(&factions)
+	return &factions, result.Error
 }
 
 func SaveFaction(faction *Faction) error {

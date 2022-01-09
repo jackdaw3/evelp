@@ -1,5 +1,5 @@
 app:
-  serverPort: 8080
+  serverPort: :8000
 
 mysql:
   host: 127.0.0.1

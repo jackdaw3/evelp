@@ -1,7 +1,9 @@
 package main
 
 import (
+	"evelp/configs/global"
 	"evelp/initial"
+	"evelp/router"
 
 	log "github.com/sirupsen/logrus"
 
@@ -9,13 +11,9 @@ import (
 )
 
 func main() {
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	engine := gin.Default()
+	router.LoadRouter(engine)
+	engine.Run(global.Conf.App.ServerPort)
 }
 
 func init() {

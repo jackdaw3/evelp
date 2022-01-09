@@ -7,10 +7,9 @@ import (
 )
 
 type Corporation struct {
-	CorporationId int         `gorm:"type:int;not null;primary_key;autoIncrement:false"`
-	FactionId     int         `gorm:"type:int" yaml:"factionID"`
-	Name          Name        `gorm:"type:text" yaml:"nameID"`
-	Description   Description `gorm:"type:text" yaml:"descriptionID"`
+	CorporationId int  `gorm:"type:int;not null;primary_key;autoIncrement:false"`
+	FactionId     int  `gorm:"type:int" yaml:"factionID"`
+	Name          Name `gorm:"type:text" yaml:"nameID"`
 }
 
 type Corporations []Corporation
@@ -32,6 +31,12 @@ func GetCorporation(id int) (*Corporation, error) {
 func GetCorporations() (*Corporations, error) {
 	var corporations Corporations
 	result := global.DB.Find(&corporations)
+	return &corporations, result.Error
+}
+
+func GetCorporationsByFaction(factionId int) (*Corporations, error) {
+	var corporations Corporations
+	result := global.DB.Where("faction_id <> ?", factionId).Find(&corporations)
 	return &corporations, result.Error
 }
 
