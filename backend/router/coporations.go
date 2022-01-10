@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Corporations(c *gin.Context) {
+func corporations(c *gin.Context) {
 	factionId, err := strconv.Atoi(c.Param("factionId"))
 	if err != nil {
 		c.AbortWithError(500, err)

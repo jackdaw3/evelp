@@ -19,6 +19,12 @@ func (regions Regions) Less(i, j int) bool { return regions[i].RegionId < region
 
 func (regions Regions) Swap(i, j int) { regions[i], regions[j] = regions[j], regions[i] }
 
+func GetRegions() (*Regions, error) {
+	var regions Regions
+	result := global.DB.Find(&regions)
+	return &regions, result.Error
+}
+
 func SaveRegion(region *Region) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&region).Error; err != nil {
 		return err
