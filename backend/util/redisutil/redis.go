@@ -1,1 +1,1 @@
-package redisutil
+package redisUtil
