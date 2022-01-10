@@ -1,4 +1,4 @@
-package netUtil
+package netutil
 
 import (
 	"io/ioutil"

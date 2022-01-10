@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"evelp/config/global"
 	"evelp/model"
-	"evelp/util/netUtil"
+	"evelp/util/netutil"
 	"fmt"
 	"sort"
 
@@ -41,7 +41,7 @@ func (r *ReginosInit) Refresh() error {
 func (r *ReginosInit) getAllRegions() {
 	req := fmt.Sprintf("%s/universe/regions/?datasource=%s", global.Conf.Data.RemoteDataAddress, global.Conf.Data.RemoteDataSource)
 
-	body, err := netUtil.GetWithRetries(client, req)
+	body, err := netutil.GetWithRetries(client, req)
 	if err != nil {
 		log.Errorf("Get regions failed: %s", err.Error())
 	}
@@ -72,7 +72,7 @@ func getRegion(region *model.Region) {
 	for _, lang := range langs {
 		req := fmt.Sprintf("%s/universe/regions/%d/?datasource=%s&language=%s", global.Conf.Data.RemoteDataAddress, region.RegionId, global.Conf.Data.RemoteDataSource, lang)
 
-		body, err := netUtil.GetWithRetries(client, req)
+		body, err := netutil.GetWithRetries(client, req)
 		if err != nil {
 			log.Errorf("Get region %d failed: %s", region.RegionId, err.Error())
 		}
