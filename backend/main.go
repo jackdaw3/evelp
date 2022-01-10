@@ -1,7 +1,7 @@
 package main
 
 import (
-	"evelp/configs/global"
+	"evelp/config/global"
 	"evelp/initial"
 	"evelp/router"
 

@@ -1,7 +1,7 @@
 package model
 
 import (
-	"evelp/configs/global"
+	"evelp/config/global"
 
 	"gorm.io/gorm/clause"
 )

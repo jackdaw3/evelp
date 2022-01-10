@@ -1,7 +1,7 @@
 package initial
 
 import (
-	"evelp/configs/global"
+	"evelp/config/global"
 	"evelp/initial/internal/sde"
 	"time"
 

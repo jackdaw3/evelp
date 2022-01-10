@@ -12,9 +12,11 @@ func Corporations(c *gin.Context) {
 	if err != nil {
 		c.AbortWithError(500, err)
 	}
+
 	corporations, err := model.GetCorporationsByFaction(factionId)
 	if err != nil {
 		c.AbortWithError(500, err)
 	}
+
 	c.JSON(200, corporations)
 }

@@ -11,11 +11,12 @@ func remoteData() error {
 	log.Info("Start refresh remote esi data to DB.")
 	start := time.Now()
 
+	regionsInit := new(esi.ReginosInit)
 	offersInit := new(esi.OffersInit)
 
-	initializers := []esi.OffersInit{*offersInit}
+	initializers := []esi.RemoteDataInit{regionsInit, offersInit}
 	for _, itinitializer := range initializers {
-		if err := itinitializer.Refrsh(); err != nil {
+		if err := itinitializer.Refresh(); err != nil {
 			return err
 		}
 	}

@@ -1,7 +1,7 @@
 package initial
 
 import (
-	"evelp/configs/global"
+	"evelp/config/global"
 )
 
 func Init() error {

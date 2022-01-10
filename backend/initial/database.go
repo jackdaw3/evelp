@@ -1,7 +1,7 @@
 package initial
 
 import (
-	"evelp/configs/global"
+	"evelp/config/global"
 	"evelp/model"
 	"fmt"
 	"net/url"
@@ -45,7 +45,7 @@ func database() error {
 func autoMigrate() error {
 	log.Info("Auto migrate db tables.")
 
-	models := []interface{}{&model.Item{}, &model.Faction{}, &model.Corporation{}, &model.Offer{}, &model.BluePrint{}}
+	models := []interface{}{&model.Item{}, &model.Faction{}, &model.Corporation{}, &model.Offer{}, &model.BluePrint{}, &model.Region{}}
 
 	for _, m := range models {
 		if err := global.DB.AutoMigrate(m); err != nil {

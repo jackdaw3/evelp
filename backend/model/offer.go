@@ -3,7 +3,7 @@ package model
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"evelp/configs/global"
+	"evelp/config/global"
 	"fmt"
 	"sort"
 	"strconv"

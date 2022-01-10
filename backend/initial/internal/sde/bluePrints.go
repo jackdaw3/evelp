@@ -23,17 +23,20 @@ type BluePrintsInit struct {
 }
 
 func (b *BluePrintsInit) Refresh() error {
-	log.Info("Start load bluePrints", b.ProductFilePath, b.MaterialFilePath)
+	log.Infof("Start load bluePrints %s and %s", b.ProductFilePath, b.MaterialFilePath)
 	b.bluePrintsMap = make(map[int]*model.BluePrint)
 
 	bluePrints, err := b.load()
 	if err != nil {
 		return err
 	}
+	log.Info("Load bluePrints finished.")
 
+	log.Info("Save bluePrints to DB.")
 	if err := model.SaveBluePrints(bluePrints); err != nil {
 		return err
 	}
+	log.Info("BluePrints have saved to DB.")
 
 	return nil
 }

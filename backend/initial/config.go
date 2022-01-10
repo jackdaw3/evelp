@@ -1,7 +1,7 @@
 package initial
 
 import (
-	"evelp/configs/global"
+	"evelp/config/global"
 	"os"
 
 	log "github.com/sirupsen/logrus"
@@ -42,7 +42,7 @@ func initEnv() error {
 
 func initConfig() error {
 
-	viper.AddConfigPath(global.WORKSPACE + "/configs")
+	viper.AddConfigPath(global.WORKSPACE + "/config")
 	viper.SetConfigName("application-" + global.ENV)
 	viper.SetConfigType("yaml")
 

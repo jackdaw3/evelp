@@ -11,5 +11,6 @@ func Factions(c *gin.Context) {
 	if err != nil {
 		c.AbortWithError(500, err)
 	}
+
 	c.JSON(200, factions)
 }

@@ -3,7 +3,7 @@ package model
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"evelp/configs/global"
+	"evelp/config/global"
 	"fmt"
 
 	"gorm.io/gorm/clause"
@@ -88,7 +88,6 @@ func (manufactMaterials ManufactMaterials) Value() (driver.Value, error) {
 	if err != nil {
 		return nil, nil
 	}
-
 	return string(str), nil
 }
 
