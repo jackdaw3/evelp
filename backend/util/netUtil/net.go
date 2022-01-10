@@ -1,4 +1,4 @@
-package util
+package netUtil
 
 import (
 	"io/ioutil"
@@ -19,7 +19,7 @@ func GetWithRetries(client *http.Client, request string) ([]byte, error) {
 	var err error
 
 	for _, backoff := range backoffSchedule {
-		body, err = get(client, request)
+		body, err = Get(client, request)
 
 		if err == nil {
 			break
@@ -38,7 +38,7 @@ func GetWithRetries(client *http.Client, request string) ([]byte, error) {
 	return body, nil
 }
 
-func get(client *http.Client, request string) ([]byte, error) {
+func Get(client *http.Client, request string) ([]byte, error) {
 	resp, err := client.Get(request)
 	if err != nil {
 		return nil, err
