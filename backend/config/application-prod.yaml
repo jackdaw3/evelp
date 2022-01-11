@@ -18,5 +18,6 @@ data:
   refreshStaticData: false
   staticDataPath: /opt/data/sde
   refreshRemoteData: false
+  refreshUnusualRemoteData: false
   remoteDataAddress: https://esi.evetech.net/latest
   remoteDataSource: tranquility

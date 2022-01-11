@@ -1,7 +1,6 @@
 package esi
 
 import (
-	"context"
 	"encoding/json"
 	"evelp/config/global"
 	"evelp/model"
@@ -16,24 +15,27 @@ type ReginosInit struct {
 	regions *model.Regions
 }
 
-var langs [6]string = [6]string{global.DE, global.EN, global.FR, global.JA, global.RU, global.ZH}
-
 func (r *ReginosInit) Refresh() error {
 	log.Infof("Start load regions from %s.", global.Conf.Data.RemoteDataAddress)
 	r.getAllRegions()
+	sort.Sort(r.regions)
+
 	for _, region := range *r.regions {
+		exist, err := model.IsRegionExist(region.RegionId)
+		if err != nil {
+			log.Errorf("Check region %d exist failed %s.", region.RegionId, err)
+		}
+
+		if exist {
+			continue
+		}
+
 		wg.Add(1)
+		acquireSem(weigth)
 		go getRegion(region)
 	}
 	wg.Wait()
-	log.Info("Regions loaded.")
-
-	log.Info("Save regions to DB.")
-	sort.Sort(r.regions)
-	if err := model.SaveRegions(r.regions); err != nil {
-		return err
-	}
-	log.Infof("%d regions have saved to DB.", r.regions.Len())
+	log.Info("Regions loaded and have saved to DB..")
 
 	return nil
 }
@@ -64,10 +66,6 @@ func (r *ReginosInit) getAllRegions() {
 func getRegion(region *model.Region) {
 	defer wg.Done()
 	defer sem.Release(weigth)
-	if err := sem.Acquire(context.Background(), weigth); err != nil {
-		log.Errorf("Region %d get sem failed", region.RegionId, err.Error())
-		return
-	}
 
 	for _, lang := range langs {
 		req := fmt.Sprintf("%s/universe/regions/%d/?datasource=%s&language=%s", global.Conf.Data.RemoteDataAddress, region.RegionId, global.Conf.Data.RemoteDataSource, lang)
@@ -83,7 +81,12 @@ func getRegion(region *model.Region) {
 			log.Errorf("Unmarshal region %d json failed: %s", region.RegionId, err.Error())
 		}
 
-		name := resultMap["name"].(string)
+		name, ok := resultMap["name"].(string)
+		if !ok {
+			log.Errorf("Region %d %v cast to string failed.", region.RegionId, resultMap["name"])
+			continue
+		}
+
 		switch lang {
 		case global.DE:
 			region.Name.De = name
@@ -98,5 +101,9 @@ func getRegion(region *model.Region) {
 		case global.ZH:
 			region.Name.Zh = name
 		}
+	}
+
+	if err := model.SaveRegion(region); err != nil {
+		log.Errorf("Region %d failed to save to DB.", region.RegionId)
 	}
 }

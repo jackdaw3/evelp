@@ -52,6 +52,7 @@ func (o *OffersInit) getOffersMap() error {
 
 	for _, corporation := range *corporations {
 		wg.Add(1)
+		acquireSem(weigth)
 		go getOffers(corporation.CorporationId)
 	}
 
@@ -92,7 +93,6 @@ func (o *OffersInit) covertOffersWrapper(offersWrapper offersWrapper) {
 func getOffers(corporationId int) {
 	defer wg.Done()
 	defer sem.Release(weigth)
-	acquireSem(weigth)
 
 	req := fmt.Sprintf("%s/loyalty/stores/%s/offers/?datasource=%s", global.Conf.Data.RemoteDataAddress, strconv.Itoa(corporationId), global.Conf.Data.RemoteDataSource)
 	body, err := netutil.GetWithRetries(client, req)

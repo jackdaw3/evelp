@@ -15,9 +15,10 @@ mysql:
   autoMigrate: true
 
 data: 
-  refreshStaticData: true
+  refreshStaticData: false
   staticDataPath: C://Users//Administrator//dev//data//
-  refreshRemoteData: true
+  refreshRemoteData: false
+  refreshUnusualRemoteData: true
   remoteDataAddress: https://esi.evetech.net/latest
   remoteDataSource: tranquility
 

@@ -40,3 +40,16 @@ func SaveRegions(regions *Regions) error {
 	}
 	return nil
 }
+
+func IsRegionExist(regionId int) (bool, error) {
+	var region Region
+
+	count := int64(0)
+	err := global.DB.Model(&region).Where("region_id = ?", regionId).Count(&count).Error
+	if err != nil {
+		return false, err
+	}
+
+	exists := count > 0
+	return exists, nil
+}

@@ -30,5 +30,11 @@ func Init() error {
 			return err
 		}
 	}
+
+	if global.Conf.Data.RefreshUnusualRemoteData {
+		if err := unusualRemoteData(); err != nil {
+			return err
+		}
+	}
 	return nil
 }
