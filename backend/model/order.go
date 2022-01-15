@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	"fmt"
 	"math"
 	"sort"
 	"time"
@@ -65,6 +64,9 @@ func getOrdersPrice(scope float64, orders *Orders) (float64, error) {
 	if err != nil {
 		return 0, err
 	}
+	if size == 0 {
+		return 0, nil
+	}
 
 	var sum float64
 	var count int64
@@ -91,8 +93,8 @@ func getOrdersScopeSize(scope float64, orders *Orders) (int64, error) {
 		size += order.VolumeRemain
 	}
 
-	if size <= 0 || scope <= 0 {
-		return 0, fmt.Errorf("GetScopeSize incorrect paratermer with size:%d and scope:%f", size, scope)
+	if size == 0 || scope == 0 {
+		return 0, nil
 	}
 
 	result := int64(math.Ceil(float64(size) * scope))

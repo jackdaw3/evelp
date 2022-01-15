@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"evelp/config/global"
 	"evelp/model"
-	"evelp/util/netutil"
+	"evelp/util/netUtil"
 	"fmt"
 	"sort"
 
@@ -43,7 +43,7 @@ func (s *StarSystemsInit) Refresh() error {
 func (s *StarSystemsInit) getAllStarSystems() {
 	req := fmt.Sprintf("%s/universe/systems/?datasource=%s", global.Conf.Data.RemoteDataAddress, global.Conf.Data.RemoteDataSource)
 
-	body, err := netutil.GetWithRetries(client, req)
+	body, err := netUtil.GetWithRetries(client, req)
 	if err != nil {
 		log.Errorf("Get starSystems failed: %s", err.Error())
 	}
@@ -70,7 +70,7 @@ func getStarSystem(starSystem *model.StarSystem) {
 	for _, lang := range langs {
 		req := fmt.Sprintf("%s/universe/systems/%d/?datasource=%s&language=%s", global.Conf.Data.RemoteDataAddress, starSystem.SystemId, global.Conf.Data.RemoteDataSource, lang)
 
-		body, err := netutil.GetWithRetries(client, req)
+		body, err := netUtil.GetWithRetries(client, req)
 		if err != nil {
 			log.Errorf("Get starSystem %d failed: %s", starSystem.SystemId, err.Error())
 		}

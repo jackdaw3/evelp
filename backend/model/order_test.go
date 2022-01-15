@@ -8,7 +8,10 @@ import (
 )
 
 var orders Orders
-var invalidOrders Orders
+var multipleItemOrders Orders
+var buyOrders Orders
+var sellOrders Orders
+
 var (
 	scope1 float64 = 0.01
 	scope2 float64 = 0.05
@@ -25,27 +28,30 @@ func setUp() {
 	time5, _ := time.Parse(time.RFC3339, "2021-12-15T11:54:30Z")
 	time6, _ := time.Parse(time.RFC3339, "2022-01-14T04:58:10Z")
 
-	orders = Orders{
-		Order{6150132220, 28758, time5, 90, 30000142, 38100000, 9, 15, false},
-		Order{6173392220, 28758, time1, 90, 30000142, 26350000, 28, 30, true},
-		Order{6150131000, 28758, time4, 90, 30000142, 38500000, 92, 100, false},
-		Order{6171724721, 28758, time2, 90, 30000142, 27850000, 3, 30, true},
-		Order{6169089210, 28758, time3, 90, 30000142, 27760000, 5, 10, true},
-		Order{6173556403, 28758, time6, 90, 30000142, 36730000, 12, 50, false},
-	}
+	order1 := Order{6173392220, 28758, time1, 90, 30000142, 26350000, 28, 30, true}
+	order2 := Order{6171724721, 28758, time2, 90, 30000142, 27850000, 3, 30, true}
+	order3 := Order{6169089210, 28758, time3, 90, 30000142, 27760000, 5, 10, true}
 
-	invalidOrders = Orders{
-		Order{6150132220, 28758, time5, 90, 30000142, 38100000, 9, 15, false},
-		Order{6173392220, 28758, time1, 90, 30000142, 26350000, 28, 30, true},
-		Order{6150131000, 28759, time4, 90, 30000142, 38500000, 92, 100, false},
-	}
+	order4 := Order{6150131000, 28758, time4, 90, 30000142, 38500000, 92, 100, false}
+	order5 := Order{6150132220, 28758, time5, 90, 30000142, 38100000, 9, 15, false}
+	order6 := Order{6173556403, 28758, time6, 90, 30000142, 36730000, 12, 50, false}
+	anotherItemOrder := Order{6150131000, 28759, time4, 90, 30000142, 38500000, 92, 100, false}
+
+	orders = Orders{order5, order1, order4, order2, order3, order6}
+	buyOrders = Orders{order1, order2, order3}
+	sellOrders = Orders{order4, order5, order6}
+	multipleItemOrders = Orders{order1, order4, anotherItemOrder}
 }
 func TestGetHighestBuyPrice(t *testing.T) {
 	setUp()
 
-	invaidHighestPrice, err := invalidOrders.GetHighestBuyPrice(scope1)
-	assert.Zero(t, invaidHighestPrice)
+	invaidHighestPrice1, err := multipleItemOrders.GetHighestBuyPrice(scope1)
+	assert.Zero(t, invaidHighestPrice1)
 	assert.Equal(t, "Orders have multiple itemIds", err.Error())
+
+	invaidHighestPrice2, err := sellOrders.GetHighestBuyPrice(scope1)
+	assert.Zero(t, invaidHighestPrice2)
+	assert.Nil(t, err)
 
 	highestPrice1, err := orders.GetHighestBuyPrice(scope1)
 	assert.Equal(t, float64(27850000), highestPrice1)
@@ -71,9 +77,13 @@ func TestGetHighestBuyPrice(t *testing.T) {
 func TestGetLowestSellPrice(t *testing.T) {
 	setUp()
 
-	invaidLowestPrice, err := invalidOrders.GetLowestSellPrice(scope1)
-	assert.Zero(t, invaidLowestPrice)
+	invaidLowestPrice1, err := multipleItemOrders.GetLowestSellPrice(scope1)
+	assert.Zero(t, invaidLowestPrice1)
 	assert.Equal(t, "Orders have multiple itemIds", err.Error())
+
+	invaidLowestPrice2, err := buyOrders.GetLowestSellPrice(scope1)
+	assert.Zero(t, invaidLowestPrice2)
+	assert.Nil(t, err)
 
 	lowestPrice1, err := orders.GetLowestSellPrice(scope1)
 	assert.Equal(t, float64(36730000), lowestPrice1)

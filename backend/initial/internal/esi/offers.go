@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"evelp/config/global"
 	"evelp/model"
-	"evelp/util/netutil"
+	"evelp/util/netUtil"
 	"fmt"
 	"sort"
 	"strconv"
@@ -95,7 +95,7 @@ func getOffers(corporationId int) {
 	defer sem.Release(weigth)
 
 	req := fmt.Sprintf("%s/loyalty/stores/%s/offers/?datasource=%s", global.Conf.Data.RemoteDataAddress, strconv.Itoa(corporationId), global.Conf.Data.RemoteDataSource)
-	body, err := netutil.GetWithRetries(client, req)
+	body, err := netUtil.GetWithRetries(client, req)
 	if err != nil {
 		log.Errorf("Get corporation %d's failed: %s", corporationId, err.Error())
 	}

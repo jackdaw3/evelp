@@ -1,4 +1,4 @@
-package netutil
+package netUtil
 
 import (
 	"io/ioutil"
@@ -25,13 +25,13 @@ func GetWithRetries(client *http.Client, request string) ([]byte, error) {
 			break
 		}
 
-		log.Warnf("Request %s error: %+v\n", request, err)
+		log.Warn(err)
 		log.Warnf("Request %s retrying in %v\n", request, backoff)
 		time.Sleep(backoff)
 	}
 
 	if err != nil {
-		log.Errorf("Request %s error: %+v\n", request, err)
+		log.Errorf("All request retries failed: %v\n", err)
 		return nil, err
 	}
 
