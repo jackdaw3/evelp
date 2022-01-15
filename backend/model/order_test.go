@@ -8,6 +8,13 @@ import (
 )
 
 var orders Orders
+var (
+	scope1 float64 = 0.01
+	scope2 float64 = 0.05
+	scope3 float64 = 0.1
+	scope4 float64 = 0.2
+	scope5 float64 = 0.5
+)
 
 func setUp() {
 	time1, _ := time.Parse(time.RFC3339, "2022-01-13T22:51:59Z")
@@ -29,23 +36,18 @@ func setUp() {
 func TestGetHighestBuyPrice(t *testing.T) {
 	setUp()
 
-	var scope1 float64 = 0.01
 	highestPrice1, _ := orders.GetHighestBuyPrice(scope1)
 	assert.Equal(t, float64(27850000), highestPrice1)
 
-	var scope2 float64 = 0.05
 	highestPrice2, _ := orders.GetHighestBuyPrice(scope2)
 	assert.Equal(t, float64(27850000), highestPrice2)
 
-	var scope3 float64 = 0.1
 	highestPrice3, _ := orders.GetHighestBuyPrice(scope3)
 	assert.Equal(t, float64(27827500), highestPrice3)
 
-	var scope4 float64 = 0.2
 	highestPrice4, _ := orders.GetHighestBuyPrice(scope4)
 	assert.Equal(t, float64(27793750), highestPrice4)
 
-	var scope5 float64 = 0.5
 	highestPrice5, _ := orders.GetHighestBuyPrice(scope5)
 	assert.Equal(t, int64(26991666), int64(highestPrice5))
 }
@@ -53,23 +55,18 @@ func TestGetHighestBuyPrice(t *testing.T) {
 func TestGetLowestSellPrice(t *testing.T) {
 	setUp()
 
-	var scope1 float64 = 0.01
 	lowestPrice1, _ := orders.GetLowestSellPrice(scope1)
 	assert.Equal(t, float64(36730000), lowestPrice1)
 
-	var scope2 float64 = 0.05
 	lowestPrice2, _ := orders.GetLowestSellPrice(scope2)
 	assert.Equal(t, float64(36730000), lowestPrice2)
 
-	var scope3 float64 = 0.1
 	lowestPrice3, _ := orders.GetLowestSellPrice(scope3)
 	assert.Equal(t, float64(36730000), lowestPrice3)
 
-	var scope4 float64 = 0.2
 	lowestPrice4, _ := orders.GetLowestSellPrice(scope4)
 	assert.Equal(t, float64(37420000), lowestPrice4)
 
-	var scope5 float64 = 0.5
 	lowestPrice5, _ := orders.GetLowestSellPrice(scope5)
 	assert.Equal(t, int64(38064210), int64(lowestPrice5))
 }
