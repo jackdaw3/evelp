@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"sort"
@@ -28,6 +29,10 @@ func (orders Orders) Less(i, j int) bool { return orders[i].Price < orders[j].Pr
 func (orders Orders) Swap(i, j int) { orders[i], orders[j] = orders[j], orders[i] }
 
 func (o *Orders) GetHighestBuyPrice(scope float64) (float64, error) {
+	if err := checkOrdersValid(o); err != nil {
+		return 0, err
+	}
+
 	var buyOrders Orders
 	for _, order := range *o {
 		if order.IsBuyOrder {
@@ -40,6 +45,10 @@ func (o *Orders) GetHighestBuyPrice(scope float64) (float64, error) {
 }
 
 func (o *Orders) GetLowestSellPrice(scope float64) (float64, error) {
+	if err := checkOrdersValid(o); err != nil {
+		return 0, err
+	}
+
 	var sellOrders Orders
 	for _, order := range *o {
 		if !order.IsBuyOrder {
@@ -52,7 +61,7 @@ func (o *Orders) GetLowestSellPrice(scope float64) (float64, error) {
 }
 
 func getOrdersPrice(scope float64, orders *Orders) (float64, error) {
-	size, err := getScopeSize(scope, orders)
+	size, err := getOrdersScopeSize(scope, orders)
 	if err != nil {
 		return 0, err
 	}
@@ -76,7 +85,7 @@ func getOrdersPrice(scope float64, orders *Orders) (float64, error) {
 	return sum / float64(size), nil
 }
 
-func getScopeSize(scope float64, orders *Orders) (int64, error) {
+func getOrdersScopeSize(scope float64, orders *Orders) (int64, error) {
 	var size int64
 	for _, order := range *orders {
 		size += order.VolumeRemain
@@ -92,4 +101,14 @@ func getScopeSize(scope float64, orders *Orders) (int64, error) {
 	} else {
 		return result, nil
 	}
+}
+
+func checkOrdersValid(orders *Orders) error {
+	var itemId int = (*orders)[0].ItemId
+	for _, order := range *orders {
+		if order.ItemId != itemId {
+			return errors.New("Orders have multiple itemIds")
+		}
+	}
+	return nil
 }
