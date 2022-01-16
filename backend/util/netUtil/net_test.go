@@ -32,9 +32,8 @@ func TestGetWithRetries(t *testing.T) {
 	go setUpServer()
 
 	client := &http.Client{Timeout: 1 * time.Second}
-
 	body, err := GetWithRetries(client, request)
-	str := strings.ReplaceAll(string(body), "\n", "")
-	assert.Equal(t, name, str)
-	assert.Nil(t, err)
+
+	assert.Equal(t, name, strings.ReplaceAll(string(body), "\n", ""))
+	assert.NoError(t, err)
 }

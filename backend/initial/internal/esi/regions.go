@@ -7,6 +7,7 @@ import (
 	"evelp/util/netUtil"
 	"fmt"
 	"sort"
+	"sync"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -21,21 +22,30 @@ func (r *ReginosInit) Refresh() error {
 	sort.Sort(r.regions)
 
 	for _, region := range *r.regions {
-		exist, err := model.IsRegionExist(region.RegionId)
+		exist, err := region.IsExist()
 		if err != nil {
 			log.Errorf("Check region %d exist failed %s.", region.RegionId, err)
 		}
 
 		if exist {
-			continue
+			valid, err := region.IsVaild()
+			if err != nil {
+				log.Errorf("Check region %d valid failed %s.", region.RegionId, err)
+			}
+
+			if valid {
+				continue
+			}
 		}
 
 		wg.Add(1)
-		acquireSem(weigth)
-		go getRegion(region)
+		if err := global.ANTS.Submit(r.getRegion(region, &wg)); err != nil {
+			return err
+		}
 	}
+
 	wg.Wait()
-	log.Info("Regions loaded and have saved to DB..")
+	log.Info("Regions have loaded and saved to DB.")
 
 	return nil
 }
@@ -63,47 +73,48 @@ func (r *ReginosInit) getAllRegions() {
 	r.regions = &regions
 }
 
-func getRegion(region *model.Region) {
-	defer wg.Done()
-	defer sem.Release(weigth)
+func (r *ReginosInit) getRegion(region *model.Region, wg *sync.WaitGroup) func() {
+	return func() {
+		defer wg.Done()
 
-	for _, lang := range langs {
-		req := fmt.Sprintf("%s/universe/regions/%d/?datasource=%s&language=%s", global.Conf.Data.RemoteDataAddress, region.RegionId, global.Conf.Data.RemoteDataSource, lang)
+		for _, lang := range global.LANGS {
+			req := fmt.Sprintf("%s/universe/regions/%d/?datasource=%s&language=%s", global.Conf.Data.RemoteDataAddress, region.RegionId, global.Conf.Data.RemoteDataSource, lang)
 
-		body, err := netUtil.GetWithRetries(client, req)
-		if err != nil {
-			log.Errorf("Get region %d failed: %s", region.RegionId, err.Error())
+			body, err := netUtil.GetWithRetries(client, req)
+			if err != nil {
+				log.Errorf("Get region %d failed: %s", region.RegionId, err.Error())
+			}
+
+			var resultMap map[string]interface{}
+
+			if err = json.Unmarshal(body, &resultMap); err != nil {
+				log.Errorf("Unmarshal region %d json failed: %s", region.RegionId, err.Error())
+			}
+
+			name, ok := resultMap["name"].(string)
+			if !ok {
+				log.Errorf("Region %d %v cast to string failed.", region.RegionId, resultMap["name"])
+				continue
+			}
+
+			switch lang {
+			case global.DE:
+				region.Name.De = name
+			case global.EN:
+				region.Name.En = name
+			case global.FR:
+				region.Name.Fr = name
+			case global.JA:
+				region.Name.Ja = name
+			case global.RU:
+				region.Name.Ru = name
+			case global.ZH:
+				region.Name.Zh = name
+			}
 		}
 
-		var resultMap map[string]interface{}
-
-		if err = json.Unmarshal(body, &resultMap); err != nil {
-			log.Errorf("Unmarshal region %d json failed: %s", region.RegionId, err.Error())
+		if err := model.SaveRegion(region); err != nil {
+			log.Errorf("Region %d failed to save to DB.", region.RegionId)
 		}
-
-		name, ok := resultMap["name"].(string)
-		if !ok {
-			log.Errorf("Region %d %v cast to string failed.", region.RegionId, resultMap["name"])
-			continue
-		}
-
-		switch lang {
-		case global.DE:
-			region.Name.De = name
-		case global.EN:
-			region.Name.En = name
-		case global.FR:
-			region.Name.Fr = name
-		case global.JA:
-			region.Name.Ja = name
-		case global.RU:
-			region.Name.Ru = name
-		case global.ZH:
-			region.Name.Zh = name
-		}
-	}
-
-	if err := model.SaveRegion(region); err != nil {
-		log.Errorf("Region %d failed to save to DB.", region.RegionId)
 	}
 }

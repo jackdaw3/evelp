@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"sort"
 	"strconv"
+	"sync"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -21,15 +22,17 @@ type offersWrapper struct {
 	corporationId int
 }
 
+var mu sync.Mutex
+
 func (o *OffersInit) Refresh() error {
 	log.Infof("Start load offers from %s.", global.Conf.Data.RemoteDataAddress)
 	o.offersMap = make(map[int]*model.Offer)
 	if err := o.getOffersMap(); err != nil {
 		return err
 	}
-	log.Info("Offers loaded.")
+	log.Info("Offers have loaded.")
 
-	log.Info("Save offers to DB.")
+	log.Info("Start save offers to DB.")
 	var offers model.Offers
 	for _, v := range o.offersMap {
 		offers = append(offers, v)
@@ -38,7 +41,7 @@ func (o *OffersInit) Refresh() error {
 	if err := model.SaveOffers(&offers); err != nil {
 		return err
 	}
-	log.Infof("%d offers have saved to DB.", offers.Len())
+	log.Infof("%d offers have saved or updated to DB.", offers.Len())
 
 	return nil
 }
@@ -52,23 +55,19 @@ func (o *OffersInit) getOffersMap() error {
 
 	for _, corporation := range *corporations {
 		wg.Add(1)
-		acquireSem(weigth)
-		go getOffers(corporation.CorporationId)
+		if err := global.ANTS.Submit(o.getOffers(corporation.CorporationId, &wg)); err != nil {
+			return err
+		}
 	}
 
-	go func() {
-		wg.Wait()
-		close(channel)
-	}()
-
-	for offersWrapper := range channel {
-		o.covertOffersWrapper(offersWrapper)
-	}
-
+	wg.Wait()
 	return nil
 }
 
 func (o *OffersInit) covertOffersWrapper(offersWrapper offersWrapper) {
+	defer mu.Unlock()
+	mu.Lock()
+
 	for _, offer := range *offersWrapper.offers {
 		if value, ok := o.offersMap[offer.OfferId]; !ok {
 			offer.CorporationIDs = append(offer.CorporationIDs, offersWrapper.corporationId)
@@ -90,25 +89,25 @@ func (o *OffersInit) covertOffersWrapper(offersWrapper offersWrapper) {
 	}
 }
 
-func getOffers(corporationId int) {
-	defer wg.Done()
-	defer sem.Release(weigth)
+func (o *OffersInit) getOffers(corporationId int, wg *sync.WaitGroup) func() {
+	return func() {
+		defer wg.Done()
+		req := fmt.Sprintf("%s/loyalty/stores/%s/offers/?datasource=%s", global.Conf.Data.RemoteDataAddress, strconv.Itoa(corporationId), global.Conf.Data.RemoteDataSource)
+		body, err := netUtil.GetWithRetries(client, req)
+		if err != nil {
+			log.Errorf("Get corporation %d's failed: %s", corporationId, err.Error())
+		}
 
-	req := fmt.Sprintf("%s/loyalty/stores/%s/offers/?datasource=%s", global.Conf.Data.RemoteDataAddress, strconv.Itoa(corporationId), global.Conf.Data.RemoteDataSource)
-	body, err := netUtil.GetWithRetries(client, req)
-	if err != nil {
-		log.Errorf("Get corporation %d's failed: %s", corporationId, err.Error())
+		var offers model.Offers
+		if err = json.Unmarshal(body, &offers); err != nil {
+			log.Errorf("Unmarshal corporation %d's offers json failed: %s", corporationId, err.Error())
+		}
+
+		if offers.Len() == 0 {
+			log.Debugf("Corporation %d has no offer.", corporationId)
+			return
+		}
+
+		o.covertOffersWrapper(offersWrapper{&offers, corporationId})
 	}
-
-	var offers model.Offers
-	if err = json.Unmarshal(body, &offers); err != nil {
-		log.Errorf("Unmarshal corporation %d's offers json failed: %s", corporationId, err.Error())
-	}
-
-	if offers.Len() == 0 {
-		log.Warnf("Corporation %d has no offer.", corporationId)
-		return
-	}
-
-	channel <- offersWrapper{&offers, corporationId}
 }

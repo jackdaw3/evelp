@@ -2,6 +2,7 @@ package model
 
 import (
 	"evelp/config/global"
+	"reflect"
 
 	"gorm.io/gorm/clause"
 )
@@ -18,6 +19,12 @@ func (regions Regions) Len() int { return len(regions) }
 func (regions Regions) Less(i, j int) bool { return regions[i].RegionId < regions[j].RegionId }
 
 func (regions Regions) Swap(i, j int) { regions[i], regions[j] = regions[j], regions[i] }
+
+func GetRegion(regionId int) (*Region, error) {
+	var region Region
+	result := global.DB.First(&region, regionId)
+	return &region, result.Error
+}
 
 func GetRegions() (*Regions, error) {
 	var regions Regions
@@ -41,15 +48,33 @@ func SaveRegions(regions *Regions) error {
 	return nil
 }
 
-func IsRegionExist(regionId int) (bool, error) {
+func (r Region) IsExist() (bool, error) {
 	var region Region
 
 	count := int64(0)
-	err := global.DB.Model(&region).Where("region_id = ?", regionId).Count(&count).Error
+	err := global.DB.Model(&region).Where("region_id = ?", r.RegionId).Count(&count).Error
 	if err != nil {
 		return false, err
 	}
 
 	exists := count > 0
 	return exists, nil
+}
+
+func (r Region) IsVaild() (bool, error) {
+	region, err := GetRegion(r.RegionId)
+	if err != nil {
+		return false, err
+	}
+
+	value := reflect.ValueOf(region.Name)
+	langsCount := value.NumField()
+	for i := 0; i < langsCount; i++ {
+		field := value.Field(i)
+		if len(field.String()) == 0 {
+			return false, nil
+		}
+	}
+
+	return true, nil
 }

@@ -19,6 +19,10 @@ func Init() error {
 		}
 	}
 
+	if err := initAnts(); err != nil {
+		return err
+	}
+
 	if global.Conf.Data.RefreshStaticData {
 		if err := staticData(); err != nil {
 			return err
@@ -31,10 +35,5 @@ func Init() error {
 		}
 	}
 
-	if global.Conf.Data.RefreshUnusualRemoteData {
-		if err := unusualRemoteData(); err != nil {
-			return err
-		}
-	}
 	return nil
 }

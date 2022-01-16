@@ -17,8 +17,7 @@ mysql:
 data: 
   refreshStaticData: false
   staticDataPath: C://Users//Administrator//dev//data//
-  refreshRemoteData: false
-  refreshUnusualRemoteData: true
+  refreshRemoteData: true
   remoteDataAddress: https://esi.evetech.net/latest
   remoteDataSource: tranquility
 

@@ -23,9 +23,8 @@ type MySQLConfig struct {
 }
 
 type DataConfig struct {
-	RefreshStaticData        bool `yaml:"refreshStaticData"`
-	RefreshRemoteData        bool `yaml:"refreshRemoteData"`
-	RefreshUnusualRemoteData bool `yaml:"refreshUnusualRemoteData"`
+	RefreshStaticData bool `yaml:"refreshStaticData"`
+	RefreshRemoteData bool `yaml:"refreshRemoteData"`
 
 	StaticDataPath    string `yaml:"staticDataPath"`
 	RemoteDataAddress string `yaml:"remoteDataAddress"`

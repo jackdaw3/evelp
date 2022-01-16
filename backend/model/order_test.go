@@ -51,27 +51,27 @@ func TestGetHighestBuyPrice(t *testing.T) {
 
 	invaidHighestPrice2, err := sellOrders.GetHighestBuyPrice(scope1)
 	assert.Zero(t, invaidHighestPrice2)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	highestPrice1, err := orders.GetHighestBuyPrice(scope1)
 	assert.Equal(t, float64(27850000), highestPrice1)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	highestPrice2, err := orders.GetHighestBuyPrice(scope2)
 	assert.Equal(t, float64(27850000), highestPrice2)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	highestPrice3, err := orders.GetHighestBuyPrice(scope3)
 	assert.Equal(t, float64(27827500), highestPrice3)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	highestPrice4, err := orders.GetHighestBuyPrice(scope4)
 	assert.Equal(t, float64(27793750), highestPrice4)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	highestPrice5, err := orders.GetHighestBuyPrice(scope5)
 	assert.Equal(t, int64(26991666), int64(highestPrice5))
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 }
 
 func TestGetLowestSellPrice(t *testing.T) {
@@ -83,25 +83,25 @@ func TestGetLowestSellPrice(t *testing.T) {
 
 	invaidLowestPrice2, err := buyOrders.GetLowestSellPrice(scope1)
 	assert.Zero(t, invaidLowestPrice2)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	lowestPrice1, err := orders.GetLowestSellPrice(scope1)
 	assert.Equal(t, float64(36730000), lowestPrice1)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	lowestPrice2, err := orders.GetLowestSellPrice(scope2)
 	assert.Equal(t, float64(36730000), lowestPrice2)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	lowestPrice3, err := orders.GetLowestSellPrice(scope3)
 	assert.Equal(t, float64(36730000), lowestPrice3)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	lowestPrice4, err := orders.GetLowestSellPrice(scope4)
 	assert.Equal(t, float64(37420000), lowestPrice4)
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 
 	lowestPrice5, err := orders.GetLowestSellPrice(scope5)
 	assert.Equal(t, int64(38064210), int64(lowestPrice5))
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 }

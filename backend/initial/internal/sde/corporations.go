@@ -21,7 +21,7 @@ func (c *CorporationsInit) Refresh() error {
 	}
 	log.Info("Load ", c.FilePath, " finished.")
 
-	log.Info("Save corporations to DB.")
+	log.Info("Start save corporations to DB.")
 	if err := model.SaveCorporations(c.corporations); err != nil {
 		return err
 	}

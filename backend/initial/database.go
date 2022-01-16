@@ -43,7 +43,7 @@ func database() error {
 }
 
 func autoMigrate() error {
-	log.Info("Auto migrate db tables.")
+	log.Info("Auto migrate DB tables.")
 
 	models := []interface{}{&model.Item{}, &model.Faction{}, &model.Corporation{}, &model.Offer{}, &model.BluePrint{}, &model.Region{}, &model.StarSystem{}}
 

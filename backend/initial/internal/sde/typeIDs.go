@@ -21,7 +21,7 @@ func (t *TypeIDsInit) Refresh() error {
 	}
 	log.Info("Load ", t.FilePath, " finished.")
 
-	log.Info("Save types to DB.")
+	log.Info("Start save types to DB.")
 	if err := model.SaveItems(t.items); err != nil {
 		return err
 	}

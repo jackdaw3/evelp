@@ -32,7 +32,7 @@ func (b *BluePrintsInit) Refresh() error {
 	}
 	log.Info("Load bluePrints finished.")
 
-	log.Info("Save bluePrints to DB.")
+	log.Info("Start save bluePrints to DB.")
 	if err := model.SaveBluePrints(bluePrints); err != nil {
 		return err
 	}

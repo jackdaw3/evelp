@@ -21,7 +21,7 @@ func (f *FactionsInit) Refresh() error {
 	}
 	log.Info("Load ", f.FilePath, " finished.")
 
-	log.Info("Save factions to DB.")
+	log.Info("Start save factions to DB.")
 	if err := model.SaveFactions(f.factions); err != nil {
 		return err
 	}
