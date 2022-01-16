@@ -47,7 +47,6 @@ func (o *OffersInit) Refresh() error {
 }
 
 func (o *OffersInit) getOffersMap() error {
-
 	corporations, err := model.GetCorporations()
 	if err != nil {
 		return err
@@ -92,6 +91,7 @@ func (o *OffersInit) covertOffersWrapper(offersWrapper offersWrapper) {
 func (o *OffersInit) getOffers(corporationId int, wg *sync.WaitGroup) func() {
 	return func() {
 		defer wg.Done()
+
 		req := fmt.Sprintf("%s/loyalty/stores/%s/offers/?datasource=%s", global.Conf.Data.RemoteDataAddress, strconv.Itoa(corporationId), global.Conf.Data.RemoteDataSource)
 		body, err := netUtil.GetWithRetries(client, req)
 		if err != nil {
