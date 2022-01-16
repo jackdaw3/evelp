@@ -13,7 +13,7 @@ func config() error {
 		return err
 	}
 
-	if err := initConfig(); err != nil {
+	if err := initViper(); err != nil {
 		return err
 	}
 
@@ -40,8 +40,7 @@ func initEnv() error {
 	return nil
 }
 
-func initConfig() error {
-
+func initViper() error {
 	viper.AddConfigPath(global.WORKSPACE + "/config")
 	viper.SetConfigName("application-" + global.ENV)
 	viper.SetConfigType("yaml")
