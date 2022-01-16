@@ -31,8 +31,15 @@ type DataConfig struct {
 	RemoteDataSource  string `yaml:"remoteDataSource"`
 }
 
+type RedisConfig struct {
+	Address  string `yaml:"address"`
+	Password string `yaml:"password"`
+	Database int    `yaml:"database"`
+}
+
 type Config struct {
 	App   AppConfig   `yaml:"app"`
 	MySQL MySQLConfig `yaml:"mysql"`
+	Redis RedisConfig `yaml:"redis"`
 	Data  DataConfig  `yaml:"data"`
 }

@@ -12,12 +12,17 @@ mysql:
   maxIdleConn: 10
   maxOpenConn: 100
   connMaxLifetime: 600
-  autoMigrate: true
+  autoMigrate: false
+
+redis:
+  address: 127.0.0.1:6379
+  password: changeit
+  database: 0
 
 data: 
   refreshStaticData: false
   staticDataPath: C://Users//Administrator//dev//data//
-  refreshRemoteData: true
+  refreshRemoteData: false
   remoteDataAddress: https://esi.evetech.net/latest
   remoteDataSource: tranquility
 

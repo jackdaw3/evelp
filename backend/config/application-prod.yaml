@@ -14,6 +14,11 @@ mysql:
   connMaxLifetime: 600
   autoMigrate: false
 
+redis:
+  address: 127.0.0.1:6379
+  password: changeit
+  database: 0
+
 data: 
   refreshStaticData: false
   staticDataPath: /opt/data/sde

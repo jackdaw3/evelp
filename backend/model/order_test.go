@@ -7,10 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var orders Orders
-var multipleItemOrders Orders
-var buyOrders Orders
-var sellOrders Orders
+var (
+	orders             Orders
+	multipleItemOrders Orders
+	buyOrders          Orders
+	sellOrders         Orders
+)
 
 var (
 	scope1 float64 = 0.01

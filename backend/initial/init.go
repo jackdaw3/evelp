@@ -19,6 +19,10 @@ func Init() error {
 		}
 	}
 
+	if err := initRedis(); err != nil {
+		return err
+	}
+
 	if err := initAnts(); err != nil {
 		return err
 	}
