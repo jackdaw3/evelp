@@ -22,12 +22,11 @@ func database() error {
 		global.Conf.MySQL.Charset,
 		url.QueryEscape(global.Conf.MySQL.Loc))
 
-	log.Info("Connect to mysql:", dsn)
-
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return err
 	}
+	log.Info("Connect to mysql:", dsn)
 
 	sqlDB, err := db.DB()
 	if err != nil {

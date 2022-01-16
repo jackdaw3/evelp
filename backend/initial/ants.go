@@ -7,11 +7,11 @@ import (
 )
 
 func initAnts() error {
-	p, err := ants.NewPool(3)
+	pool, err := ants.NewPool(3)
 	if err != nil {
 		return err
 	}
 
-	global.ANTS = p
+	global.ANTS = pool
 	return nil
 }

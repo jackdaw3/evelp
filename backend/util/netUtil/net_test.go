@@ -12,7 +12,7 @@ import (
 
 var (
 	request string = "http://127.0.0.1:9090/hello"
-	name    string = "hello"
+	hello   string = "hello"
 )
 
 func setUpServer() {
@@ -22,7 +22,7 @@ func setUpServer() {
 			time.Sleep(1500 * time.Millisecond)
 		}
 		count++
-		fmt.Fprintln(w, name)
+		fmt.Fprintln(w, hello)
 
 	})
 	http.ListenAndServe(":9090", nil)
@@ -34,6 +34,6 @@ func TestGetWithRetries(t *testing.T) {
 	client := &http.Client{Timeout: 1 * time.Second}
 	body, err := GetWithRetries(client, request)
 
-	assert.Equal(t, name, strings.ReplaceAll(string(body), "\n", ""))
+	assert.Equal(t, hello, strings.ReplaceAll(string(body), "\n", ""))
 	assert.NoError(t, err)
 }
