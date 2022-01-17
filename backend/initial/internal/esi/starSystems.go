@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"evelp/config/global"
 	"evelp/model"
-	"evelp/util/netUtil"
+	"evelp/util/net"
 	"fmt"
+	"io/ioutil"
 	"sort"
 	"sync"
 
@@ -49,17 +50,25 @@ func (s *StarSystemsInit) Refresh() error {
 }
 
 func (s *StarSystemsInit) getAllStarSystems() {
-	req := fmt.Sprintf("%s/universe/systems/?datasource=%s", global.Conf.Data.RemoteDataAddress, global.Conf.Data.RemoteDataSource)
+	req := fmt.Sprintf("%s/universe/systems/?datasource=%s",
+		global.Conf.Data.RemoteDataAddress,
+		global.Conf.Data.RemoteDataSource,
+	)
 
-	body, err := netUtil.GetWithRetries(client, req)
+	resp, err := net.GetWithRetries(client, req)
 	if err != nil {
-		log.Errorf("Get starSystems failed: %s", err.Error())
+		log.Errorf("Get starSystems failed: %v", err)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Errorf("Get starSystems' body failed: %v", err)
 	}
 
 	var idArray []int
 
 	if err = json.Unmarshal(body, &idArray); err != nil {
-		log.Errorf("Unmarshal starSystems json failed: %s", err.Error())
+		log.Errorf("Unmarshal starSystems json failed: %v", err)
 	}
 
 	var starSystems model.StarSystems
@@ -76,17 +85,27 @@ func (s *StarSystemsInit) getStarSystem(starSystem *model.StarSystem, wg *sync.W
 		defer wg.Done()
 
 		for _, lang := range global.LANGS {
-			req := fmt.Sprintf("%s/universe/systems/%d/?datasource=%s&language=%s", global.Conf.Data.RemoteDataAddress, starSystem.SystemId, global.Conf.Data.RemoteDataSource, lang)
+			req := fmt.Sprintf("%s/universe/systems/%d/?datasource=%s&language=%s",
+				global.Conf.Data.RemoteDataAddress,
+				starSystem.SystemId,
+				global.Conf.Data.RemoteDataSource,
+				lang,
+			)
 
-			body, err := netUtil.GetWithRetries(client, req)
+			resp, err := net.GetWithRetries(client, req)
 			if err != nil {
-				log.Errorf("Get starSystem %d failed: %s", starSystem.SystemId, err.Error())
+				log.Errorf("Get starSystem %d failed: %v", starSystem.SystemId, err)
+			}
+
+			body, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				log.Errorf("Get starSystem %d's body failed: %v", starSystem.SystemId, err)
 			}
 
 			var resultMap map[string]interface{}
 
 			if err = json.Unmarshal(body, &resultMap); err != nil {
-				log.Errorf("Unmarshal starSystem %d json failed: %s", starSystem.SystemId, err.Error())
+				log.Errorf("Unmarshal starSystem %d json failed: %v", starSystem.SystemId, err)
 			}
 
 			name, ok := resultMap["name"].(string)

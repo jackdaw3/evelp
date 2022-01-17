@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"evelp/config/global"
 	"evelp/model"
-	"evelp/util/netUtil"
+	"evelp/util/net"
 	"fmt"
+	"io/ioutil"
 	"sort"
 	"strconv"
 	"sync"
@@ -92,15 +93,25 @@ func (o *OffersInit) getOffers(corporationId int, wg *sync.WaitGroup) func() {
 	return func() {
 		defer wg.Done()
 
-		req := fmt.Sprintf("%s/loyalty/stores/%s/offers/?datasource=%s", global.Conf.Data.RemoteDataAddress, strconv.Itoa(corporationId), global.Conf.Data.RemoteDataSource)
-		body, err := netUtil.GetWithRetries(client, req)
+		req := fmt.Sprintf("%s/loyalty/stores/%s/offers/?datasource=%s",
+			global.Conf.Data.RemoteDataAddress,
+			strconv.Itoa(corporationId),
+			global.Conf.Data.RemoteDataSource,
+		)
+
+		resp, err := net.GetWithRetries(client, req)
 		if err != nil {
-			log.Errorf("Get corporation %d's failed: %s", corporationId, err.Error())
+			log.Errorf("Get corporation %d's failed: %v", corporationId, err)
+		}
+
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Errorf("Get corporation %d's body failed: %v", corporationId, err)
 		}
 
 		var offers model.Offers
 		if err = json.Unmarshal(body, &offers); err != nil {
-			log.Errorf("Unmarshal corporation %d's offers json failed: %s", corporationId, err.Error())
+			log.Errorf("Unmarshal corporation %d's offers json failed: %v", corporationId, err)
 		}
 
 		if offers.Len() == 0 {

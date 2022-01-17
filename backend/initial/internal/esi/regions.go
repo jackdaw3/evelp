@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"evelp/config/global"
 	"evelp/model"
-	"evelp/util/netUtil"
+	"evelp/util/net"
 	"fmt"
+	"io/ioutil"
 	"sort"
 	"sync"
 
@@ -24,13 +25,13 @@ func (r *ReginosInit) Refresh() error {
 	for _, region := range *r.regions {
 		exist, err := region.IsExist()
 		if err != nil {
-			log.Errorf("Check region %d exist failed %s.", region.RegionId, err)
+			log.Errorf("Check region %d exist failed %v.", region.RegionId, err)
 		}
 
 		if exist {
 			valid, err := region.IsVaild()
 			if err != nil {
-				log.Errorf("Check region %d valid failed %s.", region.RegionId, err)
+				log.Errorf("Check region %d valid failed %v.", region.RegionId, err)
 			}
 
 			if valid {
@@ -51,17 +52,25 @@ func (r *ReginosInit) Refresh() error {
 }
 
 func (r *ReginosInit) getAllRegions() {
-	req := fmt.Sprintf("%s/universe/regions/?datasource=%s", global.Conf.Data.RemoteDataAddress, global.Conf.Data.RemoteDataSource)
+	req := fmt.Sprintf("%s/universe/regions/?datasource=%s",
+		global.Conf.Data.RemoteDataAddress,
+		global.Conf.Data.RemoteDataSource,
+	)
 
-	body, err := netUtil.GetWithRetries(client, req)
+	resp, err := net.GetWithRetries(client, req)
 	if err != nil {
-		log.Errorf("Get regions failed: %s", err.Error())
+		log.Errorf("Get regions failed: %v", err)
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Errorf("Get regions'body failed: %v", err)
 	}
 
 	var idArray []int
 
 	if err = json.Unmarshal(body, &idArray); err != nil {
-		log.Errorf("Unmarshal regions json failed: %s", err.Error())
+		log.Errorf("Unmarshal regions json failed: %v", err)
 	}
 
 	var regions model.Regions
@@ -78,17 +87,27 @@ func (r *ReginosInit) getRegion(region *model.Region, wg *sync.WaitGroup) func()
 		defer wg.Done()
 
 		for _, lang := range global.LANGS {
-			req := fmt.Sprintf("%s/universe/regions/%d/?datasource=%s&language=%s", global.Conf.Data.RemoteDataAddress, region.RegionId, global.Conf.Data.RemoteDataSource, lang)
+			req := fmt.Sprintf("%s/universe/regions/%d/?datasource=%s&language=%s",
+				global.Conf.Data.RemoteDataAddress,
+				region.RegionId,
+				global.Conf.Data.RemoteDataSource,
+				lang,
+			)
 
-			body, err := netUtil.GetWithRetries(client, req)
+			resp, err := net.GetWithRetries(client, req)
 			if err != nil {
-				log.Errorf("Get region %d failed: %s", region.RegionId, err.Error())
+				log.Errorf("Get region %d failed: %v", region.RegionId, err)
+			}
+
+			body, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				log.Errorf("Get region %d's body failed: %v", region.RegionId, err)
 			}
 
 			var resultMap map[string]interface{}
 
 			if err = json.Unmarshal(body, &resultMap); err != nil {
-				log.Errorf("Unmarshal region %d json failed: %s", region.RegionId, err.Error())
+				log.Errorf("Unmarshal region %d json failed: %v", region.RegionId, err)
 			}
 
 			name, ok := resultMap["name"].(string)
