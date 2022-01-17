@@ -39,5 +39,9 @@ func Init() error {
 		}
 	}
 
+	if err := schedule(); err != nil {
+		return err
+	}
+
 	return nil
 }

@@ -17,6 +17,7 @@ type Order struct {
 	VolumeRemain int64     `json:"volume_remain"`
 	VolumeTotal  int64     `json:"volume_total"`
 	IsBuyOrder   bool      `json:"is_buy_order"`
+	LastUpdated  time.Time
 }
 
 type Orders []Order

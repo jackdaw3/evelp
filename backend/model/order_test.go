@@ -30,14 +30,14 @@ func setUp() {
 	time5, _ := time.Parse(time.RFC3339, "2021-12-15T11:54:30Z")
 	time6, _ := time.Parse(time.RFC3339, "2022-01-14T04:58:10Z")
 
-	order1 := Order{6173392220, 28758, time1, 90, 30000142, 26350000, 28, 30, true}
-	order2 := Order{6171724721, 28758, time2, 90, 30000142, 27850000, 3, 30, true}
-	order3 := Order{6169089210, 28758, time3, 90, 30000142, 27760000, 5, 10, true}
+	order1 := Order{6173392220, 28758, time1, 90, 30000142, 26350000, 28, 30, true, time.Now()}
+	order2 := Order{6171724721, 28758, time2, 90, 30000142, 27850000, 3, 30, true, time.Now()}
+	order3 := Order{6169089210, 28758, time3, 90, 30000142, 27760000, 5, 10, true, time.Now()}
 
-	order4 := Order{6150131000, 28758, time4, 90, 30000142, 38500000, 92, 100, false}
-	order5 := Order{6150132220, 28758, time5, 90, 30000142, 38100000, 9, 15, false}
-	order6 := Order{6173556403, 28758, time6, 90, 30000142, 36730000, 12, 50, false}
-	anotherItemOrder := Order{6150131000, 28759, time4, 90, 30000142, 38500000, 92, 100, false}
+	order4 := Order{6150131000, 28758, time4, 90, 30000142, 38500000, 92, 100, false, time.Now()}
+	order5 := Order{6150132220, 28758, time5, 90, 30000142, 38100000, 9, 15, false, time.Now()}
+	order6 := Order{6173556403, 28758, time6, 90, 30000142, 36730000, 12, 50, false, time.Now()}
+	anotherItemOrder := Order{6150131000, 28759, time4, 90, 30000142, 38500000, 92, 100, false, time.Now()}
 
 	orders = Orders{order5, order1, order4, order2, order3, order6}
 	buyOrders = Orders{order1, order2, order3}

@@ -33,7 +33,8 @@ type OrderService struct {
 	expirationTime time.Duration
 }
 
-func NewOrderService(orders map[string]*model.Orders, expirationTime time.Duration) *OrderService {
+func NewOrderService(expirationTime time.Duration) *OrderService {
+	orders := make(map[string]*model.Orders)
 	return &OrderService{orders, expirationTime}
 }
 
@@ -58,13 +59,13 @@ func (o *OrderService) LoadOrders() func() {
 					log.Errorf("Save orders to redis failed:%v", key, err)
 				}
 			}
+
+			o.clearMap()
 		}
 	}
 }
 
 func (o *OrderService) loadOrdersByRegion(regionId int) error {
-	defer o.clearMap()
-
 	pages, err := o.getOrdersPage(regionId)
 	if err != nil {
 		return err
@@ -142,6 +143,7 @@ func (o *OrderService) syncPutToMap(key string, order *model.Order) {
 	mu.Lock()
 
 	orders, ok := o.orders[key]
+	order.LastUpdated = time.Now()
 	if ok {
 		val := append(*orders, *order)
 		o.orders[key] = &val
