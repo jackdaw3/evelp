@@ -8,15 +8,15 @@ import (
 )
 
 type Order struct {
-	OrderId      int
-	ItemId       int
-	Issued       time.Time
-	Duration     int
-	SystemId     int
-	Price        float64
-	VolumeRemain int64
-	VolumeTotal  int64
-	IsBuyOrder   bool
+	OrderId      int       `json:"order_id"`
+	ItemId       int       `json:"type_id"`
+	Issued       time.Time `json:"issued"`
+	Duration     int       `json:"duration"`
+	SystemId     int       `json:"system_id"`
+	Price        float64   `json:"price"`
+	VolumeRemain int64     `json:"volume_remain"`
+	VolumeTotal  int64     `json:"volume_total"`
+	IsBuyOrder   bool      `json:"is_buy_order"`
 }
 
 type Orders []Order
@@ -28,7 +28,7 @@ func (orders Orders) Less(i, j int) bool { return orders[i].Price < orders[j].Pr
 func (orders Orders) Swap(i, j int) { orders[i], orders[j] = orders[j], orders[i] }
 
 func (o *Orders) GetHighestBuyPrice(scope float64) (float64, error) {
-	if err := checkOrdersValid(o); err != nil {
+	if err := o.isValid(); err != nil {
 		return 0, err
 	}
 
@@ -40,11 +40,11 @@ func (o *Orders) GetHighestBuyPrice(scope float64) (float64, error) {
 	}
 	sort.Sort(sort.Reverse(buyOrders))
 
-	return getOrdersPrice(scope, &buyOrders)
+	return buyOrders.getOrdersPrice(scope)
 }
 
 func (o *Orders) GetLowestSellPrice(scope float64) (float64, error) {
-	if err := checkOrdersValid(o); err != nil {
+	if err := o.isValid(); err != nil {
 		return 0, err
 	}
 
@@ -56,11 +56,11 @@ func (o *Orders) GetLowestSellPrice(scope float64) (float64, error) {
 	}
 	sort.Sort(sellOrders)
 
-	return getOrdersPrice(scope, &sellOrders)
+	return sellOrders.getOrdersPrice(scope)
 }
 
-func getOrdersPrice(scope float64, orders *Orders) (float64, error) {
-	size, err := getOrdersScopeSize(scope, orders)
+func (o *Orders) getOrdersPrice(scope float64) (float64, error) {
+	size, err := o.getOrdersScopeSize(scope)
 	if err != nil {
 		return 0, err
 	}
@@ -70,9 +70,9 @@ func getOrdersPrice(scope float64, orders *Orders) (float64, error) {
 
 	var sum float64
 	var count int64
-	for i := 0; i < len(*orders) && count < size; i++ {
-		volume := (*orders)[i].VolumeRemain
-		price := (*orders)[i].Price
+	for i := 0; i < len(*o) && count < size; i++ {
+		volume := (*o)[i].VolumeRemain
+		price := (*o)[i].Price
 
 		if count+volume > size {
 			volume = size - count
@@ -87,9 +87,9 @@ func getOrdersPrice(scope float64, orders *Orders) (float64, error) {
 	return sum / float64(size), nil
 }
 
-func getOrdersScopeSize(scope float64, orders *Orders) (int64, error) {
+func (o *Orders) getOrdersScopeSize(scope float64) (int64, error) {
 	var size int64
-	for _, order := range *orders {
+	for _, order := range *o {
 		size += order.VolumeRemain
 	}
 
@@ -105,9 +105,9 @@ func getOrdersScopeSize(scope float64, orders *Orders) (int64, error) {
 	}
 }
 
-func checkOrdersValid(orders *Orders) error {
-	var itemId int = (*orders)[0].ItemId
-	for _, order := range *orders {
+func (o *Orders) isValid() error {
+	var itemId int = (*o)[0].ItemId
+	for _, order := range *o {
 		if order.ItemId != itemId {
 			return errors.New("Orders have multiple itemIds")
 		}

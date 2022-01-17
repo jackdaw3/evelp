@@ -2,6 +2,7 @@ package main
 
 import (
 	"evelp/config/global"
+	"evelp/cron"
 	"evelp/initial"
 	"evelp/router"
 
@@ -11,9 +12,12 @@ import (
 )
 
 func main() {
+	cron.Cron()
+
 	engine := gin.Default()
 	router.LoadRouter(engine)
 	engine.Run(global.Conf.App.ServerPort)
+
 }
 
 func init() {

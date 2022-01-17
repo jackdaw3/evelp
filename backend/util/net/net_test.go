@@ -1,7 +1,8 @@
-package netUtil
+package net
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"strings"
 	"testing"
@@ -32,8 +33,10 @@ func TestGetWithRetries(t *testing.T) {
 	go setUpServer()
 
 	client := &http.Client{Timeout: 1 * time.Second}
-	body, err := GetWithRetries(client, request)
+	resp, err := GetWithRetries(client, request)
+	assert.NoError(t, err)
 
+	body, err := ioutil.ReadAll(resp.Body)
 	assert.Equal(t, hello, strings.ReplaceAll(string(body), "\n", ""))
 	assert.NoError(t, err)
 }
