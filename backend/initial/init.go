@@ -13,12 +13,6 @@ func Init() error {
 		return err
 	}
 
-	if global.Conf.MySQL.AutoMigrate {
-		if err := autoMigrate(); err != nil {
-			return err
-		}
-	}
-
 	if err := initRedis(); err != nil {
 		return err
 	}

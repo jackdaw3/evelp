@@ -11,10 +11,12 @@ const (
 )
 
 func schedule() error {
-	orderService := service.NewOrderService(FIVE_HOUR)
-	orderSchedule := service.NewScheduleService(orderService.LoadOrders(), ONE_SECOND)
+	orderSchedule := service.NewScheduleService(service.NewOrderService(FIVE_HOUR).LoadOrders(), ONE_SECOND)
 
-	schedules := service.NewScheduleServices(*orderSchedule)
+	schedules := service.NewScheduleServices(
+		*orderSchedule,
+	)
+
 	if err := schedules.Start(); err != nil {
 		return err
 	}

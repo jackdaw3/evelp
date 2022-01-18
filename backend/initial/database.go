@@ -38,6 +38,12 @@ func database() error {
 
 	global.DB = db
 
+	if global.Conf.MySQL.AutoMigrate {
+		if err := autoMigrate(); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
