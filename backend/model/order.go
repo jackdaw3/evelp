@@ -28,7 +28,7 @@ func (orders Orders) Less(i, j int) bool { return orders[i].Price < orders[j].Pr
 
 func (orders Orders) Swap(i, j int) { orders[i], orders[j] = orders[j], orders[i] }
 
-func (o *Orders) GetHighestBuyPrice(scope float64) (float64, error) {
+func (o *Orders) BuyOrdersHighestPrice(scope float64) (float64, error) {
 	if err := o.isValid(); err != nil {
 		return 0, err
 	}
@@ -44,7 +44,7 @@ func (o *Orders) GetHighestBuyPrice(scope float64) (float64, error) {
 	return buyOrders.getOrdersPrice(scope)
 }
 
-func (o *Orders) GetLowestSellPrice(scope float64) (float64, error) {
+func (o *Orders) SellOrdersLowestPrice(scope float64) (float64, error) {
 	if err := o.isValid(); err != nil {
 		return 0, err
 	}

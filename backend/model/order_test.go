@@ -47,31 +47,31 @@ func setUp() {
 func TestGetHighestBuyPrice(t *testing.T) {
 	setUp()
 
-	invaidHighestPrice1, err := multipleItemOrders.GetHighestBuyPrice(scope1)
+	invaidHighestPrice1, err := multipleItemOrders.BuyOrdersHighestPrice(scope1)
 	assert.Zero(t, invaidHighestPrice1)
 	assert.Equal(t, "orders have multiple itemIds", err.Error())
 
-	invaidHighestPrice2, err := sellOrders.GetHighestBuyPrice(scope1)
+	invaidHighestPrice2, err := sellOrders.BuyOrdersHighestPrice(scope1)
 	assert.Zero(t, invaidHighestPrice2)
 	assert.NoError(t, err)
 
-	highestPrice1, err := orders.GetHighestBuyPrice(scope1)
+	highestPrice1, err := orders.BuyOrdersHighestPrice(scope1)
 	assert.Equal(t, float64(27850000), highestPrice1)
 	assert.NoError(t, err)
 
-	highestPrice2, err := orders.GetHighestBuyPrice(scope2)
+	highestPrice2, err := orders.BuyOrdersHighestPrice(scope2)
 	assert.Equal(t, float64(27850000), highestPrice2)
 	assert.NoError(t, err)
 
-	highestPrice3, err := orders.GetHighestBuyPrice(scope3)
+	highestPrice3, err := orders.BuyOrdersHighestPrice(scope3)
 	assert.Equal(t, float64(27827500), highestPrice3)
 	assert.NoError(t, err)
 
-	highestPrice4, err := orders.GetHighestBuyPrice(scope4)
+	highestPrice4, err := orders.BuyOrdersHighestPrice(scope4)
 	assert.Equal(t, float64(27793750), highestPrice4)
 	assert.NoError(t, err)
 
-	highestPrice5, err := orders.GetHighestBuyPrice(scope5)
+	highestPrice5, err := orders.BuyOrdersHighestPrice(scope5)
 	assert.Equal(t, int64(26991666), int64(highestPrice5))
 	assert.NoError(t, err)
 }
@@ -79,31 +79,31 @@ func TestGetHighestBuyPrice(t *testing.T) {
 func TestGetLowestSellPrice(t *testing.T) {
 	setUp()
 
-	invaidLowestPrice1, err := multipleItemOrders.GetLowestSellPrice(scope1)
+	invaidLowestPrice1, err := multipleItemOrders.SellOrdersLowestPrice(scope1)
 	assert.Zero(t, invaidLowestPrice1)
 	assert.Equal(t, "orders have multiple itemIds", err.Error())
 
-	invaidLowestPrice2, err := buyOrders.GetLowestSellPrice(scope1)
+	invaidLowestPrice2, err := buyOrders.SellOrdersLowestPrice(scope1)
 	assert.Zero(t, invaidLowestPrice2)
 	assert.NoError(t, err)
 
-	lowestPrice1, err := orders.GetLowestSellPrice(scope1)
+	lowestPrice1, err := orders.SellOrdersLowestPrice(scope1)
 	assert.Equal(t, float64(36730000), lowestPrice1)
 	assert.NoError(t, err)
 
-	lowestPrice2, err := orders.GetLowestSellPrice(scope2)
+	lowestPrice2, err := orders.SellOrdersLowestPrice(scope2)
 	assert.Equal(t, float64(36730000), lowestPrice2)
 	assert.NoError(t, err)
 
-	lowestPrice3, err := orders.GetLowestSellPrice(scope3)
+	lowestPrice3, err := orders.SellOrdersLowestPrice(scope3)
 	assert.Equal(t, float64(36730000), lowestPrice3)
 	assert.NoError(t, err)
 
-	lowestPrice4, err := orders.GetLowestSellPrice(scope4)
+	lowestPrice4, err := orders.SellOrdersLowestPrice(scope4)
 	assert.Equal(t, float64(37420000), lowestPrice4)
 	assert.NoError(t, err)
 
-	lowestPrice5, err := orders.GetLowestSellPrice(scope5)
+	lowestPrice5, err := orders.SellOrdersLowestPrice(scope5)
 	assert.Equal(t, int64(38064210), int64(lowestPrice5))
 	assert.NoError(t, err)
 }
