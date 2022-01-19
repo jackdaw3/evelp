@@ -15,7 +15,7 @@ type Name struct {
 	Zh string `yaml:"zh"`
 }
 
-func (name *Name) Scan(value interface{}) error {
+func (n *Name) Scan(value interface{}) error {
 	if value == nil {
 		return nil
 	}
@@ -25,11 +25,11 @@ func (name *Name) Scan(value interface{}) error {
 		return fmt.Errorf("%v is not []byte", value)
 	}
 
-	return json.Unmarshal(str, &name)
+	return json.Unmarshal(str, &n)
 }
 
-func (name Name) Value() (driver.Value, error) {
-	str, err := json.Marshal(name)
+func (n Name) Value() (driver.Value, error) {
+	str, err := json.Marshal(n)
 	if err != nil {
 		return nil, nil
 	}

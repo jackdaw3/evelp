@@ -27,23 +27,23 @@ type Offers []*Offer
 
 type CorporationIDArray []int
 
-func (offers Offers) Len() int { return len(offers) }
+func (o Offers) Len() int { return len(o) }
 
-func (offers Offers) Less(i, j int) bool { return offers[i].OfferId < offers[j].OfferId }
+func (o Offers) Less(i, j int) bool { return o[i].OfferId < o[j].OfferId }
 
-func (offers Offers) Swap(i, j int) { offers[i], offers[j] = offers[j], offers[i] }
+func (o Offers) Swap(i, j int) { o[i], o[j] = o[j], o[i] }
 
-func (corporationIDs CorporationIDArray) Len() int { return len(corporationIDs) }
+func (ca CorporationIDArray) Len() int { return len(ca) }
 
-func (corporationIDs CorporationIDArray) Less(i, j int) bool {
-	return corporationIDs[i] < corporationIDs[j]
+func (ca CorporationIDArray) Less(i, j int) bool {
+	return ca[i] < ca[j]
 }
 
-func (corporationIDs CorporationIDArray) Swap(i, j int) {
-	corporationIDs[i], corporationIDs[j] = corporationIDs[j], corporationIDs[i]
+func (ca CorporationIDArray) Swap(i, j int) {
+	ca[i], ca[j] = ca[j], ca[i]
 }
 
-func (corporationIDs *CorporationIDArray) Scan(value interface{}) error {
+func (ca *CorporationIDArray) Scan(value interface{}) error {
 	if value == nil {
 		return nil
 	}
@@ -53,11 +53,11 @@ func (corporationIDs *CorporationIDArray) Scan(value interface{}) error {
 		return fmt.Errorf("%v is not []byte", value)
 	}
 
-	return json.Unmarshal(str, &corporationIDs)
+	return json.Unmarshal(str, &ca)
 }
 
-func (corporationIDs CorporationIDArray) Value() (driver.Value, error) {
-	str, err := json.Marshal(corporationIDs)
+func (ca CorporationIDArray) Value() (driver.Value, error) {
+	str, err := json.Marshal(ca)
 	if err != nil {
 		return nil, nil
 	}

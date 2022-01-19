@@ -14,13 +14,13 @@ type Corporation struct {
 
 type Corporations []Corporation
 
-func (factions Corporations) Len() int { return len(factions) }
+func (c Corporations) Len() int { return len(c) }
 
-func (factions Corporations) Less(i, j int) bool {
-	return factions[i].CorporationId < factions[j].CorporationId
+func (c Corporations) Less(i, j int) bool {
+	return c[i].CorporationId < c[j].CorporationId
 }
 
-func (factions Corporations) Swap(i, j int) { factions[i], factions[j] = factions[j], factions[i] }
+func (c Corporations) Swap(i, j int) { c[i], c[j] = c[j], c[i] }
 
 func GetCorporation(id int) (*Corporation, error) {
 	var corporation Corporation

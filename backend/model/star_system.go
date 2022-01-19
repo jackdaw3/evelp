@@ -14,14 +14,14 @@ type StarSystem struct {
 
 type StarSystems []*StarSystem
 
-func (starSystems StarSystems) Len() int { return len(starSystems) }
+func (s StarSystems) Len() int { return len(s) }
 
-func (starSystems StarSystems) Less(i, j int) bool {
-	return starSystems[i].SystemId < starSystems[j].SystemId
+func (s StarSystems) Less(i, j int) bool {
+	return s[i].SystemId < s[j].SystemId
 }
 
-func (starSystems StarSystems) Swap(i, j int) {
-	starSystems[i], starSystems[j] = starSystems[j], starSystems[i]
+func (s StarSystems) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
 }
 
 func GetStarSystem(systemId int) (*StarSystem, error) {

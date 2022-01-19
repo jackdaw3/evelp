@@ -22,11 +22,11 @@ type Order struct {
 
 type Orders []Order
 
-func (orders Orders) Len() int { return len(orders) }
+func (o Orders) Len() int { return len(o) }
 
-func (orders Orders) Less(i, j int) bool { return orders[i].Price < orders[j].Price }
+func (o Orders) Less(i, j int) bool { return o[i].Price < o[j].Price }
 
-func (orders Orders) Swap(i, j int) { orders[i], orders[j] = orders[j], orders[i] }
+func (o Orders) Swap(i, j int) { o[i], o[j] = o[j], o[i] }
 
 func (o *Orders) BuyOrdersHighestPrice(scope float64) (float64, error) {
 	if err := o.isValid(); err != nil {

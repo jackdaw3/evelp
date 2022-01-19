@@ -39,7 +39,7 @@ func (o *ordersData) Refresh() error {
 		return fmt.Errorf("get regions failed:%v", err)
 	}
 
-	log.Infof("start load orders to reids")
+	log.Infof("start load orders to redis")
 	for _, region := range *regions {
 		log.Debugf("start load %d region's orders", region.RegionId)
 		if err := o.loadOrdersByRegion(region.RegionId); err != nil {
