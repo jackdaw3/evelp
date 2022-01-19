@@ -2,8 +2,8 @@ package initial
 
 import (
 	"context"
-	"encoding/base64"
 	"evelp/config/global"
+	"evelp/util/crypto"
 	"fmt"
 
 	"github.com/go-redis/redis/v8"
@@ -13,11 +13,10 @@ import (
 var ctx = context.Background()
 
 func initRedis() error {
-	b, err := base64.StdEncoding.DecodeString(global.Conf.Redis.Password)
+	password, err := crypto.Decrypt(global.Conf.MySQL.Password, global.Conf.Crypto.KeyPath)
 	if err != nil {
-		return fmt.Errorf("decode redis password failed: %v", err)
+		return fmt.Errorf("decode database password failed: %v", err)
 	}
-	password := string(b)
 
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     global.Conf.Redis.Address,

@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -14,17 +15,19 @@ import (
 var (
 	request string = "http://127.0.0.1:9090/hello"
 	hello   string = "hello"
+	count   int    = 0
+	mu      sync.Mutex
 )
 
 func setUpServer() {
-	count := 0
 	http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+		mu.Lock()
 		if count == 0 {
 			time.Sleep(1500 * time.Millisecond)
 		}
 		count++
 		fmt.Fprintln(w, hello)
-
+		mu.Unlock()
 	})
 	http.ListenAndServe(":9090", nil)
 }

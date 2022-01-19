@@ -1,9 +1,9 @@
 package initial
 
 import (
-	"encoding/base64"
 	"evelp/config/global"
 	"evelp/model"
+	"evelp/util/crypto"
 	"fmt"
 	"net/url"
 	"time"
@@ -14,11 +14,10 @@ import (
 )
 
 func database() error {
-	b, err := base64.StdEncoding.DecodeString(global.Conf.MySQL.Password)
+	password, err := crypto.Decrypt(global.Conf.MySQL.Password, global.Conf.Crypto.KeyPath)
 	if err != nil {
 		return fmt.Errorf("decode database password failed: %v", err)
 	}
-	password := string(b)
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true&loc=%s",
 		global.Conf.MySQL.UserName,

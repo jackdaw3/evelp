@@ -8,6 +8,18 @@ type AppConfig struct {
 	ServerPort string `yaml:"serverPort"`
 }
 
+type CryptoConfig struct {
+	KeyPath string `yaml:"keyPath"`
+}
+
+type DataConfig struct {
+	RefreshLocalData  bool   `yaml:"refreshLocalData"`
+	RefreshRemoteData bool   `yaml:"refreshRemoteData"`
+	LocalDataPath     string `yaml:"localDataPath"`
+	RemoteDataAddress string `yaml:"remoteDataAddress"`
+	RemoteDataSource  string `yaml:"remoteDataSource"`
+}
+
 type MySQLConfig struct {
 	Host            string `yaml:"host"`
 	Port            string `yaml:"port"`
@@ -22,15 +34,6 @@ type MySQLConfig struct {
 	AutoMigrate     bool   `yaml:"autoMigrate"`
 }
 
-type DataConfig struct {
-	RefreshLocalData  bool `yaml:"refreshLocalData"`
-	RefreshRemoteData bool `yaml:"refreshRemoteData"`
-
-	LocalDataPath     string `yaml:"localDataPath"`
-	RemoteDataAddress string `yaml:"remoteDataAddress"`
-	RemoteDataSource  string `yaml:"remoteDataSource"`
-}
-
 type RedisConfig struct {
 	Address  string `yaml:"address"`
 	Password string `yaml:"password"`
@@ -38,8 +41,9 @@ type RedisConfig struct {
 }
 
 type Config struct {
-	App   AppConfig   `yaml:"app"`
-	MySQL MySQLConfig `yaml:"mysql"`
-	Redis RedisConfig `yaml:"redis"`
-	Data  DataConfig  `yaml:"data"`
+	App    AppConfig    `yaml:"app"`
+	Crypto CryptoConfig `yaml:"crypto"`
+	Data   DataConfig   `yaml:"data"`
+	MySQL  MySQLConfig  `yaml:"mysql"`
+	Redis  RedisConfig  `yaml:"redis"`
 }

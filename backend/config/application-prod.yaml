@@ -6,7 +6,7 @@ mysql:
   port: 3306
   database: eve
   username: root
-  password: Y2hhbmdlaXQ=
+  password: co9NAIXA4OHSHcSFdrSrK2fZ2yFGjKZasn0VTb1PQenoTcxB6EJNQl705DVbbWyR45X9/z3+2RtO/PZVKMVdwOGCvme4xGZB0+t+cvrCspQjcer8epmEihfJrzzSepflIE4SsWZHr/iBz90HDEz8wk0Jqqd2DhgT38vV5nt3mWE=
   charset: utf8
   loc: Asia/Shanghai
   maxIdleConn: 10
@@ -16,7 +16,7 @@ mysql:
 
 redis:
   address: 127.0.0.1:6379
-  password: Y2hhbmdlaXQ=
+  password: co9NAIXA4OHSHcSFdrSrK2fZ2yFGjKZasn0VTb1PQenoTcxB6EJNQl705DVbbWyR45X9/z3+2RtO/PZVKMVdwOGCvme4xGZB0+t+cvrCspQjcer8epmEihfJrzzSepflIE4SsWZHr/iBz90HDEz8wk0Jqqd2DhgT38vV5nt3mWE=
   database: 0
 
 data: 
@@ -25,3 +25,6 @@ data:
   refreshRemoteData: false
   remoteDataAddress: https://esi.evetech.net/latest
   remoteDataSource: tranquility
+
+crypto:
+  keyPath: /opt/certs/private_key.pem

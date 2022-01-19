@@ -25,9 +25,8 @@ func GetWithRetries(client *http.Client, request string) (*http.Response, error)
 			code := resp.StatusCode
 			if code == http.StatusOK {
 				break
-			} else {
-				err = fmt.Errorf("request %s error status code %d", request, code)
 			}
+			err = fmt.Errorf("request %s error status code %d", request, code)
 		}
 
 		log.Warn(err)
