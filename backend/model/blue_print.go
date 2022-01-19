@@ -31,14 +31,14 @@ type ManufactProducts []ManufactProduct
 
 type ManufactMaterials []ManufactMaterial
 
-func (bluePrints BluePrints) Len() int { return len(bluePrints) }
+func (b BluePrints) Len() int { return len(b) }
 
-func (bluePrints BluePrints) Less(i, j int) bool {
-	return bluePrints[i].BlueprintId < bluePrints[j].BlueprintId
+func (b BluePrints) Less(i, j int) bool {
+	return b[i].BlueprintId < b[j].BlueprintId
 }
 
-func (bluePrints BluePrints) Swap(i, j int) {
-	bluePrints[i], bluePrints[j] = bluePrints[j], bluePrints[i]
+func (b BluePrints) Swap(i, j int) {
+	b[i], b[j] = b[j], b[i]
 }
 
 func (b *BluePrint) Empty() bool {
@@ -48,7 +48,7 @@ func (b *BluePrint) Empty() bool {
 	return false
 }
 
-func (manufactProducts *ManufactProducts) Scan(value interface{}) error {
+func (m *ManufactProducts) Scan(value interface{}) error {
 	if value == nil {
 		return nil
 	}
@@ -58,11 +58,11 @@ func (manufactProducts *ManufactProducts) Scan(value interface{}) error {
 		return fmt.Errorf("%v is not []byte", value)
 	}
 
-	return json.Unmarshal(str, &manufactProducts)
+	return json.Unmarshal(str, &m)
 }
 
-func (manufactProducts ManufactProducts) Value() (driver.Value, error) {
-	str, err := json.Marshal(manufactProducts)
+func (m ManufactProducts) Value() (driver.Value, error) {
+	str, err := json.Marshal(m)
 	if err != nil {
 		return nil, nil
 	}
@@ -70,7 +70,7 @@ func (manufactProducts ManufactProducts) Value() (driver.Value, error) {
 	return string(str), nil
 }
 
-func (manufactMaterials *ManufactMaterials) Scan(value interface{}) error {
+func (m *ManufactMaterials) Scan(value interface{}) error {
 	if value == nil {
 		return nil
 	}
@@ -80,11 +80,11 @@ func (manufactMaterials *ManufactMaterials) Scan(value interface{}) error {
 		return fmt.Errorf("%v is not []byte", value)
 	}
 
-	return json.Unmarshal(str, &manufactMaterials)
+	return json.Unmarshal(str, &m)
 }
 
-func (manufactMaterials ManufactMaterials) Value() (driver.Value, error) {
-	str, err := json.Marshal(manufactMaterials)
+func (m ManufactMaterials) Value() (driver.Value, error) {
+	str, err := json.Marshal(m)
 	if err != nil {
 		return nil, nil
 	}

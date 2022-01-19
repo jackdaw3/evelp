@@ -14,15 +14,15 @@ type corporationsData struct {
 	corporations *model.Corporations
 }
 
-func (c *corporationsData) Refresh() error {
-	log.Info("start load corporations", c.filePath)
-	if err := c.load(); err != nil {
+func (cd *corporationsData) Refresh() error {
+	log.Info("start load corporations", cd.filePath)
+	if err := cd.load(); err != nil {
 		return err
 	}
-	log.Info("load ", c.filePath, " finished")
+	log.Info("load ", cd.filePath, " finished")
 
 	log.Info("start save corporations to DB")
-	if err := model.SaveCorporations(c.corporations); err != nil {
+	if err := model.SaveCorporations(cd.corporations); err != nil {
 		return err
 	}
 	log.Info("corporations have saved to DB")
@@ -30,8 +30,8 @@ func (c *corporationsData) Refresh() error {
 	return nil
 }
 
-func (c *corporationsData) load() error {
-	file, err := ioutil.ReadFile(c.filePath)
+func (cd *corporationsData) load() error {
+	file, err := ioutil.ReadFile(cd.filePath)
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (c *corporationsData) load() error {
 		corporations = append(corporations, corporation)
 	}
 	sort.Sort(corporations)
-	c.corporations = &corporations
+	cd.corporations = &corporations
 
 	return nil
 }

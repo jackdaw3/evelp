@@ -13,7 +13,7 @@ type RequireItem struct {
 
 type RequireItems []RequireItem
 
-func (requireItems *RequireItems) Scan(value interface{}) error {
+func (r *RequireItems) Scan(value interface{}) error {
 	if value == nil {
 		return nil
 	}
@@ -23,11 +23,11 @@ func (requireItems *RequireItems) Scan(value interface{}) error {
 		return fmt.Errorf("%v is not []byte", value)
 	}
 
-	return json.Unmarshal(str, &requireItems)
+	return json.Unmarshal(str, &r)
 }
 
-func (requireItems RequireItems) Value() (driver.Value, error) {
-	str, err := json.Marshal(requireItems)
+func (r RequireItems) Value() (driver.Value, error) {
+	str, err := json.Marshal(r)
 	if err != nil {
 		return nil, nil
 	}

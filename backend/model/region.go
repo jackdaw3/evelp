@@ -14,11 +14,11 @@ type Region struct {
 
 type Regions []*Region
 
-func (regions Regions) Len() int { return len(regions) }
+func (r Regions) Len() int { return len(r) }
 
-func (regions Regions) Less(i, j int) bool { return regions[i].RegionId < regions[j].RegionId }
+func (r Regions) Less(i, j int) bool { return r[i].RegionId < r[j].RegionId }
 
-func (regions Regions) Swap(i, j int) { regions[i], regions[j] = regions[j], regions[i] }
+func (r Regions) Swap(i, j int) { r[i], r[j] = r[j], r[i] }
 
 func GetRegion(regionId int) (*Region, error) {
 	var region Region

@@ -14,15 +14,15 @@ type factionsData struct {
 	factions *model.Factions
 }
 
-func (f *factionsData) Refresh() error {
-	log.Info("start load factions", f.filePath)
-	if err := f.load(); err != nil {
+func (fd *factionsData) Refresh() error {
+	log.Info("start load factions", fd.filePath)
+	if err := fd.load(); err != nil {
 		return err
 	}
-	log.Info("load ", f.filePath, " finished")
+	log.Info("load ", fd.filePath, " finished")
 
 	log.Info("start save factions to DB")
-	if err := model.SaveFactions(f.factions); err != nil {
+	if err := model.SaveFactions(fd.factions); err != nil {
 		return err
 	}
 	log.Info("factions have saved to DB")
@@ -30,8 +30,8 @@ func (f *factionsData) Refresh() error {
 	return nil
 }
 
-func (f *factionsData) load() error {
-	file, err := ioutil.ReadFile(f.filePath)
+func (fd *factionsData) load() error {
+	file, err := ioutil.ReadFile(fd.filePath)
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (f *factionsData) load() error {
 		factions = append(factions, faction)
 	}
 	sort.Sort(factions)
-	f.factions = &factions
+	fd.factions = &factions
 
 	return nil
 }
