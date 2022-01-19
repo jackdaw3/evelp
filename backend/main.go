@@ -5,9 +5,8 @@ import (
 	"evelp/initial"
 	"evelp/router"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {

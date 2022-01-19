@@ -6,7 +6,7 @@ mysql:
   port: 3306
   database: eve
   username: root
-  password: Y2hhbmdlaXQK
+  password: Y2hhbmdlaXQ=
   charset: utf8
   loc: Asia/Shanghai
   maxIdleConn: 10
@@ -16,7 +16,7 @@ mysql:
 
 redis:
   address: 127.0.0.1:6379
-  password: Y2hhbmdlaXQK
+  password: Y2hhbmdlaXQ=
   database: 0
 
 data: 

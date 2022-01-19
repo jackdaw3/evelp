@@ -23,12 +23,12 @@ func config() error {
 func initEnv() error {
 	env := os.Getenv("ENV")
 	if env == "" {
-		log.Warn("No ENV environment variable find on this machine!")
+		log.Warn("no ENV environment variable find on this machine")
 		global.ENV = "local"
 	} else {
 		global.ENV = env
 	}
-	log.Info("Env: ", global.ENV)
+	log.Infof("Env: %s", global.ENV)
 
 	var err error
 	global.WORKSPACE, err = os.Getwd()
@@ -36,7 +36,7 @@ func initEnv() error {
 		return err
 	}
 
-	log.Info("Workspace: ", global.WORKSPACE)
+	log.Infof("Workspace: %s", global.WORKSPACE)
 	return nil
 }
 
