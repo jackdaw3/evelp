@@ -1,4 +1,4 @@
-package sde
+package dbdata
 
 import (
 	"evelp/model"
@@ -9,17 +9,17 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type TypeIDsInit struct {
-	FilePath string
+type typeIdsData struct {
+	filePath string
 	items    *model.Items
 }
 
-func (t *TypeIDsInit) Refresh() error {
-	log.Info("Start load items", t.FilePath)
+func (t *typeIdsData) Refresh() error {
+	log.Info("Start load items", t.filePath)
 	if err := t.load(); err != nil {
 		return err
 	}
-	log.Info("Load ", t.FilePath, " finished.")
+	log.Info("Load ", t.filePath, " finished.")
 
 	log.Info("Start save types to DB.")
 	if err := model.SaveItems(t.items); err != nil {
@@ -30,8 +30,8 @@ func (t *TypeIDsInit) Refresh() error {
 	return nil
 }
 
-func (t *TypeIDsInit) load() error {
-	file, err := ioutil.ReadFile(t.FilePath)
+func (t *typeIdsData) load() error {
+	file, err := ioutil.ReadFile(t.filePath)
 	if err != nil {
 		return err
 	}

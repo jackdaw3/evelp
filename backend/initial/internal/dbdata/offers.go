@@ -1,4 +1,4 @@
-package esi
+package dbdata
 
 import (
 	"encoding/json"
@@ -14,7 +14,9 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type OffersInit struct {
+var mu sync.Mutex
+
+type offersData struct {
 	offersMap map[int]*model.Offer
 }
 
@@ -23,17 +25,15 @@ type offersWrapper struct {
 	corporationId int
 }
 
-var mu sync.Mutex
-
-func (o *OffersInit) Refresh() error {
-	log.Infof("Start load offers from %s.", global.Conf.Data.RemoteDataAddress)
+func (o *offersData) Refresh() error {
+	log.Infof("start load offers from %s", global.Conf.Data.RemoteDataAddress)
 	o.offersMap = make(map[int]*model.Offer)
 	if err := o.getOffersMap(); err != nil {
 		return err
 	}
-	log.Info("Offers have loaded.")
+	log.Info("offers have loaded")
 
-	log.Info("Start save offers to DB.")
+	log.Info("start save offers to DB")
 	var offers model.Offers
 	for _, v := range o.offersMap {
 		offers = append(offers, v)
@@ -42,12 +42,12 @@ func (o *OffersInit) Refresh() error {
 	if err := model.SaveOffers(&offers); err != nil {
 		return err
 	}
-	log.Infof("%d offers have saved or updated to DB.", offers.Len())
+	log.Infof("%d offers have saved or updated to DB", offers.Len())
 
 	return nil
 }
 
-func (o *OffersInit) getOffersMap() error {
+func (o *offersData) getOffersMap() error {
 	corporations, err := model.GetCorporations()
 	if err != nil {
 		return err
@@ -64,7 +64,7 @@ func (o *OffersInit) getOffersMap() error {
 	return nil
 }
 
-func (o *OffersInit) covertOffersWrapper(offersWrapper offersWrapper) {
+func (o *offersData) covertOffersWrapper(offersWrapper offersWrapper) {
 	defer mu.Unlock()
 	mu.Lock()
 
@@ -89,7 +89,7 @@ func (o *OffersInit) covertOffersWrapper(offersWrapper offersWrapper) {
 	}
 }
 
-func (o *OffersInit) getOffers(corporationId int, wg *sync.WaitGroup) func() {
+func (o *offersData) getOffers(corporationId int, wg *sync.WaitGroup) func() {
 	return func() {
 		defer wg.Done()
 
@@ -101,21 +101,21 @@ func (o *OffersInit) getOffers(corporationId int, wg *sync.WaitGroup) func() {
 
 		resp, err := net.GetWithRetries(client, req)
 		if err != nil {
-			log.Errorf("Get corporation %d's failed: %v", corporationId, err)
+			log.Errorf("get corporation %d's failed: %v", corporationId, err)
 		}
 
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Errorf("Get corporation %d's body failed: %v", corporationId, err)
+			log.Errorf("get corporation %d's body failed: %v", corporationId, err)
 		}
 
 		var offers model.Offers
 		if err = json.Unmarshal(body, &offers); err != nil {
-			log.Errorf("Unmarshal corporation %d's offers json failed: %v", corporationId, err)
+			log.Errorf("unmarshal corporation %d's offers json failed: %v", corporationId, err)
 		}
 
 		if offers.Len() == 0 {
-			log.Debugf("Corporation %d has no offer.", corporationId)
+			log.Debugf("corporation %d has no offer", corporationId)
 			return
 		}
 

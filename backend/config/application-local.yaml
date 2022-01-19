@@ -6,7 +6,7 @@ mysql:
   port: 3306
   database: eve
   username: root
-  password: changeit
+  password: Y2hhbmdlaXQ=
   charset: utf8
   loc: Asia/Shanghai
   maxIdleConn: 10
@@ -16,12 +16,12 @@ mysql:
 
 redis:
   address: 127.0.0.1:6379
-  password: changeit
+  password: Y2hhbmdlaXQ=
   database: 0
 
 data: 
-  refreshStaticData: false
-  staticDataPath: C://Users//Administrator//dev//data//
+  refreshLocalData: false
+  localDataPath: C://Users//Administrator//dev//data//
   refreshRemoteData: false
   remoteDataAddress: https://esi.evetech.net/latest
   remoteDataSource: tranquility

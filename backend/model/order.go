@@ -17,7 +17,7 @@ type Order struct {
 	VolumeRemain int64     `json:"volume_remain"`
 	VolumeTotal  int64     `json:"volume_total"`
 	IsBuyOrder   bool      `json:"is_buy_order"`
-	LastUpdated  time.Time
+	LastUpdated  time.Time `json:"last_updated"`
 }
 
 type Orders []Order
@@ -110,7 +110,7 @@ func (o *Orders) isValid() error {
 	var itemId int = (*o)[0].ItemId
 	for _, order := range *o {
 		if order.ItemId != itemId {
-			return errors.New("Orders have multiple itemIds")
+			return errors.New("orders have multiple itemIds")
 		}
 	}
 	return nil

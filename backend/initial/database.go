@@ -1,6 +1,7 @@
 package initial
 
 import (
+	"encoding/base64"
 	"evelp/config/global"
 	"evelp/model"
 	"fmt"
@@ -13,9 +14,15 @@ import (
 )
 
 func database() error {
+	b, err := base64.StdEncoding.DecodeString(global.Conf.MySQL.Password)
+	if err != nil {
+		return fmt.Errorf("decode database password failed: %v", err)
+	}
+	password := string(b)
+
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true&loc=%s",
 		global.Conf.MySQL.UserName,
-		global.Conf.MySQL.Password,
+		password,
 		global.Conf.MySQL.Host,
 		global.Conf.MySQL.Port,
 		global.Conf.MySQL.Database,
@@ -26,7 +33,7 @@ func database() error {
 	if err != nil {
 		return err
 	}
-	log.Info("Connect to mysql:", dsn)
+	log.Infof("connect to mysql: %s", dsn)
 
 	sqlDB, err := db.DB()
 	if err != nil {
@@ -48,7 +55,7 @@ func database() error {
 }
 
 func autoMigrate() error {
-	log.Info("Auto migrate DB tables.")
+	log.Info("auto migrate DB tables")
 
 	models := []interface{}{&model.Item{}, &model.Faction{}, &model.Corporation{}, &model.Offer{}, &model.BluePrint{}, &model.Region{}, &model.StarSystem{}}
 

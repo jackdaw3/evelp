@@ -26,12 +26,12 @@ func GetWithRetries(client *http.Client, request string) (*http.Response, error)
 			if code == http.StatusOK {
 				break
 			} else {
-				err = fmt.Errorf("request %s get http statusCode %d", request, code)
+				err = fmt.Errorf("request %s error status code %d", request, code)
 			}
 		}
 
 		log.Warn(err)
-		log.Warnf("Request %s retrying in %v\n", request, backoff)
+		log.Warnf("request %s retrying in %v", request, backoff)
 		time.Sleep(backoff)
 	}
 

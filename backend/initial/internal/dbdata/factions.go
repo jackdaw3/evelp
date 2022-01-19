@@ -1,4 +1,4 @@
-package sde
+package dbdata
 
 import (
 	"evelp/model"
@@ -9,29 +9,29 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type FactionsInit struct {
-	FilePath string
+type factionsData struct {
+	filePath string
 	factions *model.Factions
 }
 
-func (f *FactionsInit) Refresh() error {
-	log.Info("Start load factions", f.FilePath)
+func (f *factionsData) Refresh() error {
+	log.Info("start load factions", f.filePath)
 	if err := f.load(); err != nil {
 		return err
 	}
-	log.Info("Load ", f.FilePath, " finished.")
+	log.Info("load ", f.filePath, " finished")
 
-	log.Info("Start save factions to DB.")
+	log.Info("start save factions to DB")
 	if err := model.SaveFactions(f.factions); err != nil {
 		return err
 	}
-	log.Info("Factions have saved to DB.")
+	log.Info("factions have saved to DB")
 
 	return nil
 }
 
-func (f *FactionsInit) load() error {
-	file, err := ioutil.ReadFile(f.FilePath)
+func (f *factionsData) load() error {
+	file, err := ioutil.ReadFile(f.filePath)
 	if err != nil {
 		return err
 	}

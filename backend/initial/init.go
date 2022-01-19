@@ -2,6 +2,8 @@ package initial
 
 import (
 	"evelp/config/global"
+	"evelp/initial/internal/cachedata"
+	"evelp/initial/internal/dbdata"
 )
 
 func Init() error {
@@ -21,19 +23,19 @@ func Init() error {
 		return err
 	}
 
-	if global.Conf.Data.RefreshStaticData {
-		if err := staticData(); err != nil {
+	if global.Conf.Data.RefreshLocalData {
+		if err := dbdata.LocalData(); err != nil {
 			return err
 		}
 	}
 
 	if global.Conf.Data.RefreshRemoteData {
-		if err := remoteData(); err != nil {
+		if err := dbdata.RemoteData(); err != nil {
 			return err
 		}
 	}
 
-	if err := schedule(); err != nil {
+	if err := cachedata.CacheData(); err != nil {
 		return err
 	}
 

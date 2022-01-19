@@ -49,7 +49,7 @@ func TestGetHighestBuyPrice(t *testing.T) {
 
 	invaidHighestPrice1, err := multipleItemOrders.GetHighestBuyPrice(scope1)
 	assert.Zero(t, invaidHighestPrice1)
-	assert.Equal(t, "Orders have multiple itemIds", err.Error())
+	assert.Equal(t, "orders have multiple itemIds", err.Error())
 
 	invaidHighestPrice2, err := sellOrders.GetHighestBuyPrice(scope1)
 	assert.Zero(t, invaidHighestPrice2)
@@ -81,7 +81,7 @@ func TestGetLowestSellPrice(t *testing.T) {
 
 	invaidLowestPrice1, err := multipleItemOrders.GetLowestSellPrice(scope1)
 	assert.Zero(t, invaidLowestPrice1)
-	assert.Equal(t, "Orders have multiple itemIds", err.Error())
+	assert.Equal(t, "orders have multiple itemIds", err.Error())
 
 	invaidLowestPrice2, err := buyOrders.GetLowestSellPrice(scope1)
 	assert.Zero(t, invaidLowestPrice2)

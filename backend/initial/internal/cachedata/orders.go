@@ -1,4 +1,4 @@
-package service
+package cachedata
 
 import (
 	"encoding/json"
@@ -28,44 +28,40 @@ const (
 	FIRST  = 1
 )
 
-type OrderService struct {
+type ordersData struct {
 	orders         map[string]*model.Orders
 	expirationTime time.Duration
 }
 
-func NewOrderService(expirationTime time.Duration) *OrderService {
-	orders := make(map[string]*model.Orders)
-	return &OrderService{orders, expirationTime}
-}
-
-func (o *OrderService) LoadOrders() func() {
-	return func() {
-		regions, err := model.GetRegions()
-		if err != nil {
-			log.Errorf("Get regions failed.")
-			return
-		}
-
-		for _, region := range *regions {
-			log.Infof("Start load %d region's orders.", region.RegionId)
-			if err := o.loadOrdersByRegion(region.RegionId); err != nil {
-				log.Errorf("Load %d region orders failed:%v", region.RegionId, err)
-				continue
-			}
-
-			log.Infof("Start save %d region's orders to redis.", region.RegionId)
-			for key, order := range o.orders {
-				if err := cache.Set(key, order, o.expirationTime); err != nil {
-					log.Errorf("Save orders to redis failed:%v", key, err)
-				}
-			}
-
-			o.clearMap()
-		}
+func (o *ordersData) Refresh() error {
+	regions, err := model.GetRegions()
+	if err != nil {
+		return fmt.Errorf("get regions failed:%v", err)
 	}
+
+	log.Infof("start load orders to reids")
+	for _, region := range *regions {
+		log.Debugf("start load %d region's orders", region.RegionId)
+		if err := o.loadOrdersByRegion(region.RegionId); err != nil {
+			log.Errorf("load %d region orders failed:%v", region.RegionId, err)
+			continue
+		}
+
+		log.Debugf("start load %d region's orders to redis", region.RegionId)
+		for key, order := range o.orders {
+			if err := cache.Set(key, order, o.expirationTime); err != nil {
+				log.Errorf("save orders to redis failed:%v", key, err)
+			}
+		}
+
+		o.clearMap()
+	}
+	log.Infof("orders saved to reids")
+
+	return nil
 }
 
-func (o *OrderService) loadOrdersByRegion(regionId int) error {
+func (o *ordersData) loadOrdersByRegion(regionId int) error {
 	pages, err := o.getOrdersPage(regionId)
 	if err != nil {
 		return err
@@ -80,7 +76,7 @@ func (o *OrderService) loadOrdersByRegion(regionId int) error {
 	return nil
 }
 
-func (o *OrderService) loadOrdersByRegionPage(regionId int, page int) func() {
+func (o *ordersData) loadOrdersByRegionPage(regionId int, page int) func() {
 	return func() {
 		defer wg.Done()
 
@@ -93,19 +89,19 @@ func (o *OrderService) loadOrdersByRegionPage(regionId int, page int) func() {
 
 		resp, err := net.GetWithRetries(client, req)
 		if err != nil {
-			log.Errorf("Get %d region %d page's orders failed: %v", regionId, page, err)
+			log.Errorf("get %d region %d page's orders failed: %v", regionId, page, err)
 			return
 		}
 
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Errorf("Read %d region %d page's orders body failed: %v", regionId, page, err)
+			log.Errorf("read %d region %d page's orders body failed: %v", regionId, page, err)
 			return
 		}
 
 		var orders model.Orders
 		if err = json.Unmarshal(body, &orders); err != nil {
-			log.Errorf("Unmarshal %d region %d page's orders json failed: %v", regionId, page, err)
+			log.Errorf("unmarshal %d region %d page's orders json failed: %v", regionId, page, err)
 			return
 		}
 
@@ -116,7 +112,7 @@ func (o *OrderService) loadOrdersByRegionPage(regionId int, page int) func() {
 	}
 }
 
-func (o *OrderService) getOrdersPage(regionId int) (int, error) {
+func (o *ordersData) getOrdersPage(regionId int) (int, error) {
 	req := fmt.Sprintf("%s/markets/%d/orders/?datasource=%s&order_type=all&page=%d",
 		global.Conf.Data.RemoteDataAddress,
 		regionId,
@@ -138,7 +134,7 @@ func (o *OrderService) getOrdersPage(regionId int) (int, error) {
 
 }
 
-func (o *OrderService) syncPutToMap(key string, order *model.Order) {
+func (o *ordersData) syncPutToMap(key string, order *model.Order) {
 	defer mu.Unlock()
 	mu.Lock()
 
@@ -153,7 +149,7 @@ func (o *OrderService) syncPutToMap(key string, order *model.Order) {
 	}
 }
 
-func (o *OrderService) clearMap() {
+func (o *ordersData) clearMap() {
 	for k := range o.orders {
 		delete(o.orders, k)
 	}

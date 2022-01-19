@@ -1,4 +1,4 @@
-package sde
+package dbdata
 
 import (
 	"evelp/model"
@@ -9,29 +9,29 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type CorporationsInit struct {
-	FilePath     string
+type corporationsData struct {
+	filePath     string
 	corporations *model.Corporations
 }
 
-func (c *CorporationsInit) Refresh() error {
-	log.Info("Start load corporations", c.FilePath)
+func (c *corporationsData) Refresh() error {
+	log.Info("start load corporations", c.filePath)
 	if err := c.load(); err != nil {
 		return err
 	}
-	log.Info("Load ", c.FilePath, " finished.")
+	log.Info("load ", c.filePath, " finished")
 
-	log.Info("Start save corporations to DB.")
+	log.Info("start save corporations to DB")
 	if err := model.SaveCorporations(c.corporations); err != nil {
 		return err
 	}
-	log.Info("Corporations have saved to DB.")
+	log.Info("corporations have saved to DB")
 
 	return nil
 }
 
-func (c *CorporationsInit) load() error {
-	file, err := ioutil.ReadFile(c.FilePath)
+func (c *corporationsData) load() error {
+	file, err := ioutil.ReadFile(c.filePath)
 	if err != nil {
 		return err
 	}

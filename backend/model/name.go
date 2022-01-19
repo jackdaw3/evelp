@@ -22,7 +22,7 @@ func (name *Name) Scan(value interface{}) error {
 
 	str, ok := value.([]byte)
 	if !ok {
-		return fmt.Errorf("value is not []byte, value: %v", value)
+		return fmt.Errorf("%v is not []byte", value)
 	}
 
 	return json.Unmarshal(str, &name)

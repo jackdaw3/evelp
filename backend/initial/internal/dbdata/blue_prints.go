@@ -1,4 +1,4 @@
-package sde
+package dbdata
 
 import (
 	"encoding/csv"
@@ -16,33 +16,33 @@ const (
 	reactActivity   = 11
 )
 
-type BluePrintsInit struct {
-	ProductFilePath  string
-	MaterialFilePath string
+type bluePrintsData struct {
+	productFilePath  string
+	materialFilePath string
 	bluePrintsMap    map[int]*model.BluePrint
 }
 
-func (b *BluePrintsInit) Refresh() error {
-	log.Infof("Start load bluePrints %s and %s", b.ProductFilePath, b.MaterialFilePath)
+func (b *bluePrintsData) Refresh() error {
+	log.Infof("start load bluePrints %s and %s", b.productFilePath, b.materialFilePath)
 	b.bluePrintsMap = make(map[int]*model.BluePrint)
 
 	bluePrints, err := b.load()
 	if err != nil {
 		return err
 	}
-	log.Info("Load bluePrints finished.")
+	log.Info("load bluePrints finished")
 
-	log.Info("Start save bluePrints to DB.")
+	log.Info("start save bluePrints to DB")
 	if err := model.SaveBluePrints(bluePrints); err != nil {
 		return err
 	}
-	log.Info("BluePrints have saved to DB.")
+	log.Info("bluePrints have saved to DB")
 
 	return nil
 }
 
-func (b *BluePrintsInit) load() (*model.BluePrints, error) {
-	products, err := read(b.ProductFilePath)
+func (b *bluePrintsData) load() (*model.BluePrints, error) {
+	products, err := readCsv(b.productFilePath)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (b *BluePrintsInit) load() (*model.BluePrints, error) {
 		return nil, err
 	}
 
-	materials, err := read(b.MaterialFilePath)
+	materials, err := readCsv(b.materialFilePath)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (b *BluePrintsInit) load() (*model.BluePrints, error) {
 
 }
 
-func (b *BluePrintsInit) covertProducts(products [][]string) error {
+func (b *bluePrintsData) covertProducts(products [][]string) error {
 	for _, product := range products {
 		bluePrintId, err := strconv.Atoi(product[0])
 		if err != nil {
@@ -107,7 +107,7 @@ func (b *BluePrintsInit) covertProducts(products [][]string) error {
 	return nil
 }
 
-func (b *BluePrintsInit) covertMaterials(materails [][]string) error {
+func (b *bluePrintsData) covertMaterials(materails [][]string) error {
 	for _, materail := range materails {
 		bluePrintId, err := strconv.Atoi(materail[0])
 		if err != nil {
@@ -115,7 +115,7 @@ func (b *BluePrintsInit) covertMaterials(materails [][]string) error {
 		}
 
 		if _, ok := b.bluePrintsMap[bluePrintId]; !ok {
-			log.Warnf("Blueprint %d has no product item.", bluePrintId)
+			log.Warnf("blueprint %d has no product item", bluePrintId)
 			continue
 		}
 
@@ -144,7 +144,7 @@ func (b *BluePrintsInit) covertMaterials(materails [][]string) error {
 	return nil
 }
 
-func read(filePath string) ([][]string, error) {
+func readCsv(filePath string) ([][]string, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
