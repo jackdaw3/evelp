@@ -40,8 +40,9 @@ func (o *Orders) BuyOrdersHighestPrice(scope float64) (float64, error) {
 		}
 	}
 	sort.Sort(sort.Reverse(buyOrders))
+	buyOrders = filterBuyOrders(buyOrders)
 
-	return buyOrders.getOrdersPrice(scope)
+	return buyOrders.ordersPrice(scope)
 }
 
 func (o *Orders) SellOrdersLowestPrice(scope float64) (float64, error) {
@@ -56,12 +57,11 @@ func (o *Orders) SellOrdersLowestPrice(scope float64) (float64, error) {
 		}
 	}
 	sort.Sort(sellOrders)
-
-	return sellOrders.getOrdersPrice(scope)
+	return sellOrders.ordersPrice(scope)
 }
 
-func (o *Orders) getOrdersPrice(scope float64) (float64, error) {
-	size, err := o.getOrdersScopeSize(scope)
+func (o *Orders) ordersPrice(scope float64) (float64, error) {
+	size, err := o.ordersScopeSize(scope)
 	if err != nil {
 		return 0, err
 	}
@@ -88,7 +88,7 @@ func (o *Orders) getOrdersPrice(scope float64) (float64, error) {
 	return sum / float64(size), nil
 }
 
-func (o *Orders) getOrdersScopeSize(scope float64) (int64, error) {
+func (o *Orders) ordersScopeSize(scope float64) (int64, error) {
 	var size int64
 	for _, order := range *o {
 		size += order.VolumeRemain
@@ -114,4 +114,31 @@ func (o *Orders) isValid() error {
 		}
 	}
 	return nil
+}
+
+func filterBuyOrders(orders Orders) Orders {
+	if len(orders) == 0 {
+		return nil
+	}
+
+	var count int
+	var currentVolume int64
+	var maxPrice float64 = orders[0].Price
+
+	for i, order := range orders {
+		if order.IsBuyOrder {
+			if maxPrice >= 1000*order.Price || (maxPrice >= 100*order.Price && order.VolumeRemain >= 20*currentVolume) {
+				count = i
+				break
+			}
+			currentVolume += order.VolumeRemain
+		}
+	}
+
+	if count != 0 {
+		filtedOrders := orders[:count]
+		return filtedOrders
+	}
+
+	return orders
 }

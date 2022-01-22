@@ -71,7 +71,7 @@ func GetOffer(offerId int) (*Offer, error) {
 	return &offer, result.Error
 }
 
-func GetCorporationOffer(corporationId int) (*Offers, error) {
+func GetOffersByCorporation(corporationId int) (*Offers, error) {
 	var offers Offers
 	criteria := fmt.Sprintf("%%%s%%", strconv.Itoa(corporationId))
 	result := global.DB.Where("corporation_ids LIKE ?", criteria).Find(&offers)

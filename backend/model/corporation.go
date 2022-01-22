@@ -53,6 +53,5 @@ func SaveCorporations(corporations *Corporations) error {
 			return err
 		}
 	}
-
 	return nil
 }
