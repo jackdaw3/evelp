@@ -21,13 +21,13 @@ var (
 
 func setUpServer() {
 	http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+		defer mu.Unlock()
 		mu.Lock()
 		if count == 0 {
 			time.Sleep(1500 * time.Millisecond)
 		}
 		count++
 		fmt.Fprintln(w, hello)
-		mu.Unlock()
 	})
 	http.ListenAndServe(":9090", nil)
 }

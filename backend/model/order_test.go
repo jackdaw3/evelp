@@ -53,35 +53,35 @@ func TestGetHighestBuyPrice(t *testing.T) {
 	err := setUp()
 	assert.NoError(t, err)
 
-	invaidHighestPrice1, err := multipleItemOrders.BuyOrdersHighestPrice(scope1)
+	invaidHighestPrice1, err := multipleItemOrders.HighestBuyPrice(scope1)
 	assert.Zero(t, invaidHighestPrice1)
 	assert.Equal(t, "orders have multiple itemIds", err.Error())
 
-	invaidHighestPrice2, err := sellOrders.BuyOrdersHighestPrice(scope1)
+	invaidHighestPrice2, err := sellOrders.HighestBuyPrice(scope1)
 	assert.Zero(t, invaidHighestPrice2)
 	assert.NoError(t, err)
 
-	highestPrice, err := buyOrders.BuyOrdersHighestPrice(scope1)
+	highestPrice, err := buyOrders.HighestBuyPrice(scope1)
 	assert.Equal(t, float64(27850000), highestPrice)
 	assert.NoError(t, err)
 
-	highestPrice1, err := orders.BuyOrdersHighestPrice(scope1)
+	highestPrice1, err := orders.HighestBuyPrice(scope1)
 	assert.Equal(t, float64(27850000), highestPrice1)
 	assert.NoError(t, err)
 
-	highestPrice2, err := orders.BuyOrdersHighestPrice(scope2)
+	highestPrice2, err := orders.HighestBuyPrice(scope2)
 	assert.Equal(t, float64(27850000), highestPrice2)
 	assert.NoError(t, err)
 
-	highestPrice3, err := orders.BuyOrdersHighestPrice(scope3)
+	highestPrice3, err := orders.HighestBuyPrice(scope3)
 	assert.Equal(t, float64(27827500), highestPrice3)
 	assert.NoError(t, err)
 
-	highestPrice4, err := orders.BuyOrdersHighestPrice(scope4)
+	highestPrice4, err := orders.HighestBuyPrice(scope4)
 	assert.Equal(t, float64(27793750), highestPrice4)
 	assert.NoError(t, err)
 
-	highestPrice5, err := orders.BuyOrdersHighestPrice(scope5)
+	highestPrice5, err := orders.HighestBuyPrice(scope5)
 	assert.Equal(t, int64(26991666), int64(highestPrice5))
 	assert.NoError(t, err)
 }
@@ -89,35 +89,35 @@ func TestGetHighestBuyPrice(t *testing.T) {
 func TestGetLowestSellPrice(t *testing.T) {
 	setUp()
 
-	invaidLowestPrice1, err := multipleItemOrders.SellOrdersLowestPrice(scope1)
+	invaidLowestPrice1, err := multipleItemOrders.LowestSellPrice(scope1)
 	assert.Zero(t, invaidLowestPrice1)
 	assert.Equal(t, "orders have multiple itemIds", err.Error())
 
-	invaidLowestPrice2, err := buyOrders.SellOrdersLowestPrice(scope1)
+	invaidLowestPrice2, err := buyOrders.LowestSellPrice(scope1)
 	assert.Zero(t, invaidLowestPrice2)
 	assert.NoError(t, err)
 
-	lowestPrice, err := sellOrders.SellOrdersLowestPrice(scope1)
+	lowestPrice, err := sellOrders.LowestSellPrice(scope1)
 	assert.Equal(t, float64(36730000), lowestPrice)
 	assert.NoError(t, err)
 
-	lowestPrice1, err := orders.SellOrdersLowestPrice(scope1)
+	lowestPrice1, err := orders.LowestSellPrice(scope1)
 	assert.Equal(t, float64(36730000), lowestPrice1)
 	assert.NoError(t, err)
 
-	lowestPrice2, err := orders.SellOrdersLowestPrice(scope2)
+	lowestPrice2, err := orders.LowestSellPrice(scope2)
 	assert.Equal(t, float64(36730000), lowestPrice2)
 	assert.NoError(t, err)
 
-	lowestPrice3, err := orders.SellOrdersLowestPrice(scope3)
+	lowestPrice3, err := orders.LowestSellPrice(scope3)
 	assert.Equal(t, float64(36730000), lowestPrice3)
 	assert.NoError(t, err)
 
-	lowestPrice4, err := orders.SellOrdersLowestPrice(scope4)
+	lowestPrice4, err := orders.LowestSellPrice(scope4)
 	assert.Equal(t, float64(37420000), lowestPrice4)
 	assert.NoError(t, err)
 
-	lowestPrice5, err := orders.SellOrdersLowestPrice(scope5)
+	lowestPrice5, err := orders.LowestSellPrice(scope5)
 	assert.Equal(t, int64(38064210), int64(lowestPrice5))
 	assert.NoError(t, err)
 }

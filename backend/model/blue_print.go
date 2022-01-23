@@ -17,12 +17,12 @@ type BluePrint struct {
 
 type ManufactProduct struct {
 	ItemId   int
-	Quantity int
+	Quantity int64
 }
 
 type ManufactMaterial struct {
 	ItemId   int
-	Quantity int
+	Quantity int64
 }
 
 type BluePrints []BluePrint

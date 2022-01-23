@@ -27,4 +27,4 @@ data:
   remoteDataSource: tranquility
 
 crypto:
-  keyPath: /opt/certs/private_key.pem
+  keyPath: /opt/certs/private_key_prod.pem

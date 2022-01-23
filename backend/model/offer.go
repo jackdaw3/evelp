@@ -15,7 +15,7 @@ type Offer struct {
 	OfferId        int                `gorm:"type:int;not null;primary_key;autoIncrement:false" json:"offer_id"`
 	ItemId         int                `gorm:"type:int;not null" json:"type_id"`
 	Quantity       int                `gorm:"type:int;not null" json:"quantity"`
-	IskCost        int                `gorm:"type:int;not null" json:"isk_cost"`
+	IskCost        float64            `gorm:"type:double;not null" json:"isk_cost"`
 	LpCost         int                `gorm:"type:int;not null" json:"lp_cost"`
 	AkCost         int                `gorm:"type:int;not null" json:"ak_cost"`
 	RequireItems   RequireItems       `gorm:"type:text" json:"required_items"`

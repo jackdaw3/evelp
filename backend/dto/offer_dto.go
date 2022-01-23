@@ -2,9 +2,9 @@ package dto
 
 import "evelp/model"
 
-type OffersDTO struct {
+type OfferDTO struct {
 	Item                model.Item
-	Quantity            int64
+	Quantity            int
 	IskCost             float64
 	LpCost              int
 	Matertials          Matertials
@@ -15,3 +15,11 @@ type OffersDTO struct {
 	LoyaltyPointsPerIsk int
 	SalaIndex           int
 }
+
+type OfferDTOs []OfferDTO
+
+func (o OfferDTOs) Len() int { return len(o) }
+
+func (o OfferDTOs) Less(i, j int) bool { return o[i].LoyaltyPointsPerIsk > o[j].LoyaltyPointsPerIsk }
+
+func (o OfferDTOs) Swap(i, j int) { o[i], o[j] = o[j], o[i] }

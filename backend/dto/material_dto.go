@@ -10,3 +10,11 @@ type Material struct {
 }
 
 type Matertials []Material
+
+func (ms *Matertials) Cost() float64 {
+	var cost float64
+	for _, m := range *ms {
+		cost += m.Price * float64(m.Quantity)
+	}
+	return cost
+}

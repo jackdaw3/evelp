@@ -88,7 +88,7 @@ func (b *bluePrintsData) covertProducts(products [][]string) error {
 			return err
 		}
 		manufactProduct.ItemId = productId
-		productQuantity, err := strconv.Atoi(product[3])
+		productQuantity, err := strconv.ParseInt(product[3], 10, 64)
 		if err != nil {
 			return err
 		}
@@ -133,7 +133,7 @@ func (b *bluePrintsData) covertMaterials(materails [][]string) error {
 			return err
 		}
 		manufactMaterial.ItemId = materailId
-		materailQuantity, err := strconv.Atoi(materail[3])
+		materailQuantity, err := strconv.ParseInt(materail[3], 10, 64)
 		if err != nil {
 			return err
 		}

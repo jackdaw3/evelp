@@ -7,8 +7,8 @@ import (
 )
 
 type RequireItem struct {
-	ItemId   int `gorm:"type:int;not null" json:"type_id"`
-	Quantity int `gorm:"type:int;not null" json:"quantity"`
+	ItemId   int   `gorm:"type:int;not null" json:"type_id"`
+	Quantity int64 `gorm:"type:int;not null" json:"quantity"`
 }
 
 type RequireItems []RequireItem
