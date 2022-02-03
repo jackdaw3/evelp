@@ -101,17 +101,17 @@ func (o *offersData) getOffers(corporationId int, wg *sync.WaitGroup) func() {
 
 		resp, err := net.GetWithRetries(client, req)
 		if err != nil {
-			log.Errorf("get corporation %d's failed: %v", corporationId, err)
+			log.Errorf("get corporation %d's failed: %+v", corporationId, err)
 		}
 
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Errorf("get corporation %d's body failed: %v", corporationId, err)
+			log.Errorf("get corporation %d's body failed: %+v", corporationId, err)
 		}
 
 		var offers model.Offers
 		if err = json.Unmarshal(body, &offers); err != nil {
-			log.Errorf("unmarshal corporation %d's offers json failed: %v", corporationId, err)
+			log.Errorf("unmarshal corporation %d's offers json failed: %+v", corporationId, err)
 		}
 
 		if offers.Len() == 0 {

@@ -25,13 +25,13 @@ func (s *starSystemsData) Refresh() error {
 	for _, starSystem := range *s.starSystems {
 		exist, err := starSystem.IsExist()
 		if err != nil {
-			log.Errorf("check starSystem %d exist failed: %v", starSystem.SystemId, err)
+			log.Errorf("check starSystem %d exist failed: %+v", starSystem.SystemId, err)
 		}
 
 		if exist {
 			valid, err := starSystem.IsVaild()
 			if err != nil {
-				log.Errorf("check starSystem %d valid failed: %v", starSystem.SystemId, err)
+				log.Errorf("check starSystem %d valid failed: %+v", starSystem.SystemId, err)
 			}
 
 			if valid {
@@ -57,18 +57,18 @@ func (s *starSystemsData) getAllStarSystems() {
 
 	resp, err := net.GetWithRetries(client, req)
 	if err != nil {
-		log.Errorf("get starSystems failed: %v", err)
+		log.Errorf("get starSystems failed: %+v", err)
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Errorf("get starSystems' body failed: %v", err)
+		log.Errorf("get starSystems' body failed: %+v", err)
 	}
 
 	var idArray []int
 
 	if err = json.Unmarshal(body, &idArray); err != nil {
-		log.Errorf("unmarshal starSystems json failed: %v", err)
+		log.Errorf("unmarshal starSystems json failed: %+v", err)
 	}
 
 	var starSystems model.StarSystems
@@ -94,18 +94,18 @@ func (s *starSystemsData) getStarSystem(starSystem *model.StarSystem, wg *sync.W
 
 			resp, err := net.GetWithRetries(client, req)
 			if err != nil {
-				log.Errorf("get starSystem %d failed: %v", starSystem.SystemId, err)
+				log.Errorf("get starSystem %d failed: %+v", starSystem.SystemId, err)
 			}
 
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				log.Errorf("get starSystem %d's body failed: %v", starSystem.SystemId, err)
+				log.Errorf("get starSystem %d's body failed: %+v", starSystem.SystemId, err)
 			}
 
 			var resultMap map[string]interface{}
 
 			if err = json.Unmarshal(body, &resultMap); err != nil {
-				log.Errorf("unmarshal starSystem %d json failed: %v", starSystem.SystemId, err)
+				log.Errorf("unmarshal starSystem %d json failed: %+v", starSystem.SystemId, err)
 			}
 
 			name, ok := resultMap["name"].(string)
@@ -131,7 +131,7 @@ func (s *starSystemsData) getStarSystem(starSystem *model.StarSystem, wg *sync.W
 		}
 
 		if err := model.SaveStarSystem(starSystem); err != nil {
-			log.Errorf("starSystem %d save to DB failed: %v", starSystem.SystemId, err)
+			log.Errorf("starSystem %d save to DB failed: %+v", starSystem.SystemId, err)
 		}
 	}
 }

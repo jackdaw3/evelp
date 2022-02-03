@@ -25,13 +25,13 @@ func (r *reginosData) Refresh() error {
 	for _, region := range *r.regions {
 		exist, err := region.IsExist()
 		if err != nil {
-			log.Errorf("check region %d exist failed: %v", region.RegionId, err)
+			log.Errorf("check region %d exist failed: %+v", region.RegionId, err)
 		}
 
 		if exist {
 			valid, err := region.IsVaild()
 			if err != nil {
-				log.Errorf("check region %d valid failed: %v", region.RegionId, err)
+				log.Errorf("check region %d valid failed: %+v", region.RegionId, err)
 			}
 
 			if valid {
@@ -59,18 +59,18 @@ func (r *reginosData) getAllRegions() {
 
 	resp, err := net.GetWithRetries(client, req)
 	if err != nil {
-		log.Errorf("get regions failed: %v", err)
+		log.Errorf("get regions failed: %+v", err)
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Errorf("get regions'body failed: %v", err)
+		log.Errorf("get regions'body failed: %+v", err)
 	}
 
 	var idArray []int
 
 	if err = json.Unmarshal(body, &idArray); err != nil {
-		log.Errorf("unmarshal regions json failed: %v", err)
+		log.Errorf("unmarshal regions json failed: %+v", err)
 	}
 
 	var regions model.Regions
@@ -96,18 +96,18 @@ func (r *reginosData) getRegion(region *model.Region, wg *sync.WaitGroup) func()
 
 			resp, err := net.GetWithRetries(client, req)
 			if err != nil {
-				log.Errorf("get region %d failed: %v", region.RegionId, err)
+				log.Errorf("get region %d failed: %+v", region.RegionId, err)
 			}
 
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				log.Errorf("get region %d's body failed: %v", region.RegionId, err)
+				log.Errorf("get region %d's body failed: %+v", region.RegionId, err)
 			}
 
 			var resultMap map[string]interface{}
 
 			if err = json.Unmarshal(body, &resultMap); err != nil {
-				log.Errorf("unmarshal region %d json failed: %v", region.RegionId, err)
+				log.Errorf("unmarshal region %d json failed: %+v", region.RegionId, err)
 			}
 
 			name, ok := resultMap["name"].(string)
