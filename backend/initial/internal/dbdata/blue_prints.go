@@ -115,7 +115,7 @@ func (b *bluePrintsData) covertMaterials(materails [][]string) error {
 		}
 
 		if _, ok := b.bluePrintsMap[bluePrintId]; !ok {
-			log.Warnf("blueprint %d has no product item", bluePrintId)
+			log.Debugf("blueprint %d has no product item", bluePrintId)
 			continue
 		}
 
