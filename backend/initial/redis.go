@@ -4,9 +4,9 @@ import (
 	"context"
 	"evelp/config/global"
 	"evelp/util/crypto"
-	"fmt"
 
 	"github.com/go-redis/redis/v8"
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -15,7 +15,7 @@ var ctx = context.Background()
 func initRedis() error {
 	password, err := crypto.Decrypt(global.Conf.MySQL.Password, global.Conf.Crypto.KeyPath)
 	if err != nil {
-		return fmt.Errorf("decode database password failed: %v", err)
+		return errors.Wrap(err, "decode database password failed")
 	}
 
 	rdb := redis.NewClient(&redis.Options{

@@ -4,6 +4,7 @@ import (
 	"evelp/config/global"
 	"os"
 
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -16,6 +17,8 @@ func config() error {
 	if err := initViper(); err != nil {
 		return err
 	}
+
+	initLogrus()
 
 	return nil
 }
@@ -33,7 +36,7 @@ func initEnv() error {
 	var err error
 	global.WORKSPACE, err = os.Getwd()
 	if err != nil {
-		return err
+		return errors.Wrap(err, "get workspace failed")
 	}
 
 	log.Infof("Workspace: %s", global.WORKSPACE)
@@ -54,4 +57,14 @@ func initViper() error {
 	}
 
 	return nil
+}
+
+func initLogrus() {
+	if global.Conf.App.LogLevel == "info" {
+		log.SetLevel(log.InfoLevel)
+	}
+
+	if global.Conf.App.LogLevel == "debug" {
+		log.SetLevel(log.DebugLevel)
+	}
 }

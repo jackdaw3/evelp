@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -16,7 +17,7 @@ import (
 func database() error {
 	password, err := crypto.Decrypt(global.Conf.MySQL.Password, global.Conf.Crypto.KeyPath)
 	if err != nil {
-		return fmt.Errorf("decode database password failed: %v", err)
+		return errors.Wrap(err, "decode database password failed")
 	}
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true&loc=%s",
@@ -60,7 +61,7 @@ func autoMigrate() error {
 
 	for _, m := range models {
 		if err := global.DB.AutoMigrate(m); err != nil {
-			return err
+			return errors.Wrap(err, "auto migrate db tables failed")
 		}
 	}
 

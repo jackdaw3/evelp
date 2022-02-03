@@ -6,6 +6,7 @@ var (
 
 type AppConfig struct {
 	ServerPort string `yaml:"serverPort"`
+	LogLevel   string `yaml:"logLevel"`
 }
 
 type CryptoConfig struct {

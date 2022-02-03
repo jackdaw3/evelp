@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/pkg/errors"
 	"gorm.io/gorm/clause"
 )
 
@@ -80,7 +81,7 @@ func GetOffersByCorporation(corporationId int) (*Offers, error) {
 
 func SaveOffer(offer *Offer) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&offer).Error; err != nil {
-		return err
+		return errors.Wrap(err, "save offer to DB failed")
 	}
 	return nil
 }

@@ -1,5 +1,6 @@
 app:
   serverPort: :8000
+  logLevel: debug
 
 mysql:
   host: 127.0.0.1

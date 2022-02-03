@@ -3,6 +3,7 @@ package model
 import (
 	"evelp/config/global"
 
+	"github.com/pkg/errors"
 	"gorm.io/gorm/clause"
 )
 
@@ -33,7 +34,7 @@ func GetFactions() (*Factions, error) {
 
 func SaveFaction(faction *Faction) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&faction).Error; err != nil {
-		return err
+		return errors.Wrap(err, "save faction to DB failed")
 	}
 	return nil
 }

@@ -4,6 +4,7 @@ import (
 	"evelp/config/global"
 	"reflect"
 
+	"github.com/pkg/errors"
 	"gorm.io/gorm/clause"
 )
 
@@ -32,7 +33,7 @@ func GetStarSystem(systemId int) (*StarSystem, error) {
 
 func SaveStarSystem(starSystem *StarSystem) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&starSystem).Error; err != nil {
-		return err
+		return errors.Wrap(err, "save star system to DB failed")
 	}
 	return nil
 }

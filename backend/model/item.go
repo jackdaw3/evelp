@@ -3,6 +3,7 @@ package model
 import (
 	"evelp/config/global"
 
+	"github.com/pkg/errors"
 	"gorm.io/gorm/clause"
 )
 
@@ -28,7 +29,7 @@ func GetItem(id int) (*Item, error) {
 
 func SaveItem(item *Item) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&item).Error; err != nil {
-		return err
+		return errors.Wrap(err, "save item to DB failed")
 	}
 	return nil
 }

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -29,13 +30,13 @@ func GetWithRetries(client *http.Client, request string) (*http.Response, error)
 			err = fmt.Errorf("request %s error status code %d", request, code)
 		}
 
-		log.Warn(err)
-		log.Warnf("request %s retrying in %v", request, backoff)
+		log.Debug(err)
+		log.Debugf("request %s retrying in %v", request, backoff)
 		time.Sleep(backoff)
 	}
 
 	if err != nil {
-		return nil, fmt.Errorf("all request retries failed: %v", err)
+		return nil, errors.Wrap(err, "all request retries failed")
 	}
 
 	return resp, nil

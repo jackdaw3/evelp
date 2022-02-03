@@ -4,6 +4,7 @@ import (
 	"evelp/config/global"
 	"reflect"
 
+	"github.com/pkg/errors"
 	"gorm.io/gorm/clause"
 )
 
@@ -34,7 +35,7 @@ func GetRegions() (*Regions, error) {
 
 func SaveRegion(region *Region) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&region).Error; err != nil {
-		return err
+		return errors.Wrap(err, "save region to DB failed")
 	}
 	return nil
 }

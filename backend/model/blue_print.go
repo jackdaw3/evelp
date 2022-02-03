@@ -6,6 +6,7 @@ import (
 	"evelp/config/global"
 	"fmt"
 
+	"github.com/pkg/errors"
 	"gorm.io/gorm/clause"
 )
 
@@ -99,7 +100,7 @@ func GetBluePrint(blueprintItemId int) *BluePrint {
 
 func SaveBluePrint(bluePrint *BluePrint) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&bluePrint).Error; err != nil {
-		return err
+		return errors.Wrap(err, "save blue print to DB failed")
 	}
 	return nil
 }
