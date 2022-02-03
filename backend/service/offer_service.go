@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"sort"
 
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -31,10 +32,10 @@ func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 		var offerDTO *dto.OfferDTO
 		var err error
 		if offer.IsBluePrint {
-			offerDTO, err = convertBluePrint(offer, o.regionId, o.scope, o.lang)
+			offerDTO, err = o.convertBluePrint(offer)
 
 		} else {
-			offerDTO, err = convertOffer(offer, o.regionId, o.scope, o.lang)
+			offerDTO, err = o.convertOffer(offer)
 		}
 
 		if err != nil {
@@ -49,7 +50,7 @@ func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 
 }
 
-func convertOffer(offer *model.Offer, regionId int, scope float64, lang string) (*dto.OfferDTO, error) {
+func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 	var offerDTO dto.OfferDTO
 
 	item, err := model.GetItem(offer.ItemId)
@@ -58,56 +59,38 @@ func convertOffer(offer *model.Offer, regionId int, scope float64, lang string) 
 	}
 
 	offerDTO.ItemId = item.ItemId
-	offerDTO.Name = language.Name(lang, item.Name)
-
+	offerDTO.Name = language.Name(o.lang, item.Name)
+	offerDTO.IsBluePrint = false
 	offerDTO.Quantity = offer.Quantity
 	offerDTO.IskCost = offer.IskCost
 	offerDTO.LpCost = offer.LpCost
 
-	var materails dto.Matertials
-	requireItems := offer.RequireItems
-	for _, r := range requireItems {
-		var materail dto.Material
-		mi, err := model.GetItem(r.ItemId)
-		if err != nil {
-			return nil, err
-		}
-
-		materail.ItemId = mi.ItemId
-		materail.Name = language.Name(lang, mi.Name)
-
-		materail.Quantity = r.Quantity
-		materail.IsBluePrint = false
-
-		mos := NewOrderService(mi.ItemId, regionId, scope)
-		price, err := mos.LowestSellPrice()
-		if err != nil {
-			return nil, err
-		}
-		materail.Price = price
-		materails = append(materails, materail)
+	materails, err := o.conertMaterials(offer.RequireItems)
+	if err != nil {
+		return nil, errors.WithMessage(err, "covert materails failed")
 	}
 
 	offerDTO.Matertials = materails
 	offerDTO.MaterialCost = materails.Cost()
 
-	oos := NewOrderService(offerDTO.ItemId, regionId, scope)
+	oos := NewOrderService(offerDTO.ItemId, o.regionId, o.scope)
 	price, err := oos.HighestBuyPrice()
 	if err != nil {
 		log.Errorf(err.Error())
 	}
-	offerDTO.Income = price * float64(offerDTO.Quantity)
+	offerDTO.Price = price
+	offerDTO.Income = offerDTO.Price * float64(offer.Quantity)
 	offerDTO.Profit = offerDTO.Income - (offerDTO.MaterialCost + offerDTO.IskCost)
 
 	if offerDTO.LpCost > 0 {
-		offerDTO.LoyaltyPointsPerIsk = int(offerDTO.Profit / float64(offerDTO.LpCost))
+		offerDTO.UnitProfit = int(offerDTO.Profit / float64(offerDTO.LpCost))
 	}
-	//TODO SET SALE INDEX
 
+	//TODO SET SALE INDEX
 	return &offerDTO, nil
 }
 
-func convertBluePrint(offer *model.Offer, regionId int, scope float64, lang string) (*dto.OfferDTO, error) {
+func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, error) {
 	var offerDTO dto.OfferDTO
 
 	bluePrint := model.GetBluePrint(offer.ItemId)
@@ -115,21 +98,86 @@ func convertBluePrint(offer *model.Offer, regionId int, scope float64, lang stri
 		return nil, fmt.Errorf("offer %d's bluePrint %d have no product", offer.OfferId, bluePrint.BlueprintId)
 	}
 
-	item, err := model.GetItem(bluePrint.Products[0].ItemId)
+	bluePrintItem, err := model.GetItem(bluePrint.BlueprintId)
 	if err != nil {
 		return nil, err
 	}
 
-	offerDTO.ItemId = item.ItemId
-	offerDTO.Name = language.Name(lang, item.Name)
+	product, err := model.GetItem(bluePrint.Products[0].ItemId)
+	if err != nil {
+		return nil, err
+	}
 
+	offerDTO.ItemId = product.ItemId
+	offerDTO.Name = language.Name(o.lang, bluePrintItem.Name)
+	offerDTO.IsBluePrint = true
 	offerDTO.Quantity = offer.Quantity
 	offerDTO.IskCost = offer.IskCost
 	offerDTO.LpCost = offer.LpCost
 
+	materails, err := o.conertMaterials(offer.RequireItems)
+	if err != nil {
+		return nil, errors.WithMessage(err, "covert materails failed")
+	}
+	manufactMaterials, err := o.conertManufactMaterials(bluePrint.Materials)
+	if err != nil {
+		return nil, errors.WithMessage(err, "covert manufact materials failed")
+	}
+	materails = append(materails, manufactMaterials...)
+
+	offerDTO.Matertials = materails
+	offerDTO.MaterialCost = materails.Cost()
+
+	oos := NewOrderService(offerDTO.ItemId, o.regionId, o.scope)
+	price, err := oos.HighestBuyPrice()
+	if err != nil {
+		log.Errorf(err.Error())
+	}
+	offerDTO.Price = price
+	offerDTO.Income = offerDTO.Price * float64(offer.Quantity)
+	offerDTO.Profit = offerDTO.Income - (offerDTO.MaterialCost + offerDTO.IskCost)
+
+	if offerDTO.LpCost > 0 {
+		offerDTO.UnitProfit = int(offerDTO.Profit / float64(offerDTO.LpCost))
+	}
+
+	//TODO SET SALE INDEX
+	return &offerDTO, nil
+}
+
+func (o *OfferSerivce) conertMaterials(rs model.RequireItems) (dto.Matertials, error) {
 	var materails dto.Matertials
-	manufactMaterials := bluePrint.Materials
-	for _, m := range manufactMaterials {
+
+	for _, r := range rs {
+		var materail dto.Material
+		mi, err := model.GetItem(r.ItemId)
+		if err != nil {
+			return nil, err
+		}
+
+		materail.ItemId = mi.ItemId
+		materail.Name = language.Name(o.lang, mi.Name)
+
+		materail.Quantity = r.Quantity
+		materail.IsBluePrint = false
+
+		mos := NewOrderService(mi.ItemId, o.regionId, o.scope)
+		price, err := mos.LowestSellPrice()
+		if err != nil {
+			return nil, err
+		}
+		materail.Price = price
+		materail.Cost = materail.Price * float64(materail.Quantity)
+		materails = append(materails, materail)
+	}
+
+	return materails, nil
+}
+
+func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials) (dto.Matertials, error) {
+	var materails dto.Matertials
+
+	for _, m := range ms {
 		var materail dto.Material
 		mi, err := model.GetItem(m.ItemId)
 		if err != nil {
@@ -137,35 +185,20 @@ func convertBluePrint(offer *model.Offer, regionId int, scope float64, lang stri
 		}
 
 		materail.ItemId = mi.ItemId
-		materail.Name = language.Name(lang, mi.Name)
+		materail.Name = language.Name(o.lang, mi.Name)
 		materail.IsBluePrint = true
-		materail.Quantity = int64(m.Quantity)
+		materail.Quantity = m.Quantity
 
-		mos := NewOrderService(mi.ItemId, regionId, scope)
+		mos := NewOrderService(mi.ItemId, o.regionId, o.scope)
 		price, err := mos.LowestSellPrice()
 		if err != nil {
 			return nil, err
 		}
 		materail.Price = price
+		materail.Cost = materail.Price * float64(materail.Quantity)
 
 		materails = append(materails, materail)
 	}
 
-	offerDTO.Matertials = materails
-	offerDTO.MaterialCost = materails.Cost()
-
-	oos := NewOrderService(offerDTO.ItemId, regionId, scope)
-	price, err := oos.HighestBuyPrice()
-	if err != nil {
-		log.Errorf(err.Error())
-	}
-	offerDTO.Income = price
-	offerDTO.Profit = offerDTO.Income - (offerDTO.MaterialCost + offerDTO.IskCost)
-
-	if offerDTO.LpCost > 0 {
-		offerDTO.LoyaltyPointsPerIsk = int(offerDTO.Profit / float64(offerDTO.LpCost))
-	}
-	//TODO SET SALE INDEX
-
-	return &offerDTO, nil
+	return materails, nil
 }

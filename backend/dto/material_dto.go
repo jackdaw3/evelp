@@ -5,6 +5,7 @@ type Material struct {
 	Name        string
 	Quantity    int64
 	Price       float64
+	Cost        float64
 	IsBluePrint bool
 }
 
@@ -13,7 +14,7 @@ type Matertials []Material
 func (ms *Matertials) Cost() float64 {
 	var cost float64
 	for _, m := range *ms {
-		cost += m.Price * float64(m.Quantity)
+		cost += m.Cost
 	}
 	return cost
 }
