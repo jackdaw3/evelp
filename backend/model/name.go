@@ -31,7 +31,7 @@ func (n *Name) Scan(value interface{}) error {
 func (n Name) Value() (driver.Value, error) {
 	str, err := json.Marshal(n)
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	return string(str), nil

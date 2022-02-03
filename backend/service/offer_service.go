@@ -3,6 +3,7 @@ package service
 import (
 	"evelp/dto"
 	"evelp/model"
+	"evelp/util/language"
 	"fmt"
 	"sort"
 
@@ -12,10 +13,11 @@ import (
 type OfferSerivce struct {
 	regionId int
 	scope    float64
+	lang     string
 }
 
-func NewOfferSerivce(regionId int, scope float64) *OfferSerivce {
-	return &OfferSerivce{regionId, scope}
+func NewOfferSerivce(regionId int, scope float64, lang string) *OfferSerivce {
+	return &OfferSerivce{regionId, scope, lang}
 }
 
 func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
@@ -29,10 +31,10 @@ func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 		var offerDTO *dto.OfferDTO
 		var err error
 		if offer.IsBluePrint {
-			offerDTO, err = convertBluePrint(offer, o.regionId, o.scope)
+			offerDTO, err = convertBluePrint(offer, o.regionId, o.scope, o.lang)
 
 		} else {
-			offerDTO, err = convertOffer(offer, o.regionId, o.scope)
+			offerDTO, err = convertOffer(offer, o.regionId, o.scope, o.lang)
 		}
 
 		if err != nil {
@@ -47,14 +49,17 @@ func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 
 }
 
-func convertOffer(offer *model.Offer, regionId int, scope float64) (*dto.OfferDTO, error) {
+func convertOffer(offer *model.Offer, regionId int, scope float64, lang string) (*dto.OfferDTO, error) {
 	var offerDTO dto.OfferDTO
 
 	item, err := model.GetItem(offer.ItemId)
 	if err != nil {
 		return nil, err
 	}
-	offerDTO.Item = *item
+
+	offerDTO.ItemId = item.ItemId
+	offerDTO.Name = language.Name(lang, item.Name)
+
 	offerDTO.Quantity = offer.Quantity
 	offerDTO.IskCost = offer.IskCost
 	offerDTO.LpCost = offer.LpCost
@@ -67,7 +72,10 @@ func convertOffer(offer *model.Offer, regionId int, scope float64) (*dto.OfferDT
 		if err != nil {
 			return nil, err
 		}
-		materail.Item = *mi
+
+		materail.ItemId = mi.ItemId
+		materail.Name = language.Name(lang, mi.Name)
+
 		materail.Quantity = r.Quantity
 		materail.IsBluePrint = false
 
@@ -83,7 +91,7 @@ func convertOffer(offer *model.Offer, regionId int, scope float64) (*dto.OfferDT
 	offerDTO.Matertials = materails
 	offerDTO.MaterialCost = materails.Cost()
 
-	oos := NewOrderService(offerDTO.Item.ItemId, regionId, scope)
+	oos := NewOrderService(offerDTO.ItemId, regionId, scope)
 	price, err := oos.HighestBuyPrice()
 	if err != nil {
 		log.Errorf(err.Error())
@@ -99,7 +107,7 @@ func convertOffer(offer *model.Offer, regionId int, scope float64) (*dto.OfferDT
 	return &offerDTO, nil
 }
 
-func convertBluePrint(offer *model.Offer, regionId int, scope float64) (*dto.OfferDTO, error) {
+func convertBluePrint(offer *model.Offer, regionId int, scope float64, lang string) (*dto.OfferDTO, error) {
 	var offerDTO dto.OfferDTO
 
 	bluePrint := model.GetBluePrint(offer.ItemId)
@@ -111,7 +119,10 @@ func convertBluePrint(offer *model.Offer, regionId int, scope float64) (*dto.Off
 	if err != nil {
 		return nil, err
 	}
-	offerDTO.Item = *item
+
+	offerDTO.ItemId = item.ItemId
+	offerDTO.Name = language.Name(lang, item.Name)
+
 	offerDTO.Quantity = offer.Quantity
 	offerDTO.IskCost = offer.IskCost
 	offerDTO.LpCost = offer.LpCost
@@ -124,7 +135,9 @@ func convertBluePrint(offer *model.Offer, regionId int, scope float64) (*dto.Off
 		if err != nil {
 			return nil, err
 		}
-		materail.Item = *mi
+
+		materail.ItemId = mi.ItemId
+		materail.Name = language.Name(lang, mi.Name)
 		materail.IsBluePrint = true
 		materail.Quantity = int64(m.Quantity)
 
@@ -141,7 +154,7 @@ func convertBluePrint(offer *model.Offer, regionId int, scope float64) (*dto.Off
 	offerDTO.Matertials = materails
 	offerDTO.MaterialCost = materails.Cost()
 
-	oos := NewOrderService(offerDTO.Item.ItemId, regionId, scope)
+	oos := NewOrderService(offerDTO.ItemId, regionId, scope)
 	price, err := oos.HighestBuyPrice()
 	if err != nil {
 		log.Errorf(err.Error())

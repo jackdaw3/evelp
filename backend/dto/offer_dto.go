@@ -1,9 +1,8 @@
 package dto
 
-import "evelp/model"
-
 type OfferDTO struct {
-	Item                model.Item
+	ItemId              int
+	Name                string
 	Quantity            int
 	IskCost             float64
 	LpCost              int

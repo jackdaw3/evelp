@@ -1,9 +1,8 @@
 package dto
 
-import "evelp/model"
-
 type Material struct {
-	Item        model.Item
+	ItemId      int
+	Name        string
 	Quantity    int64
 	Price       float64
 	IsBluePrint bool
