@@ -4,7 +4,6 @@ import (
 	"evelp/model"
 	"time"
 
-	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -26,14 +25,6 @@ func CacheData() error {
 			}
 		}
 	}()
-
-	itemHistroyData := new(itemHistroy)
-	cron := cron.New(cron.WithSeconds())
-	if _, err := cron.AddFunc("@daily", itemHistroyData.invoke()); err != nil {
-		return err
-	}
-
-	//cron.Run()
 
 	return nil
 }
