@@ -109,7 +109,6 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	}
 
 	offerDTO.ItemId = product.ItemId
-	offerDTO.Name = language.Name(o.lang, bluePrintItem.Name)
 	offerDTO.IsBluePrint = true
 	offerDTO.Quantity = offer.Quantity
 	offerDTO.IskCost = offer.IskCost
@@ -142,6 +141,10 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	}
 
 	//TODO SET SALE INDEX
+
+	offerDTO.ItemId = bluePrintItem.ItemId
+	offerDTO.Name = language.Name(o.lang, bluePrintItem.Name)
+
 	return &offerDTO, nil
 }
 

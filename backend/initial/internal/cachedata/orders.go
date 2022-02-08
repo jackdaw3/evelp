@@ -8,7 +8,6 @@ import (
 	"evelp/util/net"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"strconv"
 	"sync"
 	"time"
@@ -18,9 +17,8 @@ import (
 )
 
 var (
-	client = &http.Client{}
-	wg     sync.WaitGroup
-	mu     sync.Mutex
+	wg sync.WaitGroup
+	mu sync.Mutex
 )
 
 const (

@@ -72,6 +72,12 @@ func GetOffer(offerId int) (*Offer, error) {
 	return &offer, result.Error
 }
 
+func GetOffers() (*Offers, error) {
+	var offers Offers
+	result := global.DB.Find(&offers)
+	return &offers, result.Error
+}
+
 func GetOffersByCorporation(corporationId int) (*Offers, error) {
 	var offers Offers
 	criteria := fmt.Sprintf("%%%s%%", strconv.Itoa(corporationId))

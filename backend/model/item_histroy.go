@@ -1,12 +1,15 @@
 package model
 
+import "time"
+
 type ItemHistory struct {
 	ItemId     int
-	Average    float64
-	Highest    float64
-	Lowest     float64
-	OrderCount int64
-	Volume     int64
+	Average    float64   `json:"average"`
+	Highest    float64   `json:"highest"`
+	Lowest     float64   `json:"lowest"`
+	OrderCount int64     `json:"order_count"`
+	Volume     int64     `json:"volume"`
+	Date       time.Time `json:"date"`
 }
 
 type ItemHistorys []*ItemHistory
