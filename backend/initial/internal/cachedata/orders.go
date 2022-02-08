@@ -33,28 +33,21 @@ type ordersData struct {
 }
 
 func (o *ordersData) Refresh() error {
-	regions, err := model.GetRegions()
-	if err != nil {
-		return errors.WithMessage(err, "get regions failed")
-	}
-
 	log.Infof("start load orders to redis")
-	for _, region := range *regions {
-		log.Debugf("start load %d region's orders", region.RegionId)
-		if err := o.loadOrdersByRegion(region.RegionId); err != nil {
-			log.Errorf("load %d region orders failed:%+v", region.RegionId, err)
-			continue
-		}
 
-		log.Debugf("start load %d region's orders to redis", region.RegionId)
-		for key, order := range o.orders {
-			if err := cache.Set(key, order, o.expirationTime); err != nil {
-				log.Errorf("save orders to redis failed:%+v", key, err)
-			}
-		}
-
-		o.clearMap()
+	log.Debugf("start load %d region's orders", THE_FORGE)
+	if err := o.loadOrdersByRegion(THE_FORGE); err != nil {
+		return errors.WithMessagef(err, "load %d region orders failed", THE_FORGE)
 	}
+
+	log.Debugf("start load %d region's orders to redis", THE_FORGE)
+	for key, order := range o.orders {
+		if err := cache.Set(key, order, o.expirationTime); err != nil {
+			log.Errorf("save order %s to redis failed:%+v", key, err)
+		}
+	}
+
+	o.clearMap()
 	log.Infof("orders saved to reids")
 
 	return nil

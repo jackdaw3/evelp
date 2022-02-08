@@ -16,6 +16,7 @@ var (
 const (
 	orderExpireTime       = 5 * time.Hour
 	itemHistoryExpireTime = 24 * time.Hour
+	THE_FORGE             = 10000002
 )
 
 func CacheData() error {
@@ -39,6 +40,6 @@ func CacheData() error {
 		return err
 	}
 
-	cron.Run()
+	cron.Start()
 	return nil
 }

@@ -14,11 +14,12 @@ import (
 type OfferSerivce struct {
 	regionId int
 	scope    float64
+	days     int
 	lang     string
 }
 
-func NewOfferSerivce(regionId int, scope float64, lang string) *OfferSerivce {
-	return &OfferSerivce{regionId, scope, lang}
+func NewOfferSerivce(regionId int, scope float64, days int, lang string) *OfferSerivce {
+	return &OfferSerivce{regionId, scope, days, lang}
 }
 
 func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
@@ -33,13 +34,13 @@ func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 		var err error
 		if offer.IsBluePrint {
 			offerDTO, err = o.convertBluePrint(offer)
-
 		} else {
 			offerDTO, err = o.convertOffer(offer)
 		}
 
 		if err != nil {
-			return nil, err
+			log.Errorf("get offer %d failed: %+v", offer.OfferId, err)
+			continue
 		}
 		offerDTOs = append(offerDTOs, *offerDTO)
 	}
@@ -76,7 +77,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 	oos := NewOrderService(offerDTO.ItemId, o.regionId, o.scope)
 	price, err := oos.HighestBuyPrice()
 	if err != nil {
-		log.Errorf(err.Error())
+		return nil, errors.WithMessage(err, "get highestBuyPrice failed")
 	}
 	offerDTO.Price = price
 	offerDTO.Income = offerDTO.Price * float64(offer.Quantity)
@@ -85,6 +86,12 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 	if offerDTO.LpCost > 0 {
 		offerDTO.UnitProfit = int(offerDTO.Profit / float64(offerDTO.LpCost))
 	}
+
+	volume, err := o.AverageVolume(offerDTO.ItemId)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	offerDTO.Volume = volume
 
 	//TODO SET SALE INDEX
 	return &offerDTO, nil
@@ -130,7 +137,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	oos := NewOrderService(offerDTO.ItemId, o.regionId, o.scope)
 	price, err := oos.HighestBuyPrice()
 	if err != nil {
-		log.Errorf(err.Error())
+		return nil, errors.WithMessage(err, "get highestBuyPrice failed")
 	}
 	offerDTO.Price = price
 	offerDTO.Income = offerDTO.Price * float64(offer.Quantity)
@@ -140,6 +147,12 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 		offerDTO.UnitProfit = int(offerDTO.Profit / float64(offerDTO.LpCost))
 	}
 
+	volume, err := o.AverageVolume(offerDTO.ItemId)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	offerDTO.Volume = volume
+
 	//TODO SET SALE INDEX
 
 	offerDTO.ItemId = bluePrintItem.ItemId
@@ -148,11 +161,11 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	return &offerDTO, nil
 }
 
-func (o *OfferSerivce) conertMaterials(rs model.RequireItems) (dto.Matertials, error) {
-	var materails dto.Matertials
+func (o *OfferSerivce) conertMaterials(rs model.RequireItems) (dto.MatertialDTOs, error) {
+	var materails dto.MatertialDTOs
 
 	for _, r := range rs {
-		var materail dto.Material
+		var materail dto.MaterialDTO
 		mi, err := model.GetItem(r.ItemId)
 		if err != nil {
 			return nil, err
@@ -177,11 +190,11 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems) (dto.Matertials, e
 	return materails, nil
 }
 
-func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials) (dto.Matertials, error) {
-	var materails dto.Matertials
+func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials) (dto.MatertialDTOs, error) {
+	var materails dto.MatertialDTOs
 
 	for _, m := range ms {
-		var materail dto.Material
+		var materail dto.MaterialDTO
 		mi, err := model.GetItem(m.ItemId)
 		if err != nil {
 			return nil, err
@@ -204,4 +217,15 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials) (dto.
 	}
 
 	return materails, nil
+}
+
+func (o *OfferSerivce) AverageVolume(itemId int) (int64, error) {
+	ihs := NewItemHistoryService(itemId, o.regionId)
+	itemHistorys, err := ihs.History()
+	if err != nil {
+		return 0, errors.WithMessagef(err, "get item %d historys failed", itemId)
+	}
+
+	volume := itemHistorys.AverageVolume(o.days)
+	return volume, nil
 }

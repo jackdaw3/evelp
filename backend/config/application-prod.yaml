@@ -1,5 +1,5 @@
 app:
-  serverPort: :8000
+  serverPort: :9000
   logLevel: info
 
 mysql:

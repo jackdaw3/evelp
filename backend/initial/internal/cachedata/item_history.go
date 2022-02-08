@@ -14,8 +14,7 @@ import (
 )
 
 const (
-	THE_FORGE = 10000002
-	HISTROY   = "history"
+	HISTROY = "history"
 )
 
 type itemHistroy struct {
@@ -23,8 +22,6 @@ type itemHistroy struct {
 
 func (i *itemHistroy) invoke() func() {
 	return func() {
-		log.Infof("start load item history to redis")
-
 		products := make(map[int]struct{})
 
 		offers, err := model.GetOffers()
@@ -50,6 +47,8 @@ func (i *itemHistroy) invoke() func() {
 			}
 		}
 
+		log.Infof("start load %d items history to redis", len(products))
+
 		for p := range products {
 			req := fmt.Sprintf("%s/markets/%d/history/?datasource=%s&type_id=%d",
 				global.Conf.Data.RemoteDataAddress,
@@ -73,15 +72,18 @@ func (i *itemHistroy) invoke() func() {
 			var itemHistorys model.ItemHistorys
 			if err = json.Unmarshal(body, &itemHistorys); err != nil {
 				log.Errorf("unmarshal item %d histroy json failed: %+v", p, err)
-
 			}
 
-			key := cache.Key(ORDER, strconv.Itoa(THE_FORGE), strconv.Itoa(p))
+			for _, itemitemHistory := range itemHistorys {
+				itemitemHistory.ItemId = p
+			}
+
+			key := cache.Key(HISTROY, strconv.Itoa(THE_FORGE), strconv.Itoa(p))
 			if err := cache.Set(key, itemHistorys, itemHistoryExpireTime); err != nil {
 				log.Errorf("save orders to redis failed:%+v", key, err)
 			}
 		}
 
-		log.Infof("Item histroy saved to reids")
+		log.Infof("Items histroy saved to reids")
 	}
 }

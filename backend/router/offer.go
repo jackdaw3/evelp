@@ -21,6 +21,12 @@ func offer(c *gin.Context) {
 		return
 	}
 
+	days, err := strconv.Atoi(c.Query("days"))
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
+	}
+
 	lang := c.Query("lang")
 	if lang == "" {
 		c.AbortWithError(500, errors.New("lang is empty"))
@@ -33,7 +39,7 @@ func offer(c *gin.Context) {
 		return
 	}
 
-	offerService := service.NewOfferSerivce(regionId, float64(scope), lang)
+	offerService := service.NewOfferSerivce(regionId, float64(scope), days, lang)
 
 	orders, err := offerService.Offers(corporationId)
 	if err != nil {

@@ -6,12 +6,12 @@ type OfferDTO struct {
 	Quantity     int
 	IskCost      float64
 	LpCost       int
-	Matertials   Matertials
+	Matertials   MatertialDTOs
 	MaterialCost float64
 	Price        float64
 	Income       float64
 	Profit       float64
-	Volume       float64
+	Volume       int64
 	UnitProfit   int
 	SalaIndex    int
 	IsBluePrint  bool
