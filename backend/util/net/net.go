@@ -2,7 +2,6 @@ package net
 
 import (
 	"evelp/log"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -27,7 +26,7 @@ func GetWithRetries(client *http.Client, request string) (*http.Response, error)
 			if code == http.StatusOK {
 				break
 			}
-			err = fmt.Errorf("http request %s error status code %d", request, code)
+			err = errors.Errorf("http request %s error status code %d", request, code)
 		}
 
 		log.Warnf("http request %s failed: %+v \nretrying in %v", request, err, backoff)
