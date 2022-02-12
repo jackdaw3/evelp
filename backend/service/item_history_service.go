@@ -21,17 +21,9 @@ func (h *ItemHistoryService) History() (*model.ItemHistorys, error) {
 	var itemHistorys model.ItemHistorys
 
 	key := cache.Key(history, strconv.Itoa(h.regionId), strconv.Itoa(h.itemId))
-	exist, err := cache.Exist(key)
-	if err != nil {
-		return nil, err
-	}
 
-	if exist {
-		if err := cache.Get(key, &itemHistorys); err != nil {
-			return nil, err
-		}
-	} else {
-		return nil, nil
+	if err := cache.Get(key, &itemHistorys); err != nil {
+		return nil, err
 	}
 
 	return &itemHistorys, nil

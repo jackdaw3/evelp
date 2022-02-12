@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"evelp/config/global"
-	"evelp/log"
 	"strings"
 	"time"
 
@@ -27,6 +26,10 @@ func Set(key string, value interface{}, expirationTime time.Duration) error {
 }
 
 func Get(key string, dest interface{}) error {
+	if err := Exist(key); err != nil {
+		return err
+	}
+
 	val, err := global.REDIS.Get(ctx, key).Result()
 	if err != nil {
 		return errors.Wrapf(err, "redis get %v failed", key)
@@ -37,17 +40,16 @@ func Get(key string, dest interface{}) error {
 	return nil
 }
 
-func Exist(key ...string) (bool, error) {
+func Exist(key ...string) error {
 	val, err := global.REDIS.Exists(ctx, key...).Result()
 	if err != nil {
-		return false, errors.Wrapf(err, "redis check %v exist failed", key)
+		return errors.Wrapf(err, "redis check %v exist failed", key)
 	}
 
 	if val == 1 {
-		return true, nil
+		return nil
 	} else {
-		log.Warnf("redis key %v not exist", key)
-		return false, nil
+		return errors.Errorf("redis key %v not exist", key)
 	}
 }
 
