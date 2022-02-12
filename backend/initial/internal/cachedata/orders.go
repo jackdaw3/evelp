@@ -21,12 +21,6 @@ var (
 	mu sync.Mutex
 )
 
-const (
-	ORDER  = "order"
-	XPAGES = "x-pages"
-	FIRST  = 1
-)
-
 type ordersData struct {
 	orders         map[string]*model.Orders
 	expirationTime time.Duration
@@ -35,12 +29,12 @@ type ordersData struct {
 func (o *ordersData) Refresh() error {
 	log.Infof("start load orders to redis")
 
-	log.Debugf("start load %d region's orders", THE_FORGE)
-	if err := o.loadOrdersByRegion(THE_FORGE); err != nil {
-		return errors.WithMessagef(err, "load %d region orders failed", THE_FORGE)
+	log.Debugf("start load %d region's orders", the_forge)
+	if err := o.loadOrdersByRegion(the_forge); err != nil {
+		return errors.WithMessagef(err, "load %d region orders failed", the_forge)
 	}
 
-	log.Debugf("start load %d region's orders to redis", THE_FORGE)
+	log.Debugf("start load %d region's orders to redis", the_forge)
 	for key, order := range o.orders {
 		if err := cache.Set(key, order, o.expirationTime); err != nil {
 			log.Errorf(err, "save order %s to redis failed", key)
@@ -98,7 +92,7 @@ func (o *ordersData) loadOrdersByRegionPage(regionId int, page int) func() {
 		}
 
 		for _, order := range orders {
-			key := cache.Key(ORDER, strconv.Itoa(regionId), strconv.Itoa(order.ItemId))
+			key := cache.Key("order", strconv.Itoa(regionId), strconv.Itoa(order.ItemId))
 			o.syncPutToMap(key, &order)
 		}
 	}
@@ -109,7 +103,7 @@ func (o *ordersData) getOrdersPage(regionId int) (int, error) {
 		global.Conf.Data.Remote.Address,
 		regionId,
 		global.Conf.Data.Remote.DataSource,
-		FIRST,
+		1,
 	)
 
 	resp, err := net.GetWithRetries(client, req)
@@ -117,7 +111,7 @@ func (o *ordersData) getOrdersPage(regionId int) (int, error) {
 		return 0, err
 	}
 
-	pages, err := strconv.Atoi(resp.Header.Get(XPAGES))
+	pages, err := strconv.Atoi(resp.Header.Get("x-pages"))
 	if err != nil {
 		return 0, err
 	}

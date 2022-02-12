@@ -15,10 +15,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-const (
-	HISTROY = "history"
-)
-
 type itemHistroy struct {
 	expirationTime time.Duration
 }
@@ -57,7 +53,7 @@ func (i *itemHistroy) invoke() func() {
 		for p := range products {
 			req := fmt.Sprintf("%s/markets/%d/history/?datasource=%s&type_id=%d",
 				global.Conf.Data.Remote.Address,
-				THE_FORGE,
+				the_forge,
 				global.Conf.Data.Remote.DataSource,
 				p,
 			)
@@ -84,7 +80,7 @@ func (i *itemHistroy) invoke() func() {
 				itemitemHistory.ItemId = p
 			}
 
-			key := cache.Key(HISTROY, strconv.Itoa(THE_FORGE), strconv.Itoa(p))
+			key := cache.Key("history", strconv.Itoa(the_forge), strconv.Itoa(p))
 			if err := cache.Set(key, itemHistorys, i.expirationTime); err != nil {
 				log.Errorf(err, "save orders to redis failed", key)
 			}

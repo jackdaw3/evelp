@@ -15,9 +15,7 @@ var (
 )
 
 const (
-	orderExpireTime       = 5 * time.Hour
-	itemHistoryExpireTime = 24 * time.Hour
-	THE_FORGE             = 10000002
+	the_forge = 10000002
 )
 
 func CacheData() error {
