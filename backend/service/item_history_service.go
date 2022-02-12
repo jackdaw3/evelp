@@ -1,7 +1,6 @@
 package service
 
 import (
-	"evelp/log"
 	"evelp/model"
 	"evelp/util/cache"
 	"strconv"
@@ -32,7 +31,6 @@ func (h *ItemHistoryService) History() (*model.ItemHistorys, error) {
 			return nil, err
 		}
 	} else {
-		log.Warnf("key %v not exist in redis", key)
 		return nil, nil
 	}
 

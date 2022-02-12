@@ -1,7 +1,6 @@
 package service
 
 import (
-	"evelp/log"
 	"evelp/model"
 	"evelp/util/cache"
 	"strconv"
@@ -71,7 +70,6 @@ func (o *OrderService) Orders() (*model.Orders, error) {
 			return nil, err
 		}
 	} else {
-		log.Warnf("key %v not exist in redis", key)
 		return nil, nil
 	}
 
