@@ -7,5 +7,5 @@ func LoadRouter(e *gin.Engine) {
 	e.GET("/corporation", corporation)
 	e.GET("/region", region)
 	e.GET("/offer", offer)
-	e.GET("/histroy", itemHistroy)
+	e.GET("/history", itemHistory)
 }

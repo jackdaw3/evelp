@@ -38,7 +38,7 @@ func CacheData() error {
 	itemHistroyData := new(itemHistroy)
 	itemHistroyData.expirationTime = global.Conf.Redis.HistoryExpireTime * time.Hour
 	cron := cron.New(cron.WithSeconds())
-	if _, err := cron.AddFunc("0 01 20 * * ?", itemHistroyData.invoke()); err != nil {
+	if _, err := cron.AddFunc("@daily", itemHistroyData.invoke()); err != nil {
 		return err
 	}
 

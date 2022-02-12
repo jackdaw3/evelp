@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func itemHistroy(c *gin.Context) {
+func itemHistory(c *gin.Context) {
 	regionId, err := strconv.Atoi(c.Query("regionId"))
 	if err != nil {
 		c.AbortWithError(500, err)
