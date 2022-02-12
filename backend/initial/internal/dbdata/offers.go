@@ -3,6 +3,7 @@ package dbdata
 import (
 	"encoding/json"
 	"evelp/config/global"
+	"evelp/log"
 	"evelp/model"
 	"evelp/util/net"
 	"fmt"
@@ -10,8 +11,6 @@ import (
 	"sort"
 	"strconv"
 	"sync"
-
-	log "github.com/sirupsen/logrus"
 )
 
 var mu sync.Mutex
@@ -101,17 +100,17 @@ func (o *offersData) getOffers(corporationId int, wg *sync.WaitGroup) func() {
 
 		resp, err := net.GetWithRetries(client, req)
 		if err != nil {
-			log.Errorf("get corporation %d's failed: %+v", corporationId, err)
+			log.Errorf(err, "get corporation %d's failed", corporationId)
 		}
 
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Errorf("get corporation %d's body failed: %+v", corporationId, err)
+			log.Errorf(err, "get corporation %d's body failed", corporationId)
 		}
 
 		var offers model.Offers
 		if err = json.Unmarshal(body, &offers); err != nil {
-			log.Errorf("unmarshal corporation %d's offers json failed: %+v", corporationId, err)
+			log.Errorf(err, "unmarshal corporation %d's offers json failed", corporationId)
 		}
 
 		if offers.Len() == 0 {

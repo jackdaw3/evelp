@@ -3,7 +3,9 @@ package model
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"fmt"
+	"evelp/config/global"
+
+	"github.com/pkg/errors"
 )
 
 type Name struct {
@@ -22,7 +24,7 @@ func (n *Name) Scan(value interface{}) error {
 
 	str, ok := value.([]byte)
 	if !ok {
-		return fmt.Errorf("%v is not []byte", value)
+		return errors.Errorf("%v is not []byte", value)
 	}
 
 	return json.Unmarshal(str, &n)
@@ -35,4 +37,25 @@ func (n Name) Value() (driver.Value, error) {
 	}
 
 	return string(str), nil
+}
+
+func (n *Name) Val(lang string) string {
+	var val string
+
+	switch lang {
+	case global.DE:
+		val = n.De
+	case global.EN:
+		val = n.En
+	case global.FR:
+		val = n.Fr
+	case global.JA:
+		val = n.Ja
+	case global.RU:
+		val = n.Ru
+	case global.ZH:
+		val = n.Zh
+	}
+
+	return val
 }

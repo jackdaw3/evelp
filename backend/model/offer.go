@@ -51,7 +51,7 @@ func (ca *CorporationIDArray) Scan(value interface{}) error {
 
 	str, ok := value.([]byte)
 	if !ok {
-		return fmt.Errorf("%v is not []byte", value)
+		return errors.Errorf("%v is not []byte", value)
 	}
 
 	return json.Unmarshal(str, &ca)

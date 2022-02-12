@@ -3,15 +3,18 @@ package main
 import (
 	"evelp/config/global"
 	"evelp/initial"
+	"evelp/log"
 	"evelp/router"
 
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 )
 
 func main() {
 	engine := gin.Default()
+	pprof.Register(engine)
 	router.LoadRouter(engine)
+
 	engine.Run(global.Conf.App.ServerPort)
 }
 

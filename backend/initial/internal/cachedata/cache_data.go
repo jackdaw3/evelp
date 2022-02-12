@@ -1,12 +1,13 @@
 package cachedata
 
 import (
+	"evelp/config/global"
+	"evelp/log"
 	"evelp/model"
 	"net/http"
 	"time"
 
 	"github.com/robfig/cron/v3"
-	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -25,18 +26,19 @@ func CacheData() error {
 	orders := make(map[string]*model.Orders)
 	ordersData := new(ordersData)
 	ordersData.orders = orders
-	ordersData.expirationTime = orderExpireTime
+	ordersData.expirationTime = global.Conf.Redis.OrderExpireTime * time.Hour
 	go func() {
 		for {
 			if err := ordersData.Refresh(); err != nil {
-				log.Errorf("refresh orders to cache failed: %v", err)
+				log.Errorf(err, "refresh orders to cache failed")
 			}
 		}
 	}()
 
 	itemHistroyData := new(itemHistroy)
+	itemHistroyData.expirationTime = global.Conf.Redis.HistoryExpireTime * time.Hour
 	cron := cron.New(cron.WithSeconds())
-	if _, err := cron.AddFunc("@daily", itemHistroyData.invoke()); err != nil {
+	if _, err := cron.AddFunc("0 01 20 * * ?", itemHistroyData.invoke()); err != nil {
 		return err
 	}
 

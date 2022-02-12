@@ -2,13 +2,11 @@ package service
 
 import (
 	"evelp/dto"
+	"evelp/log"
 	"evelp/model"
-	"evelp/util/language"
-	"fmt"
 	"sort"
 
 	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
 )
 
 type OfferSerivce struct {
@@ -39,7 +37,7 @@ func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 		}
 
 		if err != nil {
-			log.Errorf("get offer %d failed: %+v", offer.OfferId, err)
+			log.Errorf(err, "get offer %d failed", offer.OfferId)
 			continue
 		}
 		offerDTOs = append(offerDTOs, *offerDTO)
@@ -60,7 +58,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 	}
 
 	offerDTO.ItemId = item.ItemId
-	offerDTO.Name = language.Name(o.lang, item.Name)
+	offerDTO.Name = item.Name.Val(o.lang)
 	offerDTO.IsBluePrint = false
 	offerDTO.Quantity = offer.Quantity
 	offerDTO.IskCost = offer.IskCost
@@ -68,7 +66,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 
 	materails, err := o.conertMaterials(offer.RequireItems)
 	if err != nil {
-		return nil, errors.WithMessage(err, "covert materails failed")
+		return nil, err
 	}
 
 	offerDTO.Matertials = materails
@@ -77,7 +75,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 	oos := NewOrderService(offerDTO.ItemId, o.regionId, o.scope)
 	price, err := oos.HighestBuyPrice()
 	if err != nil {
-		return nil, errors.WithMessage(err, "get highestBuyPrice failed")
+		return nil, err
 	}
 	offerDTO.Price = price
 	offerDTO.Income = offerDTO.Price * float64(offer.Quantity)
@@ -102,7 +100,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 
 	bluePrint := model.GetBluePrint(offer.ItemId)
 	if len(bluePrint.Products) == 0 {
-		return nil, fmt.Errorf("offer %d's bluePrint %d have no product", offer.OfferId, bluePrint.BlueprintId)
+		return nil, errors.Errorf("offer %d's bluePrint %d have no product", offer.OfferId, bluePrint.BlueprintId)
 	}
 
 	bluePrintItem, err := model.GetItem(bluePrint.BlueprintId)
@@ -156,7 +154,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	//TODO SET SALE INDEX
 
 	offerDTO.ItemId = bluePrintItem.ItemId
-	offerDTO.Name = language.Name(o.lang, bluePrintItem.Name)
+	offerDTO.Name = bluePrintItem.Name.Val(o.lang)
 
 	return &offerDTO, nil
 }
@@ -172,7 +170,7 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems) (dto.MatertialDTOs
 		}
 
 		materail.ItemId = mi.ItemId
-		materail.Name = language.Name(o.lang, mi.Name)
+		materail.Name = mi.Name.Val(o.lang)
 
 		materail.Quantity = r.Quantity
 		materail.IsBluePrint = false
@@ -201,7 +199,7 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials) (dto.
 		}
 
 		materail.ItemId = mi.ItemId
-		materail.Name = language.Name(o.lang, mi.Name)
+		materail.Name = mi.Name.Val(o.lang)
 		materail.IsBluePrint = true
 		materail.Quantity = m.Quantity
 

@@ -3,6 +3,7 @@ package dbdata
 import (
 	"encoding/json"
 	"evelp/config/global"
+	"evelp/log"
 	"evelp/model"
 	"evelp/util/net"
 	"fmt"
@@ -10,7 +11,7 @@ import (
 	"sort"
 	"sync"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/pkg/errors"
 )
 
 type reginosData struct {
@@ -25,13 +26,13 @@ func (r *reginosData) Refresh() error {
 	for _, region := range *r.regions {
 		exist, err := region.IsExist()
 		if err != nil {
-			log.Errorf("check region %d exist failed: %+v", region.RegionId, err)
+			log.Errorf(err, "check region %d exist failed", region.RegionId)
 		}
 
 		if exist {
 			valid, err := region.IsVaild()
 			if err != nil {
-				log.Errorf("check region %d valid failed: %+v", region.RegionId, err)
+				log.Errorf(err, "check region %d valid failed", region.RegionId)
 			}
 
 			if valid {
@@ -59,18 +60,18 @@ func (r *reginosData) getAllRegions() {
 
 	resp, err := net.GetWithRetries(client, req)
 	if err != nil {
-		log.Errorf("get regions failed: %+v", err)
+		log.Errorf(err, "get regions failed")
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Errorf("get regions'body failed: %+v", err)
+		log.Errorf(err, "get regions' body failed")
 	}
 
 	var idArray []int
 
 	if err = json.Unmarshal(body, &idArray); err != nil {
-		log.Errorf("unmarshal regions json failed: %+v", err)
+		log.Errorf(err, "unmarshal regions json failed")
 	}
 
 	var regions model.Regions
@@ -96,23 +97,23 @@ func (r *reginosData) getRegion(region *model.Region, wg *sync.WaitGroup) func()
 
 			resp, err := net.GetWithRetries(client, req)
 			if err != nil {
-				log.Errorf("get region %d failed: %+v", region.RegionId, err)
+				log.Errorf(err, "get region %d failed", region.RegionId)
 			}
 
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				log.Errorf("get region %d's body failed: %+v", region.RegionId, err)
+				log.Errorf(err, "get region %d's body failed", region.RegionId)
 			}
 
 			var resultMap map[string]interface{}
 
 			if err = json.Unmarshal(body, &resultMap); err != nil {
-				log.Errorf("unmarshal region %d json failed: %+v", region.RegionId, err)
+				log.Errorf(err, "unmarshal region %d json failed", region.RegionId)
 			}
 
 			name, ok := resultMap["name"].(string)
 			if !ok {
-				log.Errorf("region %d %v cast to string failed", region.RegionId, resultMap["name"])
+				log.Error(errors.Errorf("region %d %v cast to string failed", region.RegionId, resultMap["name"]))
 				continue
 			}
 
@@ -133,7 +134,7 @@ func (r *reginosData) getRegion(region *model.Region, wg *sync.WaitGroup) func()
 		}
 
 		if err := model.SaveRegion(region); err != nil {
-			log.Errorf("region %d failed to save to DB", region.RegionId)
+			log.Error(errors.Errorf("region %d failed to save to DB", region.RegionId))
 		}
 	}
 }

@@ -2,14 +2,16 @@ package initial
 
 import (
 	"evelp/config/global"
+	"evelp/log"
 	"os"
 
 	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
 func config() error {
+	log.Init()
+
 	if err := initEnv(); err != nil {
 		return err
 	}
@@ -18,8 +20,7 @@ func config() error {
 		return err
 	}
 
-	initLogrus()
-
+	log.SetLevel(global.Conf.App.LogLevel)
 	return nil
 }
 
@@ -57,14 +58,4 @@ func initViper() error {
 	}
 
 	return nil
-}
-
-func initLogrus() {
-	if global.Conf.App.LogLevel == "info" {
-		log.SetLevel(log.InfoLevel)
-	}
-
-	if global.Conf.App.LogLevel == "debug" {
-		log.SetLevel(log.DebugLevel)
-	}
 }

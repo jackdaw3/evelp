@@ -1,5 +1,7 @@
 package global
 
+import "time"
+
 var (
 	Conf *Config
 )
@@ -36,9 +38,12 @@ type MySQLConfig struct {
 }
 
 type RedisConfig struct {
-	Address  string `yaml:"address"`
-	Password string `yaml:"password"`
-	Database int    `yaml:"database"`
+	Address           string        `yaml:"address"`
+	Password          string        `yaml:"password"`
+	Database          int           `yaml:"database"`
+	HistoryExpireTime time.Duration `yaml:"history_expire_time"`
+	OrderExpireTime   time.Duration `yaml:"order_expire_time"`
+	Refresh           bool          `yaml:"refresh"`
 }
 
 type Config struct {

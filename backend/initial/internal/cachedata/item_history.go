@@ -3,14 +3,16 @@ package cachedata
 import (
 	"encoding/json"
 	"evelp/config/global"
+	"evelp/log"
 	"evelp/model"
 	"evelp/util/cache"
 	"evelp/util/net"
 	"fmt"
 	"io/ioutil"
 	"strconv"
+	"time"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -18,6 +20,7 @@ const (
 )
 
 type itemHistroy struct {
+	expirationTime time.Duration
 }
 
 func (i *itemHistroy) invoke() func() {
@@ -26,7 +29,7 @@ func (i *itemHistroy) invoke() func() {
 
 		offers, err := model.GetOffers()
 		if err != nil {
-			log.Errorf("get offers failed: %+v", err)
+			log.Error(err, "get offers failed")
 			return
 		}
 
@@ -34,11 +37,13 @@ func (i *itemHistroy) invoke() func() {
 			if offer.IsBluePrint {
 				bluePrint := model.GetBluePrint(offer.ItemId)
 				if len(bluePrint.Products) == 0 {
-					log.Errorf("offer %d's bluePrint %d have no product", offer.OfferId, bluePrint.BlueprintId)
+					log.Error(errors.Errorf("offer %d's bluePrint %d have no product", offer.OfferId, bluePrint.BlueprintId))
+					continue
 				}
 				product, err := model.GetItem(bluePrint.Products[0].ItemId)
 				if err != nil {
-					log.Errorf("get item %d failed: %+v", err)
+					log.Errorf(err, "get item %d failed", bluePrint.Products[0].ItemId)
+					continue
 				}
 				products[product.ItemId] = struct{}{}
 
@@ -59,19 +64,20 @@ func (i *itemHistroy) invoke() func() {
 
 			resp, err := net.GetWithRetries(client, req)
 			if err != nil {
-				log.Errorf("get item %d histroy failed: %+v", p, err)
-
+				log.Errorf(err, "get item %d histroy failed", p)
+				continue
 			}
 
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				log.Errorf("read item %d histroybody failed: %+v", p, err)
-
+				log.Errorf(err, "read item %d histroybody failed", p)
+				continue
 			}
 
 			var itemHistorys model.ItemHistorys
 			if err = json.Unmarshal(body, &itemHistorys); err != nil {
-				log.Errorf("unmarshal item %d histroy json failed: %+v", p, err)
+				log.Errorf(err, "unmarshal item %d histroy json failed", p)
+				continue
 			}
 
 			for _, itemitemHistory := range itemHistorys {
@@ -79,8 +85,8 @@ func (i *itemHistroy) invoke() func() {
 			}
 
 			key := cache.Key(HISTROY, strconv.Itoa(THE_FORGE), strconv.Itoa(p))
-			if err := cache.Set(key, itemHistorys, itemHistoryExpireTime); err != nil {
-				log.Errorf("save orders to redis failed:%+v", key, err)
+			if err := cache.Set(key, itemHistorys, i.expirationTime); err != nil {
+				log.Errorf(err, "save orders to redis failed", key)
 			}
 		}
 

@@ -3,9 +3,8 @@ package dbdata
 import (
 	"evelp/config/global"
 	"evelp/initial/internal/api"
+	"evelp/log"
 	"time"
-
-	log "github.com/sirupsen/logrus"
 )
 
 const (

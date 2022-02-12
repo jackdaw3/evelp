@@ -2,12 +2,11 @@ package dbdata
 
 import (
 	"encoding/csv"
+	"evelp/log"
 	"evelp/model"
 	"os"
 	"sort"
 	"strconv"
-
-	log "github.com/sirupsen/logrus"
 )
 
 const (

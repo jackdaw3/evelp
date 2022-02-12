@@ -2,11 +2,10 @@ package dbdata
 
 import (
 	"evelp/initial/internal/api"
+	"evelp/log"
 	"net/http"
 	"sync"
 	"time"
-
-	log "github.com/sirupsen/logrus"
 )
 
 var (

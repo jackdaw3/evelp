@@ -3,7 +3,8 @@ package model
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"fmt"
+
+	"github.com/pkg/errors"
 )
 
 type RequireItem struct {
@@ -20,7 +21,7 @@ func (r *RequireItems) Scan(value interface{}) error {
 
 	str, ok := value.([]byte)
 	if !ok {
-		return fmt.Errorf("%v is not []byte", value)
+		return errors.Errorf("%v is not []byte", value)
 	}
 
 	return json.Unmarshal(str, &r)

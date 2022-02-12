@@ -2,6 +2,7 @@ package initial
 
 import (
 	"evelp/config/global"
+	"evelp/log"
 	"evelp/model"
 	"evelp/util/crypto"
 	"fmt"
@@ -9,7 +10,6 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -17,7 +17,7 @@ import (
 func database() error {
 	password, err := crypto.Decrypt(global.Conf.MySQL.Password, global.Conf.Crypto.KeyPath)
 	if err != nil {
-		return errors.Wrap(err, "decode database password failed")
+		return errors.WithMessage(err, "decode database password failed")
 	}
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true&loc=%s",

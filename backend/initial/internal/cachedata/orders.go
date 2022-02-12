@@ -3,6 +3,7 @@ package cachedata
 import (
 	"encoding/json"
 	"evelp/config/global"
+	"evelp/log"
 	"evelp/model"
 	"evelp/util/cache"
 	"evelp/util/net"
@@ -13,7 +14,6 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -43,7 +43,7 @@ func (o *ordersData) Refresh() error {
 	log.Debugf("start load %d region's orders to redis", THE_FORGE)
 	for key, order := range o.orders {
 		if err := cache.Set(key, order, o.expirationTime); err != nil {
-			log.Errorf("save order %s to redis failed:%+v", key, err)
+			log.Errorf(err, "save order %s to redis failed", key)
 		}
 	}
 
@@ -81,19 +81,19 @@ func (o *ordersData) loadOrdersByRegionPage(regionId int, page int) func() {
 
 		resp, err := net.GetWithRetries(client, req)
 		if err != nil {
-			log.Errorf("get %d region %d page's orders failed: %+v", regionId, page, err)
+			log.Errorf(err, "get %d region %d page's orders failed", regionId, page)
 			return
 		}
 
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Errorf("read %d region %d page's orders body failed: %+v", regionId, page, err)
+			log.Errorf(err, "read %d region %d page's orders body failed", regionId, page)
 			return
 		}
 
 		var orders model.Orders
 		if err = json.Unmarshal(body, &orders); err != nil {
-			log.Errorf("unmarshal %d region %d page's orders json failed: %+v", regionId, page, err)
+			log.Errorf(err, "unmarshal %d region %d page's orders json failed", regionId, page)
 			return
 		}
 

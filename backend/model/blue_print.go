@@ -4,7 +4,6 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"evelp/config/global"
-	"fmt"
 
 	"github.com/pkg/errors"
 	"gorm.io/gorm/clause"
@@ -56,7 +55,7 @@ func (m *ManufactProducts) Scan(value interface{}) error {
 
 	str, ok := value.([]byte)
 	if !ok {
-		return fmt.Errorf("%v is not []byte", value)
+		return errors.Errorf("%v is not []byte", value)
 	}
 
 	return json.Unmarshal(str, &m)
@@ -78,7 +77,7 @@ func (m *ManufactMaterials) Scan(value interface{}) error {
 
 	str, ok := value.([]byte)
 	if !ok {
-		return fmt.Errorf("%v is not []byte", value)
+		return errors.Errorf("%v is not []byte", value)
 	}
 
 	return json.Unmarshal(str, &m)

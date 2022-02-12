@@ -30,13 +30,12 @@ func GetWithRetries(client *http.Client, request string) (*http.Response, error)
 			err = fmt.Errorf("request %s error status code %d", request, code)
 		}
 
-		log.Debug(err)
-		log.Debugf("request %s retrying in %v", request, backoff)
+		log.Debugf("request %s failed: %+v retrying in %v", request, err, backoff)
 		time.Sleep(backoff)
 	}
 
 	if err != nil {
-		return nil, errors.Wrap(err, "all request retries failed")
+		return nil, errors.WithMessage(err, "all request retries failed")
 	}
 
 	return resp, nil

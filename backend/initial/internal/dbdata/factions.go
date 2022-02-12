@@ -1,11 +1,11 @@
 package dbdata
 
 import (
+	"evelp/log"
 	"evelp/model"
 	"io/ioutil"
 	"sort"
 
-	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 )
 

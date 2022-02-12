@@ -35,8 +35,10 @@ func Init() error {
 		}
 	}
 
-	if err := cachedata.CacheData(); err != nil {
-		return err
+	if global.Conf.Redis.Refresh {
+		if err := cachedata.CacheData(); err != nil {
+			return err
+		}
 	}
 
 	return nil
