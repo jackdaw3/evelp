@@ -24,11 +24,13 @@ redis:
   refresh: true
 
 data: 
-  refreshLocalData: false
-  localDataPath: /opt/data/sde
-  refreshRemoteData: false
-  remoteDataAddress: https://esi.evetech.net/latest
-  remoteDataSource: tranquility
-
+  local:  
+    path: C://Users//Administrator//dev//data//
+    refresh: false
+  remote: 
+    address: https://esi.evetech.net/latest
+    datasource: tranquility
+    refresh: false
+    
 crypto:
   keyPath: /opt/certs/private_key_prod.pem
