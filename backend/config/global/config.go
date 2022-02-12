@@ -15,13 +15,29 @@ type CryptoConfig struct {
 	KeyPath string `yaml:"keyPath"`
 }
 
-type DataConfig struct {
-	RefreshLocalData  bool   `yaml:"refreshLocalData"`
-	RefreshRemoteData bool   `yaml:"refreshRemoteData"`
-	LocalDataPath     string `yaml:"localDataPath"`
-	RemoteDataAddress string `yaml:"remoteDataAddress"`
-	RemoteDataSource  string `yaml:"remoteDataSource"`
+type LocalData struct {
+	Path    string `yaml:"path"`
+	Refresh bool   `yaml:"refresh"`
 }
+
+type RemoteData struct {
+	Address    string `yaml:"address"`
+	DataSource string `yaml:"datasource"`
+	Refresh    bool   `yaml:"refresh"`
+}
+
+type DataConfig struct {
+	Local  LocalData  `yaml:"local"`
+	Remote RemoteData `yaml:"remote"`
+}
+
+// type DataConfig struct {
+// 	RefreshLocalData  bool   `yaml:"refreshLocalData"`
+// 	RefreshRemoteData bool   `yaml:"refreshRemoteData"`
+// 	LocalDataPath     string `yaml:"localDataPath"`
+// 	RemoteDataAddress string `yaml:"remoteDataAddress"`
+// 	RemoteDataSource  string `yaml:"remoteDataSource"`
+// }
 
 type MySQLConfig struct {
 	Host            string `yaml:"host"`

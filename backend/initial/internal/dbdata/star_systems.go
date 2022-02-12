@@ -19,7 +19,7 @@ type starSystemsData struct {
 }
 
 func (s *starSystemsData) Refresh() error {
-	log.Infof("start load starSystems from %s", global.Conf.Data.RemoteDataAddress)
+	log.Infof("start load starSystems from %s", global.Conf.Data.Remote.Address)
 	s.getAllStarSystems()
 	sort.Sort(s.starSystems)
 
@@ -52,8 +52,8 @@ func (s *starSystemsData) Refresh() error {
 
 func (s *starSystemsData) getAllStarSystems() {
 	req := fmt.Sprintf("%s/universe/systems/?datasource=%s",
-		global.Conf.Data.RemoteDataAddress,
-		global.Conf.Data.RemoteDataSource,
+		global.Conf.Data.Remote.Address,
+		global.Conf.Data.Remote.DataSource,
 	)
 
 	resp, err := net.GetWithRetries(client, req)
@@ -87,9 +87,9 @@ func (s *starSystemsData) getStarSystem(starSystem *model.StarSystem, wg *sync.W
 
 		for _, lang := range global.LANGS {
 			req := fmt.Sprintf("%s/universe/systems/%d/?datasource=%s&language=%s",
-				global.Conf.Data.RemoteDataAddress,
+				global.Conf.Data.Remote.Address,
 				starSystem.SystemId,
-				global.Conf.Data.RemoteDataSource,
+				global.Conf.Data.Remote.DataSource,
 				lang,
 			)
 

@@ -19,7 +19,7 @@ func LocalData() error {
 	log.Info("start refresh static data to DB")
 	start := time.Now()
 
-	var localDataPath = global.Conf.Data.LocalDataPath
+	var localDataPath = global.Conf.Data.Local.Path
 	typeIDsInit := new(typeIdsData)
 	typeIDsInit.filePath = localDataPath + typeIdsFile
 

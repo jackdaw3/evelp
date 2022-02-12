@@ -25,7 +25,7 @@ type offersWrapper struct {
 }
 
 func (o *offersData) Refresh() error {
-	log.Infof("start load offers from %s", global.Conf.Data.RemoteDataAddress)
+	log.Infof("start load offers from %s", global.Conf.Data.Remote.Address)
 	o.offersMap = make(map[int]*model.Offer)
 	if err := o.getOffersMap(); err != nil {
 		return err
@@ -93,9 +93,9 @@ func (o *offersData) getOffers(corporationId int, wg *sync.WaitGroup) func() {
 		defer wg.Done()
 
 		req := fmt.Sprintf("%s/loyalty/stores/%s/offers/?datasource=%s",
-			global.Conf.Data.RemoteDataAddress,
+			global.Conf.Data.Remote.Address,
 			strconv.Itoa(corporationId),
-			global.Conf.Data.RemoteDataSource,
+			global.Conf.Data.Remote.DataSource,
 		)
 
 		resp, err := net.GetWithRetries(client, req)

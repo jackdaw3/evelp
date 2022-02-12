@@ -19,7 +19,7 @@ type reginosData struct {
 }
 
 func (r *reginosData) Refresh() error {
-	log.Infof("start load regions from %s", global.Conf.Data.RemoteDataAddress)
+	log.Infof("start load regions from %s", global.Conf.Data.Remote.Address)
 	r.getAllRegions()
 	sort.Sort(r.regions)
 
@@ -54,8 +54,8 @@ func (r *reginosData) Refresh() error {
 
 func (r *reginosData) getAllRegions() {
 	req := fmt.Sprintf("%s/universe/regions/?datasource=%s",
-		global.Conf.Data.RemoteDataAddress,
-		global.Conf.Data.RemoteDataSource,
+		global.Conf.Data.Remote.Address,
+		global.Conf.Data.Remote.DataSource,
 	)
 
 	resp, err := net.GetWithRetries(client, req)
@@ -89,9 +89,9 @@ func (r *reginosData) getRegion(region *model.Region, wg *sync.WaitGroup) func()
 
 		for _, lang := range global.LANGS {
 			req := fmt.Sprintf("%s/universe/regions/%d/?datasource=%s&language=%s",
-				global.Conf.Data.RemoteDataAddress,
+				global.Conf.Data.Remote.Address,
 				region.RegionId,
-				global.Conf.Data.RemoteDataSource,
+				global.Conf.Data.Remote.DataSource,
 				lang,
 			)
 

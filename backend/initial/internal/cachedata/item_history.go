@@ -56,9 +56,9 @@ func (i *itemHistroy) invoke() func() {
 
 		for p := range products {
 			req := fmt.Sprintf("%s/markets/%d/history/?datasource=%s&type_id=%d",
-				global.Conf.Data.RemoteDataAddress,
+				global.Conf.Data.Remote.Address,
 				THE_FORGE,
-				global.Conf.Data.RemoteDataSource,
+				global.Conf.Data.Remote.DataSource,
 				p,
 			)
 

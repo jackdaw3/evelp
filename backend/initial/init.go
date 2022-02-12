@@ -23,13 +23,13 @@ func Init() error {
 		return err
 	}
 
-	if global.Conf.Data.RefreshLocalData {
+	if global.Conf.Data.Local.Refresh {
 		if err := dbdata.LocalData(); err != nil {
 			return err
 		}
 	}
 
-	if global.Conf.Data.RefreshRemoteData {
+	if global.Conf.Data.Remote.Refresh {
 		if err := dbdata.RemoteData(); err != nil {
 			return err
 		}

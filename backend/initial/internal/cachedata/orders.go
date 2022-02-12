@@ -73,9 +73,9 @@ func (o *ordersData) loadOrdersByRegionPage(regionId int, page int) func() {
 		defer wg.Done()
 
 		req := fmt.Sprintf("%s/markets/%d/orders/?datasource=%s&order_type=all&page=%d",
-			global.Conf.Data.RemoteDataAddress,
+			global.Conf.Data.Remote.Address,
 			regionId,
-			global.Conf.Data.RemoteDataSource,
+			global.Conf.Data.Remote.DataSource,
 			page,
 		)
 
@@ -106,9 +106,9 @@ func (o *ordersData) loadOrdersByRegionPage(regionId int, page int) func() {
 
 func (o *ordersData) getOrdersPage(regionId int) (int, error) {
 	req := fmt.Sprintf("%s/markets/%d/orders/?datasource=%s&order_type=all&page=%d",
-		global.Conf.Data.RemoteDataAddress,
+		global.Conf.Data.Remote.Address,
 		regionId,
-		global.Conf.Data.RemoteDataSource,
+		global.Conf.Data.Remote.DataSource,
 		FIRST,
 	)
 
