@@ -36,6 +36,19 @@ func Get(key string, dest interface{}) error {
 	return nil
 }
 
+func Exist(key ...string) (bool, error) {
+	val, err := global.REDIS.Exists(ctx, key...).Result()
+	if err != nil {
+		return false, errors.Wrapf(err, "check %v exist failed", key)
+	}
+
+	if val == 1 {
+		return true, nil
+	} else {
+		return false, nil
+	}
+}
+
 func Key(args ...string) string {
 	var build strings.Builder
 	for index, arg := range args {

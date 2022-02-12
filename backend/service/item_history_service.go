@@ -1,11 +1,10 @@
 package service
 
 import (
+	"evelp/log"
 	"evelp/model"
 	"evelp/util/cache"
 	"strconv"
-
-	"github.com/pkg/errors"
 )
 
 const history = "history"
@@ -21,9 +20,21 @@ func NewItemHistoryService(itemId int, regionId int) *ItemHistoryService {
 
 func (h *ItemHistoryService) History() (*model.ItemHistorys, error) {
 	var itemHistorys model.ItemHistorys
+
 	key := cache.Key(history, strconv.Itoa(h.regionId), strconv.Itoa(h.itemId))
-	if err := cache.Get(key, &itemHistorys); err != nil {
-		return nil, errors.WithMessagef(err, "get itemHistorys %s cache error", key)
+	exist, err := cache.Exist(key)
+	if err != nil {
+		return nil, err
 	}
+
+	if exist {
+		if err := cache.Get(key, &itemHistorys); err != nil {
+			return nil, err
+		}
+	} else {
+		log.Warnf("key %v not exist in redis", key)
+		return nil, nil
+	}
+
 	return &itemHistorys, nil
 }

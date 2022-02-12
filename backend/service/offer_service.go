@@ -223,6 +223,9 @@ func (o *OfferSerivce) AverageVolume(itemId int) (int64, error) {
 	if err != nil {
 		return 0, errors.WithMessagef(err, "get item %d historys failed", itemId)
 	}
+	if itemHistorys == nil {
+		return 0, nil
+	}
 
 	volume := itemHistorys.AverageVolume(o.days)
 	return volume, nil

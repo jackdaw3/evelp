@@ -1,6 +1,7 @@
 package service
 
 import (
+	"evelp/log"
 	"evelp/model"
 	"evelp/util/cache"
 	"strconv"
@@ -26,6 +27,9 @@ func (o *OrderService) HighestBuyPrice() (float64, error) {
 	if err != nil {
 		return 0, err
 	}
+	if orders == nil {
+		return 0, nil
+	}
 
 	price, err := orders.HighestBuyPrice(o.scope)
 	if err != nil {
@@ -41,6 +45,9 @@ func (o *OrderService) LowestSellPrice() (float64, error) {
 	if err != nil {
 		return 0, err
 	}
+	if orders == nil {
+		return 0, nil
+	}
 
 	price, err := orders.LowestSellPrice(o.scope)
 	if err != nil {
@@ -52,9 +59,21 @@ func (o *OrderService) LowestSellPrice() (float64, error) {
 
 func (o *OrderService) Orders() (*model.Orders, error) {
 	var orders model.Orders
+
 	key := cache.Key(order, strconv.Itoa(o.regionId), strconv.Itoa(o.itemId))
-	if err := cache.Get(key, &orders); err != nil {
-		return nil, errors.WithMessagef(err, "get order %s cache error", key)
+	exist, err := cache.Exist(key)
+	if err != nil {
+		return nil, err
 	}
+
+	if exist {
+		if err := cache.Get(key, &orders); err != nil {
+			return nil, err
+		}
+	} else {
+		log.Warnf("key %v not exist in redis", key)
+		return nil, nil
+	}
+
 	return &orders, nil
 }

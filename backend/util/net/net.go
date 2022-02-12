@@ -1,12 +1,12 @@
 package net
 
 import (
+	"evelp/log"
 	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
-	log "github.com/sirupsen/logrus"
 )
 
 var backoffSchedule = []time.Duration{
@@ -30,7 +30,7 @@ func GetWithRetries(client *http.Client, request string) (*http.Response, error)
 			err = fmt.Errorf("request %s error status code %d", request, code)
 		}
 
-		log.Debugf("request %s failed: %+v retrying in %v", request, err, backoff)
+		log.Warnf("request %s failed: %+v retrying in %v", request, err, backoff)
 		time.Sleep(backoff)
 	}
 
@@ -44,7 +44,7 @@ func GetWithRetries(client *http.Client, request string) (*http.Response, error)
 func Get(client *http.Client, request string) (*http.Response, error) {
 	resp, err := client.Get(request)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithStack(err)
 	}
 
 	return resp, nil
