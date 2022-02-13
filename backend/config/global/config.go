@@ -31,14 +31,6 @@ type DataConfig struct {
 	Remote RemoteData `yaml:"remote"`
 }
 
-// type DataConfig struct {
-// 	RefreshLocalData  bool   `yaml:"refreshLocalData"`
-// 	RefreshRemoteData bool   `yaml:"refreshRemoteData"`
-// 	LocalDataPath     string `yaml:"localDataPath"`
-// 	RemoteDataAddress string `yaml:"remoteDataAddress"`
-// 	RemoteDataSource  string `yaml:"remoteDataSource"`
-// }
-
 type MySQLConfig struct {
 	Host            string `yaml:"host"`
 	Port            string `yaml:"port"`

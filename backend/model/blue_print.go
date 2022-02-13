@@ -99,7 +99,7 @@ func GetBluePrint(blueprintItemId int) *BluePrint {
 
 func SaveBluePrint(bluePrint *BluePrint) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&bluePrint).Error; err != nil {
-		return errors.Wrap(err, "save blue print to DB failed")
+		return errors.Wrap(err, "save blueprint to DB failed")
 	}
 	return nil
 }

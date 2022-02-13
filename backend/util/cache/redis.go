@@ -40,8 +40,8 @@ func Get(key string, dest interface{}) error {
 	return nil
 }
 
-func Exist(key ...string) error {
-	val, err := global.REDIS.Exists(ctx, key...).Result()
+func Exist(key string) error {
+	val, err := global.REDIS.Exists(ctx, key).Result()
 	if err != nil {
 		return errors.Wrapf(err, "redis check %v exist failed", key)
 	}

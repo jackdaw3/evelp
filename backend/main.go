@@ -6,15 +6,12 @@ import (
 	"evelp/log"
 	"evelp/router"
 
-	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	engine := gin.Default()
-	pprof.Register(engine)
 	router.LoadRouter(engine)
-
 	engine.Run(global.Conf.App.ServerPort)
 }
 
