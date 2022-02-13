@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func offer(c *gin.Context) {
+func order(c *gin.Context) {
 	regionId, err := strconv.Atoi(c.Query("regionId"))
 	if err != nil {
 		c.AbortWithError(500, err)
@@ -21,31 +21,30 @@ func offer(c *gin.Context) {
 		return
 	}
 
-	days, err := strconv.Atoi(c.Query("days"))
-	if err != nil {
-		c.AbortWithError(500, err)
-		return
-	}
-
 	lang := c.Query("lang")
 	if lang == "" {
 		c.AbortWithError(500, errors.New("lang is empty"))
 		return
 	}
 
-	corporationId, err := strconv.Atoi(c.Query("corporationId"))
+	itemId, err := strconv.Atoi(c.Query("itemId"))
 	if err != nil {
 		c.AbortWithError(500, err)
 		return
 	}
 
-	offerService := service.NewOfferSerivce(corporationId, regionId, float64(scope), days, lang)
-
-	offers, err := offerService.Offers()
+	isBuyOrder, err := strconv.ParseBool(c.Query("isBuyOrder"))
 	if err != nil {
 		c.AbortWithError(500, err)
 		return
 	}
 
-	c.JSON(200, offers)
+	oderService := service.NewOrderService(itemId, regionId, float64(scope), lang)
+	orders, err := oderService.Orders(isBuyOrder)
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
+	}
+
+	c.JSON(200, orders)
 }

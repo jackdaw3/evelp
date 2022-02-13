@@ -1,6 +1,7 @@
 package net
 
 import (
+	"evelp/log"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -20,6 +21,7 @@ var (
 )
 
 func setUpServer() {
+	log.Init()
 	http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
 		defer mu.Unlock()
 		mu.Lock()

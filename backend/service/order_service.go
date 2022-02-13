@@ -1,8 +1,11 @@
 package service
 
 import (
+	"evelp/dto"
+	"evelp/log"
 	"evelp/model"
 	"evelp/util/cache"
+	"sort"
 	"strconv"
 
 	"github.com/pkg/errors"
@@ -14,15 +17,16 @@ type OrderService struct {
 	itemId   int
 	regionId int
 	scope    float64
+	lang     string
 }
 
-func NewOrderService(itemId int, regionId int, scope float64) *OrderService {
-	return &OrderService{itemId, regionId, scope}
+func NewOrderService(itemId int, regionId int, scope float64, lang string) *OrderService {
+	return &OrderService{itemId, regionId, scope, lang}
 }
 
 func (o *OrderService) HighestBuyPrice() (float64, error) {
 	var orders *model.Orders
-	orders, err := o.Orders()
+	orders, err := o.ordersFromCache()
 	if err != nil {
 		return 0, err
 	}
@@ -37,7 +41,7 @@ func (o *OrderService) HighestBuyPrice() (float64, error) {
 
 func (o *OrderService) LowestSellPrice() (float64, error) {
 	var orders *model.Orders
-	orders, err := o.Orders()
+	orders, err := o.ordersFromCache()
 	if err != nil {
 		return 0, err
 	}
@@ -50,7 +54,56 @@ func (o *OrderService) LowestSellPrice() (float64, error) {
 	return price, nil
 }
 
-func (o *OrderService) Orders() (*model.Orders, error) {
+func (o *OrderService) Orders(isBuyOrder bool) (*dto.OrderDTOs, error) {
+	orders, err := o.ordersFromCache()
+	if err != nil {
+		return nil, err
+	}
+
+	var orderDTOs dto.OrderDTOs
+
+	item, err := model.GetItem(o.itemId)
+	if err != nil {
+		return nil, err
+	}
+	itemName := item.Name.Val(o.lang)
+
+	for _, order := range *orders {
+		if !order.IsBuyOrder == isBuyOrder {
+			continue
+		}
+		var orderDTO dto.OrderDTO
+		orderDTO.OrderId = order.OrderId
+		orderDTO.ItemId = order.ItemId
+		orderDTO.ItemName = itemName
+		orderDTO.Issued = order.Issued
+		orderDTO.LastUpdated = order.LastUpdated
+		orderDTO.Duration = order.Duration
+		orderDTO.IsBuyOrder = order.IsBuyOrder
+		orderDTO.Price = order.Price
+		orderDTO.VolumeRemain = order.VolumeRemain
+		orderDTO.VolumeTotal = order.VolumeTotal
+
+		system, err := model.GetStarSystem(order.SystemId)
+		if err != nil {
+			log.Errorf(err, "get star system %v failed", order.SystemId)
+			continue
+		}
+		orderDTO.SystemName = system.Name.Val(o.lang)
+
+		orderDTOs = append(orderDTOs, orderDTO)
+	}
+
+	if isBuyOrder {
+		sort.Sort(sort.Reverse(orderDTOs))
+	} else {
+		sort.Sort(orderDTOs)
+	}
+
+	return &orderDTOs, nil
+}
+
+func (o *OrderService) ordersFromCache() (*model.Orders, error) {
 	var orders model.Orders
 
 	key := cache.Key(order, strconv.Itoa(o.regionId), strconv.Itoa(o.itemId))

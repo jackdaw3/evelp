@@ -21,6 +21,7 @@ func config() error {
 	}
 
 	log.SetLevel(global.Conf.App.LogLevel)
+
 	return nil
 }
 

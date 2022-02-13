@@ -9,6 +9,7 @@ func LoadRouter(e *gin.Engine) {
 	e.GET("/faction", faction)
 	e.GET("/corporation", corporation)
 	e.GET("/region", region)
+	e.GET("/order", order)
 	e.GET("/offer", offer)
 	e.GET("/history", itemHistory)
 
