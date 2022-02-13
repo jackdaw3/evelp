@@ -5,6 +5,7 @@ import (
 	"evelp/log"
 	"os"
 
+	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 )
@@ -20,6 +21,7 @@ func config() error {
 		return err
 	}
 
+	ginMode()
 	log.SetLevel(global.Conf.App.LogLevel)
 
 	return nil
@@ -59,4 +61,14 @@ func initViper() error {
 	}
 
 	return nil
+}
+
+func ginMode() {
+	if global.ENV == "local" {
+		gin.SetMode(gin.DebugMode)
+	}
+
+	if global.ENV == "prod" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 }

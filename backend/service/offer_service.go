@@ -69,7 +69,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 	offerDTO.Matertials = materails
 	offerDTO.MaterialCost = materails.Cost()
 
-	oos := NewOrderService(offerDTO.ItemId, o.regionId, o.scope, o.lang)
+	oos := NewOrderService(offerDTO.ItemId, o.regionId, o.scope)
 	price, err := oos.HighestBuyPrice()
 	if err != nil {
 		log.Warnf("get highest buy price of item %v in region %v failed: %v", oos.itemId, oos.regionId, err)
@@ -123,7 +123,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	offerDTO.Matertials = materails
 	offerDTO.MaterialCost = materails.Cost()
 
-	oos := NewOrderService(offerDTO.ItemId, o.regionId, o.scope, o.lang)
+	oos := NewOrderService(offerDTO.ItemId, o.regionId, o.scope)
 	price, err := oos.HighestBuyPrice()
 	if err != nil {
 		log.Warnf("get highest buy price of item %v in region %v failed: %v", oos.itemId, oos.regionId, err)
@@ -166,7 +166,7 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems) dto.MatertialDTOs 
 		materail.Quantity = r.Quantity
 		materail.IsBluePrint = false
 
-		mos := NewOrderService(mi.ItemId, o.regionId, o.scope, o.lang)
+		mos := NewOrderService(mi.ItemId, o.regionId, o.scope)
 		price, err := mos.LowestSellPrice()
 		if err != nil {
 			log.Warnf("get lowest sell price of item %v in region %v failed: %v", mos.itemId, mos.regionId, err)
@@ -195,7 +195,7 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials) dto.M
 		materail.IsBluePrint = true
 		materail.Quantity = m.Quantity
 
-		mos := NewOrderService(mi.ItemId, o.regionId, o.scope, o.lang)
+		mos := NewOrderService(mi.ItemId, o.regionId, o.scope)
 		price, err := mos.LowestSellPrice()
 		if err != nil {
 			log.Warnf("get lowest sell price of item %v in region %v failed: %v", mos.itemId, mos.regionId, err)

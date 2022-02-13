@@ -69,20 +69,20 @@ func (o *offersData) covertOffersWrapper(offersWrapper offersWrapper) {
 
 	for _, offer := range *offersWrapper.offers {
 		if value, ok := o.offersMap[offer.OfferId]; !ok {
-			offer.CorporationIDs = append(offer.CorporationIDs, offersWrapper.corporationId)
+			offer.CorporationIds = append(offer.CorporationIds, offersWrapper.corporationId)
 			if bluePrint := model.GetBluePrint(offer.ItemId); !bluePrint.Empty() {
 				offer.IsBluePrint = true
 			}
 			o.offersMap[offer.OfferId] = offer
 		} else {
 			hasCurrentCorporationId := false
-			for _, v := range value.CorporationIDs {
+			for _, v := range value.CorporationIds {
 				if v == offersWrapper.corporationId {
 					hasCurrentCorporationId = true
 				}
 			}
 			if !hasCurrentCorporationId {
-				value.CorporationIDs = append(value.CorporationIDs, offersWrapper.corporationId)
+				value.CorporationIds = append(value.CorporationIds, offersWrapper.corporationId)
 			}
 		}
 	}

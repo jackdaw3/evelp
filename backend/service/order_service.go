@@ -17,11 +17,10 @@ type OrderService struct {
 	itemId   int
 	regionId int
 	scope    float64
-	lang     string
 }
 
-func NewOrderService(itemId int, regionId int, scope float64, lang string) *OrderService {
-	return &OrderService{itemId, regionId, scope, lang}
+func NewOrderService(itemId int, regionId int, scope float64) *OrderService {
+	return &OrderService{itemId, regionId, scope}
 }
 
 func (o *OrderService) HighestBuyPrice() (float64, error) {
@@ -54,7 +53,7 @@ func (o *OrderService) LowestSellPrice() (float64, error) {
 	return price, nil
 }
 
-func (o *OrderService) Orders(isBuyOrder bool) (*dto.OrderDTOs, error) {
+func (o *OrderService) Orders(isBuyOrder bool, lang string) (*dto.OrderDTOs, error) {
 	orders, err := o.ordersFromCache()
 	if err != nil {
 		return nil, err
@@ -66,7 +65,7 @@ func (o *OrderService) Orders(isBuyOrder bool) (*dto.OrderDTOs, error) {
 	if err != nil {
 		return nil, err
 	}
-	itemName := item.Name.Val(o.lang)
+	itemName := item.Name.Val(lang)
 
 	for _, order := range *orders {
 		if !order.IsBuyOrder == isBuyOrder {
@@ -89,7 +88,7 @@ func (o *OrderService) Orders(isBuyOrder bool) (*dto.OrderDTOs, error) {
 			log.Errorf(err, "get star system %v failed", order.SystemId)
 			continue
 		}
-		orderDTO.SystemName = system.Name.Val(o.lang)
+		orderDTO.SystemName = system.Name.Val(lang)
 
 		orderDTOs = append(orderDTOs, orderDTO)
 	}

@@ -39,8 +39,8 @@ func order(c *gin.Context) {
 		return
 	}
 
-	oderService := service.NewOrderService(itemId, regionId, float64(scope), lang)
-	orders, err := oderService.Orders(isBuyOrder)
+	oderService := service.NewOrderService(itemId, regionId, float64(scope))
+	orders, err := oderService.Orders(isBuyOrder, lang)
 	if err != nil {
 		c.AbortWithError(500, err)
 		return

@@ -13,20 +13,20 @@ import (
 )
 
 type Offer struct {
-	OfferId        int                `gorm:"type:int;not null;primary_key;autoIncrement:false" json:"offer_id"`
-	ItemId         int                `gorm:"type:int;not null" json:"type_id"`
-	Quantity       int                `gorm:"type:int;not null" json:"quantity"`
-	IskCost        float64            `gorm:"type:double;not null" json:"isk_cost"`
-	LpCost         int                `gorm:"type:int;not null" json:"lp_cost"`
-	AkCost         int                `gorm:"type:int;not null" json:"ak_cost"`
-	RequireItems   RequireItems       `gorm:"type:text" json:"required_items"`
-	CorporationIDs CorporationIDArray `gorm:"type:text"`
-	IsBluePrint    bool               `gorm:"type:bool;default:false"`
+	OfferId        int            `gorm:"type:int;not null;primary_key;autoIncrement:false" json:"offer_id"`
+	ItemId         int            `gorm:"type:int;not null" json:"type_id"`
+	Quantity       int            `gorm:"type:int;not null" json:"quantity"`
+	IskCost        float64        `gorm:"type:double;not null" json:"isk_cost"`
+	LpCost         int            `gorm:"type:int;not null" json:"lp_cost"`
+	AkCost         int            `gorm:"type:int;not null" json:"ak_cost"`
+	RequireItems   RequireItems   `gorm:"type:text" json:"required_items"`
+	CorporationIds CorporationIds `gorm:"type:text"`
+	IsBluePrint    bool           `gorm:"type:bool;default:false"`
 }
 
 type Offers []*Offer
 
-type CorporationIDArray []int
+type CorporationIds []int
 
 func (o Offers) Len() int { return len(o) }
 
@@ -34,17 +34,17 @@ func (o Offers) Less(i, j int) bool { return o[i].OfferId < o[j].OfferId }
 
 func (o Offers) Swap(i, j int) { o[i], o[j] = o[j], o[i] }
 
-func (ca CorporationIDArray) Len() int { return len(ca) }
+func (c CorporationIds) Len() int { return len(c) }
 
-func (ca CorporationIDArray) Less(i, j int) bool {
-	return ca[i] < ca[j]
+func (c CorporationIds) Less(i, j int) bool {
+	return c[i] < c[j]
 }
 
-func (ca CorporationIDArray) Swap(i, j int) {
-	ca[i], ca[j] = ca[j], ca[i]
+func (c CorporationIds) Swap(i, j int) {
+	c[i], c[j] = c[j], c[i]
 }
 
-func (ca *CorporationIDArray) Scan(value interface{}) error {
+func (c *CorporationIds) Scan(value interface{}) error {
 	if value == nil {
 		return nil
 	}
@@ -54,11 +54,11 @@ func (ca *CorporationIDArray) Scan(value interface{}) error {
 		return errors.Errorf("%v is not []byte", value)
 	}
 
-	return json.Unmarshal(str, &ca)
+	return json.Unmarshal(str, &c)
 }
 
-func (ca CorporationIDArray) Value() (driver.Value, error) {
-	str, err := json.Marshal(ca)
+func (c CorporationIds) Value() (driver.Value, error) {
+	str, err := json.Marshal(c)
 	if err != nil {
 		return nil, nil
 	}
@@ -94,7 +94,7 @@ func SaveOffer(offer *Offer) error {
 
 func SaveOffers(offers *Offers) error {
 	for _, offer := range *offers {
-		sort.Sort(offer.CorporationIDs)
+		sort.Sort(offer.CorporationIds)
 		if err := SaveOffer(offer); err != nil {
 			return err
 		}
