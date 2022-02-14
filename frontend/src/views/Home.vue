@@ -1,18 +1,66 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Header />
+    <hr />
+    <div style="display: flex">
+      <div style="width: 100%; margin-left: 5px">
+        <el-cascader
+          v-model="corporation.value"
+          style="width: 25%"
+          v-loading="corporation.loading"
+          :placeholder="corporation.label"
+          :options="corporation.lists"
+          clearable
+          filterable
+          @change="corporationChange"
+        >
+        </el-cascader>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import Header from "@/components/Header.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    HelloWorld
-  }
-}
+    Header,
+  },
+  mounted() {
+    if (localStorage.lang == null) {
+      localStorage.lang = "en";
+    }
+    if (localStorage.lang) {
+      this.$i18n.locale = localStorage.lang;
+    }
+  },
+  data() {
+    return {
+      corporation: {
+        value: "",
+        loading: "",
+        label: "",
+        lists: [],
+      },
+    };
+  },
+  methods: {
+    loadFactions() {
+      this.selectLoading = true;
+      this.axios.get(backendUrl + "factionList").then((response) => {
+        const list = response.data;
+        this.facList = list;
+        this.initFacList(list);
+        this.selectLoading = false;
+      });
+    },
+  },
+  watch: {
+    "$i18n.locale"() {
+      localStorage.lang = this.$i18n.locale;
+    },
+  },
+};
 </script>

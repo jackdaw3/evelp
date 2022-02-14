@@ -24,6 +24,8 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "i18n": "^0.13.2",
+    "vue-i18n": "^8.22.2",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
