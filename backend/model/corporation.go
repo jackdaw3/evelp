@@ -23,9 +23,9 @@ func (c Corporations) Less(i, j int) bool {
 
 func (c Corporations) Swap(i, j int) { c[i], c[j] = c[j], c[i] }
 
-func GetCorporation(id int) (*Corporation, error) {
+func GetCorporation(corporationId int) (*Corporation, error) {
 	var corporation Corporation
-	result := global.DB.First(&corporation, id)
+	result := global.DB.First(&corporation, corporationId)
 	return &corporation, result.Error
 }
 
@@ -37,7 +37,7 @@ func GetCorporations() (*Corporations, error) {
 
 func GetCorporationsByFaction(factionId int) (*Corporations, error) {
 	var corporations Corporations
-	result := global.DB.Where("faction_id <> ?", factionId).Find(&corporations)
+	result := global.DB.Where("faction_id = ?", factionId).Find(&corporations)
 	return &corporations, result.Error
 }
 

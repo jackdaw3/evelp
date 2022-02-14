@@ -15,6 +15,12 @@ func offer(c *gin.Context) {
 		return
 	}
 
+	corporationId, err := strconv.Atoi(c.Query("corporationId"))
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
+	}
+
 	scope, err := strconv.ParseFloat(c.Query("scope"), 64)
 	if err != nil {
 		c.AbortWithError(500, err)
@@ -27,19 +33,25 @@ func offer(c *gin.Context) {
 		return
 	}
 
+	productPrice := c.Query("productPrice")
+	if productPrice == "" {
+		c.AbortWithError(500, errors.New("productPrice is empty"))
+		return
+	}
+
+	materialPrice := c.Query("materialPrice")
+	if materialPrice == "" {
+		c.AbortWithError(500, errors.New("materialPrice is empty"))
+		return
+	}
+
 	lang := c.Query("lang")
 	if lang == "" {
 		c.AbortWithError(500, errors.New("lang is empty"))
 		return
 	}
 
-	corporationId, err := strconv.Atoi(c.Query("corporationId"))
-	if err != nil {
-		c.AbortWithError(500, err)
-		return
-	}
-
-	offerService := service.NewOfferSerivce(corporationId, regionId, float64(scope), days, lang)
+	offerService := service.NewOfferSerivce(corporationId, regionId, float64(scope), days, productPrice, materialPrice, lang)
 
 	offers, err := offerService.Offers()
 	if err != nil {

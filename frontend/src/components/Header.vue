@@ -39,7 +39,7 @@
 
 
 export default {
-  beforeCreate() {
+  mounted() {
     this.language=this.langLabel(this.$i18n.locale)
   },
   data() {
