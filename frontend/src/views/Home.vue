@@ -16,8 +16,7 @@
           clearable
           filterable
           @change="corporationChange"
-        >
-        </el-cascader>
+        ></el-cascader>
       </div>
     </div>
   </div>
@@ -101,3 +100,14 @@ export default {
   },
 };
 </script>
+
+<style>
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 0.618em 0;
+  padding: 0;
+}
+</style>
