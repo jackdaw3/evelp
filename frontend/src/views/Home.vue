@@ -4,7 +4,7 @@
     <hr />
     <div style="display: flex">
       <div>
-        <Dialog />
+        <Dialog :form="form" />
       </div>
       <div style="width: 100%; margin-left: 5px">
         <el-cascader
@@ -15,24 +15,29 @@
           :options="corporation.lists"
           clearable
           filterable
-          @change="corporationChange"
+          @change="loadTable"
+          ref="cascader"
         ></el-cascader>
       </div>
     </div>
+    <Table :table-data="table" :form="form" ref="Table" />
   </div>
 </template>
 
 <script>
 import Dialog from "@/components/Dialog.vue";
 import Header from "@/components/Header.vue";
+import Table from "@/components/Table.vue";
 
 const backend = "http://localhost:9000/";
+const the_forge = "10000002";
 
 export default {
   name: "Home",
   components: {
     Dialog,
     Header,
+    Table,
   },
   mounted() {
     if (localStorage.lang == null) {
@@ -50,6 +55,16 @@ export default {
         loading: "",
         placeholder: this.$t("message.corporation.placeholder"),
         lists: [],
+      },
+      form: {
+        materialPrice: "sell",
+        productPrice: "buy",
+        days: "7",
+        scope: "0.05",
+      },
+      table: {
+        data: [],
+        corporationName: "",
       },
     };
   },
@@ -89,7 +104,35 @@ export default {
       }
       this.corporation.lists = factions;
     },
-    corporationChange() {},
+    loadTable(value) {
+      if (value == "" || value == null) {
+        return;
+      }
+      const corporationId = parseInt(value[1]);
+      this.corporation.loading = true;
+      const arr = this.$refs["cascader"].getCheckedNodes()[0].pathLabels;
+      this.table.corporationName = arr[0] + " " + arr[1];
+
+      this.axios
+        .get(backend + "offer", {
+          params: {
+            regionId: the_forge,
+            scope: this.form.scope,
+            corporationId: corporationId,
+            lang: this.$i18n.locale,
+            days: this.form.days,
+            productPrice: this.form.productPrice,
+            materialPrice: this.form.materialPrice,
+          },
+        })
+        .then((response) => {
+          this.table.data = response.data;
+          this.corporation.loading = false;
+        })
+        .catch(() => {
+          this.loading = false;
+        });
+    },
   },
   watch: {
     "$i18n.locale"() {
