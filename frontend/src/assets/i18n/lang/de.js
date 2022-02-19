@@ -9,7 +9,7 @@ const de = {
     corporation: {
       placeholder: "Please select or input faction and crop",
     },
-    tableLabel: {
+    table: {
       name: "Name",
       quantity: "Quantity",
       lpCost: "Lp Cost",
@@ -22,6 +22,18 @@ const de = {
       unitProfit: "Isk/Lp",
       lookUp: "Item Name Lookup",
       orders: "Orders",
+      operation: "Operation",
+      error: "Error",
+      material: {
+        lpStoreMaterail: "LP Store Material",
+        bluePrintMaterial: "BluePrint Material",
+        name: "Name",
+        quantity: "Quantity",
+        price: "Price",
+        type: "Type",
+        cost: "Cost",
+        error: "Error",
+      },
     },
     materialLabel: {
       name: "Material",

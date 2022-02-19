@@ -1,0 +1,7 @@
+declare module 'element-ui/lib/locale'
+declare module 'element-ui/lib/locale/lang/de'
+declare module 'element-ui/lib/locale/lang/en'
+declare module 'element-ui/lib/locale/lang/fr'
+declare module 'element-ui/lib/locale/lang/ja'
+declare module 'element-ui/lib/locale/lang/ru-RU'
+declare module 'element-ui/lib/locale/lang/zh-CN'

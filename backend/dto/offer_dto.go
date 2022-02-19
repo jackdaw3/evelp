@@ -17,6 +17,8 @@ type OfferDTO struct {
 	UnitProfit   int
 	SalaIndex    int
 	IsBluePrint  bool
+	Error        bool
+	ErrorMessage string
 }
 
 const (

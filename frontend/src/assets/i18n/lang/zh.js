@@ -25,8 +25,8 @@ const zh = {
       buyPrice: "买价",
       sellPrice: "卖价",
     },
-    tableLabel: {
-      name: "物品名",
+    table: {
+      name: "物品",
       quantity: "数量",
       lpCost: "LP成本",
       iskCost: "ISK成本",
@@ -38,6 +38,18 @@ const zh = {
       unitProfit: "LP比例",
       lookUp: "物品名关键字搜索",
       orders: "订单",
+      operation: "操作",
+      error: "错误",
+      material: {
+        lpStoreMaterail: "兑换材料",
+        bluePrintMaterial: "制造材料",
+        name: "物品",
+        quantity: "数量",
+        price: "价格",
+        type: "类型",
+        cost: "成本",
+        error: "错误",
+      },
     },
     materialLabel: {
       name: "材料名称",

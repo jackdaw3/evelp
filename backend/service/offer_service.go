@@ -4,6 +4,7 @@ import (
 	"evelp/dto"
 	"evelp/log"
 	"evelp/model"
+	"fmt"
 	"sort"
 
 	"github.com/pkg/errors"
@@ -67,7 +68,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 	offerDTO.IskCost = offer.IskCost
 	offerDTO.LpCost = offer.LpCost
 
-	materails := o.conertMaterials(offer.RequireItems)
+	materails := o.conertMaterials(offer.RequireItems, &offerDTO)
 	offerDTO.Matertials = materails
 	offerDTO.MaterialCost = materails.Cost()
 
@@ -79,6 +80,17 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 		price, err = oos.LowestSellPrice()
 	}
 	if err != nil {
+		offerDTO.Error = true
+		errorMessage := fmt.Sprintf("get %s price of product %s in The Forge failed: %s",
+			o.productPrice, offerDTO.Name,
+			errors.Cause(err).Error(),
+		)
+		if len(offerDTO.ErrorMessage) > 0 {
+			offerDTO.ErrorMessage += ".\n" + errorMessage
+		} else {
+			offerDTO.ErrorMessage = errorMessage
+		}
+
 		log.Warnf("get %s price of item %v in region %v failed: %v", o.productPrice, oos.itemId, oos.regionId, err)
 	}
 	offerDTO.Price = price
@@ -123,8 +135,8 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	offerDTO.IskCost = offer.IskCost
 	offerDTO.LpCost = offer.LpCost
 
-	materails := o.conertMaterials(offer.RequireItems)
-	manufactMaterials := o.conertManufactMaterials(bluePrint.Materials)
+	materails := o.conertMaterials(offer.RequireItems, &offerDTO)
+	manufactMaterials := o.conertManufactMaterials(bluePrint.Materials, &offerDTO)
 	materails = append(materails, manufactMaterials...)
 
 	offerDTO.Matertials = materails
@@ -138,6 +150,17 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 		price, err = oos.LowestSellPrice()
 	}
 	if err != nil {
+		offerDTO.Error = true
+		errorMessage := fmt.Sprintf("get %s price of blueprint %s product in The Forge failed: %s",
+			o.productPrice,
+			bluePrintItem.Name.Val(o.lang),
+			errors.Cause(err).Error(),
+		)
+		if len(offerDTO.ErrorMessage) > 0 {
+			offerDTO.ErrorMessage += ".\n" + errorMessage
+		} else {
+			offerDTO.ErrorMessage = errorMessage
+		}
 		log.Warnf("get %s price of item %v in region %v failed: %v", o.productPrice, oos.itemId, oos.regionId, err)
 	}
 	offerDTO.Price = price
@@ -161,7 +184,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	return &offerDTO, nil
 }
 
-func (o *OfferSerivce) conertMaterials(rs model.RequireItems) dto.MatertialDTOs {
+func (o *OfferSerivce) conertMaterials(rs model.RequireItems, offerDTO *dto.OfferDTO) dto.MatertialDTOs {
 	var materails dto.MatertialDTOs
 
 	for _, r := range rs {
@@ -186,6 +209,19 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems) dto.MatertialDTOs 
 			price, err = mos.HighestBuyPrice()
 		}
 		if err != nil {
+			offerDTO.Error = true
+			errorMessage := fmt.Sprintf("get %s price of lp store material %s in The Forge failed: %s",
+				o.materialPrice,
+				materail.Name,
+				errors.Cause(err).Error(),
+			)
+			if len(offerDTO.ErrorMessage) > 0 {
+				offerDTO.ErrorMessage += ".\n" + errorMessage
+			} else {
+				offerDTO.ErrorMessage = errorMessage
+			}
+			materail.Error = true
+			materail.ErrorMessage = errorMessage
 			log.Warnf("get %s price of item %v in region %v failed: %v", o.materialPrice, mos.itemId, mos.regionId, err)
 		}
 		materail.Price = price
@@ -196,7 +232,7 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems) dto.MatertialDTOs 
 	return materails
 }
 
-func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials) dto.MatertialDTOs {
+func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offerDTO *dto.OfferDTO) dto.MatertialDTOs {
 	var materails dto.MatertialDTOs
 
 	for _, m := range ms {
@@ -220,6 +256,19 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials) dto.M
 			price, err = mos.HighestBuyPrice()
 		}
 		if err != nil {
+			offerDTO.Error = true
+			errorMessage := fmt.Sprintf("get %s price of manufact material %s in The Forge failed: %s",
+				o.materialPrice,
+				materail.Name,
+				errors.Cause(err).Error(),
+			)
+			if len(offerDTO.ErrorMessage) > 0 {
+				offerDTO.ErrorMessage += ".\n" + errorMessage
+			} else {
+				offerDTO.ErrorMessage = errorMessage
+			}
+			materail.Error = true
+			materail.ErrorMessage = errorMessage
 			log.Warnf("get %s price of item %v in region %v failed: %v", o.materialPrice, mos.itemId, mos.regionId, err)
 		}
 		materail.Price = price

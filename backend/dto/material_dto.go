@@ -1,12 +1,14 @@
 package dto
 
 type MaterialDTO struct {
-	ItemId      int
-	Name        string
-	Quantity    int64
-	Price       float64
-	Cost        float64
-	IsBluePrint bool
+	ItemId       int
+	Name         string
+	Quantity     int64
+	Price        float64
+	Cost         float64
+	IsBluePrint  bool
+	Error        bool
+	ErrorMessage string
 }
 
 type MatertialDTOs []MaterialDTO

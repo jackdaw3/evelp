@@ -1,10 +1,11 @@
 package model
 
 import (
-	"errors"
 	"math"
 	"sort"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 type Order struct {
@@ -39,6 +40,9 @@ func (o *Orders) HighestBuyPrice(scope float64) (float64, error) {
 			buyOrders = append(buyOrders, order)
 		}
 	}
+	if len(buyOrders) == 0 {
+		return 0, errors.New("there is no buy order in the market")
+	}
 	sort.Sort(sort.Reverse(buyOrders))
 	buyOrders = filterBuyOrders(buyOrders)
 
@@ -55,6 +59,9 @@ func (o *Orders) LowestSellPrice(scope float64) (float64, error) {
 		if !order.IsBuyOrder {
 			sellOrders = append(sellOrders, order)
 		}
+	}
+	if len(sellOrders) == 0 {
+		return 0, errors.New("there is no sell order in the market")
 	}
 	sort.Sort(sellOrders)
 	return sellOrders.ordersPrice(scope)

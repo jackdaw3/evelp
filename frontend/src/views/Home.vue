@@ -20,7 +20,7 @@
         ></el-cascader>
       </div>
     </div>
-    <Table :table-data="table" :form="form" ref="Table" />
+    <Table :table-data="tableData" :corporation-name="corporationName" :form="form" ref="Table" />
   </div>
 </template>
 
@@ -62,10 +62,8 @@ export default {
         days: "7",
         scope: "0.05",
       },
-      table: {
-        data: [],
-        corporationName: "",
-      },
+      tableData: [],
+      corporationName: "",
     };
   },
   methods: {
@@ -111,8 +109,7 @@ export default {
       const corporationId = parseInt(value[1]);
       this.corporation.loading = true;
       const arr = this.$refs["cascader"].getCheckedNodes()[0].pathLabels;
-      this.table.corporationName = arr[0] + " " + arr[1];
-
+      this.corporationName = arr[0] + " " + arr[1];
       this.axios
         .get(backend + "offer", {
           params: {
@@ -126,7 +123,30 @@ export default {
           },
         })
         .then((response) => {
-          this.table.data = response.data;
+          var data = response.data;
+          for (let i=0;i<data.length;++i){
+            var matertials = data[i].Matertials
+            if (matertials==null){
+              continue;
+            }
+            let count=0
+            for(let j=0;j+count<matertials.length;){
+              if (count==0){
+                matertials[j].length=1
+                ++count
+                continue;
+              }
+              if (matertials[j].IsBluePrint==matertials[j+count].IsBluePrint){
+                matertials[j].length+=1
+                matertials[j+count].length=0
+                ++count
+              }else{
+                j+=count
+                count=0
+              }
+            }
+          }
+          this.tableData = data;
           this.corporation.loading = false;
         })
         .catch(() => {
@@ -137,7 +157,17 @@ export default {
   watch: {
     "$i18n.locale"() {
       this.corporation.placeholder = this.$t("message.corporation.placeholder");
+
       this.loadFactions(this.facList);
+
+      var cascaderValue = this.$refs["cascader"].getCheckedNodes()[0];
+      if (cascaderValue!=null) {
+        var facAndcorp = new Array();
+        facAndcorp[0] = cascaderValue.parent.value;
+        facAndcorp[1] = cascaderValue.value;
+        this.loadTable(facAndcorp);
+      }
+
       localStorage.lang = this.$i18n.locale;
     },
   },
