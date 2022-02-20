@@ -49,6 +49,10 @@ const en = {
         type: "Type",
         cost: "Cost",
         error: "Error",
+        copy: "Copy",
+        copySuccess:'Copy Successfully!',
+        copyFail:'Copy Failed!',
+        sum: "Sum",
       },
     },
     materialLabel: {

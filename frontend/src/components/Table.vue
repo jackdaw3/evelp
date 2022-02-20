@@ -17,7 +17,6 @@
             stripe
             :cell-style="tableStyle"
             style="width: 55%"
-            border
             :row-class-name="handelMaterailRowDetail"
             :span-method="objectSpanMethod"
             :header-cell-style="{padding: '0'}"
@@ -58,12 +57,27 @@
               min-width="15%"
               :formatter="stateFormat"
             ></el-table-column>
-            <el-table-column :label="tableLabel.operation" min-width="9%">
+            <el-table-column :label="tableLabel.operation" min-width="13%">
+              <template v-slot:header>
+                <el-button
+                  size="mini"
+                  type="primary"
+                  plain
+                  @click="copyAllMaterials(props.row.Matertials)"
+                >{{tableLabel.material.copy}}</el-button>
+              </template>
               <template v-slot="scope">
+                <el-button
+                  size="mini"
+                  type="primary"
+                  plain
+                  @click="copyMaterial(scope.row)"
+                >{{tableLabel.material.copy}}</el-button>
                 <el-button
                   v-if="scope.row.Error === true"
                   size="mini"
                   type="warning"
+                  plain
                   @click="errorMessage(scope.row.ErrorMessage)"
                 >{{tableLabel.material.error}}</el-button>
               </template>
@@ -132,21 +146,22 @@
       <el-table-column :label="tableLabel.unitProfit" prop="UnitProfit" min-width="7%"></el-table-column>
       <el-table-column :label="tableLabel.operation" min-width="9%">
         <template v-slot:header>
-          <el-input v-model="search" size="mini" :placeholder="tableLabel.lookUp" />
+          <el-input v-model="search" size="mini" :placeholder="tableLabel.lookUp"/>
         </template>
 
         <template v-slot="scope">
-          <el-button size="mini" type="primary" @click="orders(scope)">{{ tableLabel.orders }}</el-button>
+          <el-button size="mini" type="primary" plain @click="orders(scope)">{{ tableLabel.orders }}</el-button>
           <el-button
             v-if="scope.row.Error === true"
             size="mini"
             type="warning"
+            plain
             @click="errorMessage(scope.row.ErrorMessage)"
           >{{tableLabel.error}}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <br />
+    <br>
     <el-pagination
       align="center"
       background
@@ -158,17 +173,20 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="tableData.length"
     ></el-pagination>
-    <br />
+    <br>
   </div>
 </template>
 
 <script>
+import FileSaver from "file-saver";
+import XLSX from "xlsx";
+
 const iconServer = "https://imageserver.eveonline.com/";
 export default {
   props: {
     tableData: Array,
     form: Object,
-    corporationName: String,
+    corporationName: String
   },
   data() {
     return {
@@ -176,21 +194,21 @@ export default {
       total: 20,
       pageSize: 25,
       search: "",
-      tableLabel: this.$t("message.table"),
+      tableLabel: this.$t("message.table")
     };
   },
   methods: {
     tableStyle() {
       return {
         padding: "0",
-        "font-size": "14px",
+        "font-size": "14px"
       };
     },
-    handleSizeChange: function (val) {
+    handleSizeChange: function(val) {
       this.currentPage = 1;
       this.pageSize = val;
     },
-    handleCurrentChange: function (val) {
+    handleCurrentChange: function(val) {
       this.currentPage = val;
     },
     getIcon(typeId) {
@@ -201,12 +219,12 @@ export default {
       cellValue += "";
       if (!cellValue.includes(".")) cellValue += ".";
       return cellValue
-        .replace(/(\d)(?=(\d{3})+\.)/g, function ($0, $1) {
+        .replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {
           return $1 + ",";
         })
         .replace(/\.$/, "");
     },
-    handelRowDetail: function (row) {
+    handelRowDetail: function(row) {
       var value = "";
       var expand = true;
       if (row.row.Matertials === null) {
@@ -222,7 +240,7 @@ export default {
       }
       return value;
     },
-    handelMaterailRowDetail: function (row) {
+    handelMaterailRowDetail: function(row) {
       if (row.row.Error == true) {
         return "warning-row";
       }
@@ -234,12 +252,12 @@ export default {
         if (row.length != 0) {
           return {
             rowspan: row.length,
-            colspan: 1,
+            colspan: 1
           };
         } else {
           return {
             rowspan: 0,
-            colspan: 0,
+            colspan: 0
           };
         }
       }
@@ -249,15 +267,102 @@ export default {
         message: message,
         type: "warning",
         showClose: true,
-        duration: 8000,
+        duration: 8000
       });
     },
+    copyMaterial(row) {
+      var value = row.Quantity + " " + row.Name + "\n";
+      this.$copyText(value).then(
+        () => {
+          this.$message({
+            message: this.tableLabel.material.copySuccess,
+            type: "success"
+          });
+        },
+        function(e) {
+          this.$message({
+            message: this.tableLabel.material.copyFail,
+            type: "error"
+          });
+          console.log(e);
+        }
+      );
+    },
+    copyAllMaterials(list) {
+      let value = "";
+      for (let i = 0; i < list.length; ++i) {
+        value += list[i].Quantity + " " + list[i].Name + "\n";
+      }
+
+      this.$copyText(value).then(
+        () => {
+          this.$message({
+            message: this.tableLabel.material.copySuccess,
+            type: "success"
+          });
+        },
+        function(e) {
+          this.$message({
+            message: this.tableLabel.material.copyFail,
+            type: "error"
+          });
+          console.log(e);
+        }
+      );
+    },
+    exportExcel() {
+      const pages = this.pageSize;
+      this.pageSize = 500;
+      this.currentPage = 1;
+      let date = new Date();
+      let name =
+        this.corporationName + this.dateFormat("YYYY-mm-dd_HH-MM-SS", date);
+      this.$nextTick(function() {
+        let wb = XLSX.utils.table_to_book(document.getElementById("table"));
+        let wbout = XLSX.write(wb, {
+          bookType: "xlsx",
+          bookSST: true,
+          type: "array"
+        });
+        try {
+          FileSaver.saveAs(
+            new Blob([wbout], { type: "application/octet-stream" }),
+            name + ".xlsx"
+          );
+        } catch (e) {
+          if (typeof console !== "undefined") console.log(e, wbout);
+        }
+        this.pageSize = pages;
+        return wbout;
+      });
+    },
+    dateFormat(fmt, date) {
+      let ret;
+      const opt = {
+        "Y+": date.getFullYear().toString(),
+        "m+": (date.getMonth() + 1).toString(),
+        "d+": date.getDate().toString(),
+        "H+": date.getHours().toString(),
+        "M+": date.getMinutes().toString(),
+        "S+": date.getSeconds().toString()
+      };
+      for (let k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+          fmt = fmt.replace(
+            ret[1],
+            ret[1].length == 1 ? opt[k] : opt[k].padStart(ret[1].length, "0")
+          );
+        }
+      }
+      return fmt;
+    }
   },
   watch: {
     "$i18n.locale"() {
       this.tableLabel = this.$t("message.table");
-    },
-  },
+    }
+  }
 };
 </script>
 <style>

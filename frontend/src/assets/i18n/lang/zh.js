@@ -49,6 +49,10 @@ const zh = {
         type: "类型",
         cost: "成本",
         error: "错误",
+        copy: "拷贝",
+        copySuccess:'拷贝成功!',
+        copyFail:'拷贝失败!',
+        sum: "合计",
       },
     },
     materialLabel: {
