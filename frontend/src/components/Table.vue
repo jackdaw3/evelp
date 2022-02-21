@@ -199,11 +199,6 @@ import XLSX from "xlsx";
 
 const iconServer = "https://imageserver.eveonline.com/";
 export default {
-  props: {
-    tableData: Array,
-    form: Object,
-    corporationName: String,
-  },
   data() {
     return {
       currentPage: 1,
@@ -212,6 +207,17 @@ export default {
       search: "",
       tableLabel: this.$t("message.table"),
     };
+  },
+  computed: {
+    tableData: function () {
+      return this.$store.state.tableData;
+    },
+    form: function () {
+      return this.$store.state.form;
+    },
+    corporationName: function () {
+      return this.$store.state.corporationName;
+    },
   },
   methods: {
     tableStyle() {
@@ -331,6 +337,14 @@ export default {
       );
     },
     exportExcel() {
+      if (this.tableData.length === 0) {
+        this.$message({
+          message: this.$t("message.noData"),
+          type: "warning",
+          duration: 1500,
+        });
+        return;
+      }
       const pages = this.pageSize;
       this.pageSize = 500;
       this.currentPage = 1;
@@ -378,7 +392,7 @@ export default {
       return fmt;
     },
     sort_change(column) {
-      this.current_page = 1; // return to the first page after sorting
+      this.current_page = 1;
       if (column.prop === "SaleIndex") {
         if (column.order === "descending") {
           this.tableData = this.tableData.sort(this.saleIndexDescSort);
@@ -428,7 +442,7 @@ export default {
           this.tableData = this.tableData.sort(this.incomeAscSort);
         }
       }
-      this.showed_data = this.tableData.slice(0, this.pageSize); // show only one page
+      this.showed_data = this.tableData.slice(0, this.pageSize);
     },
     saleIndexDescSort(a, b) {
       if (a.SaleIndex > b.SaleIndex) {

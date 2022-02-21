@@ -83,6 +83,7 @@ const ja = {
       dataConfig: "Data Config",
       tableConfig: "Table Config",
     },
+    noData: "没有数据",
     orders: {
       sellOrders: "Sell Orders",
       buyOrders: "Buy Orders",

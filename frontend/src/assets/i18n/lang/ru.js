@@ -39,6 +39,7 @@ const ru = {
         sum: "Sum",
       },
     },
+    noData: "没有数据",
     materialLabel: {
       name: "Material",
       quantity: "Quantity",

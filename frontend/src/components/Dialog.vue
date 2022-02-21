@@ -7,11 +7,11 @@
       @close="closeDialog"
       width="32%"
     >
-      <el-form label-width="20%" style="margin-top: -3%" v-model="formData">
+      <el-form label-width="20%" style="margin-top: -3%" v-model="form">
         <el-form-item :label="dialogLabel.materialPrice">
           <el-select
             :placeholder="dialogLabel.materialPlaceholder"
-            v-model="formData.materialPrice"
+            v-model="form.materialPrice"
             style="width:90%"
           >
             <el-option :label="dialogLabel.buyPrice" value="buy"></el-option>
@@ -21,7 +21,7 @@
         <el-form-item :label="dialogLabel.productPrice">
           <el-select
             :placeholder="dialogLabel.productPlaceholder"
-            v-model="formData.productPrice"
+            v-model="form.productPrice"
             style="width:90%"
           >
             <el-option :label="dialogLabel.buyPrice" value="buy"></el-option>
@@ -31,7 +31,7 @@
         <el-form-item :label="dialogLabel.scope">
           <el-select
             :placeholder="dialogLabel.scopePlaceholder"
-            v-model="formData.scope"
+            v-model="form.scope"
             style="width:90%"
           >
             <el-option label="1%" value="0.01"></el-option>
@@ -43,7 +43,7 @@
         <el-form-item :label="dialogLabel.days">
           <el-select
             :placeholder="dialogLabel.daysPlaceholder"
-            v-model="formData.days"
+            v-model="form.days"
             style="width:90%"
           >
             <el-option :label="dialogLabel.week" value="7"></el-option>
@@ -61,22 +61,23 @@
 </template>
 <script>
 export default {
-  props: {
-    form: Object,
-  },
   data() {
     return {
       dialogVisible: false,
       dialogLabel: this.$t("message.dialog"),
-      formData: this.form,
     };
+  },
+  computed: {
+    form: function () {
+      return this.$store.state.form;
+    },
   },
   methods: {
     reset() {
-      this.formData.materialPrice = "sell";
-      this.formData.productPrice = "buy";
-      this.formData.days = "7";
-      this.formData.scope = "0.05";
+      this.form.materialPrice = "sell";
+      this.form.productPrice = "buy";
+      this.form.days = "7";
+      this.form.scope = "0.05";
     },
     closeDialog() {
       this.$emit("form-change");

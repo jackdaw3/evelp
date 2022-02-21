@@ -4,7 +4,7 @@
     <hr />
     <div style="display: flex">
       <div>
-        <Dialog :form="form" @form-change="formChange" />
+        <Dialog @form-change="formChange" />
       </div>
       <div style="width: 100%; margin-left: 5px">
         <el-cascader
@@ -27,7 +27,7 @@
         style="height: 50%;float: right;margin-right: 15px;cursor: pointer"
       ></el-button>
     </div>
-    <Table :table-data="tableData" :corporation-name="corporationName" :form="form" ref="Table" />
+    <Table ref="Table" />
   </div>
 </template>
 
@@ -63,15 +63,12 @@ export default {
         placeholder: this.$t("message.corporation.placeholder"),
         lists: [],
       },
-      form: {
-        materialPrice: "sell",
-        productPrice: "buy",
-        days: "7",
-        scope: "0.05",
-      },
-      tableData: [],
-      corporationName: "",
     };
+  },
+  computed: {
+    form: function () {
+      return this.$store.state.form;
+    },
   },
   methods: {
     loadFactions() {
@@ -111,12 +108,13 @@ export default {
     },
     loadTable(value) {
       if (value == "" || value == null) {
+        this.$store.dispatch("setTableData", []);
         return;
       }
       const corporationId = parseInt(value[1]);
       this.corporation.loading = true;
       const arr = this.$refs["cascader"].getCheckedNodes()[0].pathLabels;
-      this.corporationName = arr[0] + " " + arr[1];
+      this.$store.dispatch("setCorporationName", arr[0] + " " + arr[1]);
       this.axios
         .get(backend + "offer", {
           params: {
@@ -155,10 +153,11 @@ export default {
               }
             }
           }
-          this.tableData = data;
+          this.$store.dispatch("setTableData", data);
           this.corporation.loading = false;
         })
         .catch(() => {
+          this.$store.dispatch("setTableData", []);
           this.corporation.loading = false;
         });
     },

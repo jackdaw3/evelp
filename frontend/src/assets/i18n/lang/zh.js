@@ -57,6 +57,7 @@ const zh = {
         sum: "合计",
       },
     },
+    noData: "没有数据",
     materialLabel: {
       name: "材料名称",
       quantity: "数量",
