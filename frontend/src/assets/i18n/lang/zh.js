@@ -24,6 +24,8 @@ const zh = {
       season: "一季度",
       buyPrice: "买价",
       sellPrice: "卖价",
+      reset: "重置",
+      close: "关闭",
     },
     table: {
       name: "物品",

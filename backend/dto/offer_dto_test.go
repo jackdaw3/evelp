@@ -12,7 +12,7 @@ func TestGenerateSalaIndex(t *testing.T) {
 	offerDTO.Volume = 128
 	offerDTO.UnitProfit = 2500
 
-	offerDTO.GenerateSalaIndex()
+	offerDTO.GenerateSaleIndex()
 
-	assert.Equal(t, 181, offerDTO.SalaIndex)
+	assert.Equal(t, 181, offerDTO.SaleIndex)
 }

@@ -23,7 +23,9 @@ const en = {
       month: "30d",
       season: "90d",
       buyPrice: "Buy Price",
-      sellPrice: "Sell Price"
+      sellPrice: "Sell Price",
+      reset: "Reset",
+      close: "Close",
     },
     table: {
       name: "Name",

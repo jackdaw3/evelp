@@ -106,7 +106,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 		log.Warnf("get volume of item %v region %v failed: %v", oos.itemId, oos.regionId, err)
 	}
 	offerDTO.Volume = volume
-	offerDTO.GenerateSalaIndex()
+	offerDTO.GenerateSaleIndex()
 
 	return &offerDTO, nil
 }
@@ -176,7 +176,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 		log.Warnf("get volume of item %v region %v failed: %v", oos.itemId, oos.regionId, err)
 	}
 	offerDTO.Volume = volume
-	offerDTO.GenerateSalaIndex()
+	offerDTO.GenerateSaleIndex()
 
 	offerDTO.ItemId = bluePrintItem.ItemId
 	offerDTO.Name = bluePrintItem.Name.Val(o.lang)

@@ -4,7 +4,7 @@
     <el-dialog
       :title="dialogLabel.title"
       :visible.sync="dialogVisible"
-      height="60%"
+      @close="closeDialog"
       width="32%"
     >
       <el-form label-width="20%" style="margin-top: -3%" v-model="formData">
@@ -52,6 +52,10 @@
           </el-select>
         </el-form-item>
       </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="reset" size="medium">{{ dialogLabel.reset }}</el-button>
+        <el-button @click="dialogVisible = false" size="medium">{{ dialogLabel.close }}</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -67,10 +71,18 @@ export default {
       formData: this.form,
     };
   },
-  watch: {
-    formData(value) {
-      this.$emit("formChange", value);
+  methods: {
+    reset() {
+      this.formData.materialPrice = "sell";
+      this.formData.productPrice = "buy";
+      this.formData.days = "7";
+      this.formData.scope = "0.05";
     },
+    closeDialog() {
+      this.$emit("form-change");
+    },
+  },
+  watch: {
     "$i18n.locale"() {
       this.dialogLabel = this.$t("message.dialog");
     },

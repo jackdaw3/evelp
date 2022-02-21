@@ -15,7 +15,7 @@ type OfferDTO struct {
 	Profit       float64
 	Volume       int64
 	UnitProfit   int
-	SalaIndex    int
+	SaleIndex    int
 	IsBluePrint  bool
 	Error        bool
 	ErrorMessage string
@@ -35,8 +35,8 @@ func (o OfferDTOs) Less(i, j int) bool { return o[i].UnitProfit > o[j].UnitProfi
 
 func (o OfferDTOs) Swap(i, j int) { o[i], o[j] = o[j], o[i] }
 
-func (o *OfferDTO) GenerateSalaIndex() {
-	var salaIndex int
+func (o *OfferDTO) GenerateSaleIndex() {
+	var saleIndex int
 
 	var quantityScore float64
 	var iskStreamScore float64
@@ -55,6 +55,6 @@ func (o *OfferDTO) GenerateSalaIndex() {
 		unitProfitScore = k3
 	}
 
-	salaIndex = int(quantityScore * iskStreamScore * unitProfitScore)
-	o.SalaIndex = salaIndex
+	saleIndex = int(quantityScore * iskStreamScore * unitProfitScore)
+	o.SaleIndex = saleIndex
 }

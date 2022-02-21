@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <Header/>
-    <hr>
+    <Header />
+    <hr />
     <div style="display: flex">
       <div>
-        <Dialog :form="form"/>
+        <Dialog :form="form" @form-change="formChange" />
       </div>
       <div style="width: 100%; margin-left: 5px">
         <el-cascader
@@ -27,7 +27,7 @@
         style="height: 50%;float: right;margin-right: 15px;cursor: pointer"
       ></el-button>
     </div>
-    <Table :table-data="tableData" :corporation-name="corporationName" :form="form" ref="Table"/>
+    <Table :table-data="tableData" :corporation-name="corporationName" :form="form" ref="Table" />
   </div>
 </template>
 
@@ -44,7 +44,7 @@ export default {
   components: {
     Dialog,
     Header,
-    Table
+    Table,
   },
   mounted() {
     if (localStorage.lang == null) {
@@ -61,16 +61,16 @@ export default {
         value: "",
         loading: "",
         placeholder: this.$t("message.corporation.placeholder"),
-        lists: []
+        lists: [],
       },
       form: {
         materialPrice: "sell",
         productPrice: "buy",
         days: "7",
-        scope: "0.05"
+        scope: "0.05",
       },
       tableData: [],
-      corporationName: ""
+      corporationName: "",
     };
   },
   methods: {
@@ -79,10 +79,10 @@ export default {
       this.axios
         .get(backend + "faction", {
           params: {
-            lang: this.$i18n.locale
-          }
+            lang: this.$i18n.locale,
+          },
         })
-        .then(response => {
+        .then((response) => {
           var factions = response.data;
           this.loadCorporations(factions);
           this.corporation.loading = false;
@@ -126,10 +126,10 @@ export default {
             lang: this.$i18n.locale,
             days: this.form.days,
             productPrice: this.form.productPrice,
-            materialPrice: this.form.materialPrice
-          }
+            materialPrice: this.form.materialPrice,
+          },
         })
-        .then(response => {
+        .then((response) => {
           var data = response.data;
           for (let i = 0; i < data.length; ++i) {
             var matertials = data[i].Matertials;
@@ -159,19 +159,16 @@ export default {
           this.corporation.loading = false;
         })
         .catch(() => {
-          this.loading = false;
+          this.corporation.loading = false;
         });
+    },
+    formChange() {
+      this.reloadTable();
     },
     exportExcel() {
       this.$refs.Table.exportExcel();
-    }
-  },
-  watch: {
-    "$i18n.locale"() {
-      this.corporation.placeholder = this.$t("message.corporation.placeholder");
-
-      this.loadFactions(this.facList);
-
+    },
+    reloadTable() {
       var cascaderValue = this.$refs["cascader"].getCheckedNodes()[0];
       if (cascaderValue != null) {
         var facAndcorp = new Array();
@@ -179,10 +176,16 @@ export default {
         facAndcorp[1] = cascaderValue.value;
         this.loadTable(facAndcorp);
       }
-
+    },
+  },
+  watch: {
+    "$i18n.locale"() {
+      this.corporation.placeholder = this.$t("message.corporation.placeholder");
+      this.loadFactions(this.facList);
+      this.reloadTable();
       localStorage.lang = this.$i18n.locale;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -7,6 +7,7 @@
       id="table"
       :cell-style="tableStyle"
       stripe
+      @sort-change="sort_change"
       style="width: 100%"
       :row-class-name="handelRowDetail"
     >
@@ -111,44 +112,59 @@
         min-width="7%"
         :label="tableLabel.lpCost"
         :formatter="stateFormat"
+        sortable="custom"
       ></el-table-column>
       <el-table-column
         prop="IskCost"
         min-width="8%"
         :label="tableLabel.iskCost"
         :formatter="stateFormat"
+        sortable="custom"
       ></el-table-column>
       <el-table-column
         :label="tableLabel.sumCost"
         prop="MaterialCost"
         min-width="8%"
         :formatter="stateFormat"
+        sortable="custom"
       ></el-table-column>
       <el-table-column
         :label="tableLabel.sumGain"
         prop="Income"
         min-width="8%"
         :formatter="stateFormat"
+        sortable="custom"
       ></el-table-column>
       <el-table-column
         :label="tableLabel.sumProfit"
         prop="Profit"
         min-width="8%"
         :formatter="stateFormat"
+        sortable="custom"
       ></el-table-column>
       <el-table-column
         :label="tableLabel.volume"
         prop="Volume"
         min-width="7%"
         :formatter="stateFormat"
+        sortable="custom"
       ></el-table-column>
-      <el-table-column :label="tableLabel.saleIndex" prop="SalaIndex" min-width="7%"></el-table-column>
-      <el-table-column :label="tableLabel.unitProfit" prop="UnitProfit" min-width="7%"></el-table-column>
+      <el-table-column
+        :label="tableLabel.saleIndex"
+        prop="SaleIndex"
+        min-width="7%"
+        sortable="custom"
+      ></el-table-column>
+      <el-table-column
+        :label="tableLabel.unitProfit"
+        prop="UnitProfit"
+        min-width="7%"
+        sortable="custom"
+      ></el-table-column>
       <el-table-column :label="tableLabel.operation" min-width="9%">
         <template v-slot:header>
-          <el-input v-model="search" size="mini" :placeholder="tableLabel.lookUp"/>
+          <el-input v-model="search" size="mini" :placeholder="tableLabel.lookUp" />
         </template>
-
         <template v-slot="scope">
           <el-button size="mini" type="primary" plain @click="orders(scope)">{{ tableLabel.orders }}</el-button>
           <el-button
@@ -161,7 +177,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <br>
+    <br />
     <el-pagination
       align="center"
       background
@@ -173,7 +189,7 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="tableData.length"
     ></el-pagination>
-    <br>
+    <br />
   </div>
 </template>
 
@@ -186,7 +202,7 @@ export default {
   props: {
     tableData: Array,
     form: Object,
-    corporationName: String
+    corporationName: String,
   },
   data() {
     return {
@@ -194,21 +210,21 @@ export default {
       total: 20,
       pageSize: 25,
       search: "",
-      tableLabel: this.$t("message.table")
+      tableLabel: this.$t("message.table"),
     };
   },
   methods: {
     tableStyle() {
       return {
         padding: "0",
-        "font-size": "14px"
+        "font-size": "14px",
       };
     },
-    handleSizeChange: function(val) {
+    handleSizeChange: function (val) {
       this.currentPage = 1;
       this.pageSize = val;
     },
-    handleCurrentChange: function(val) {
+    handleCurrentChange: function (val) {
       this.currentPage = val;
     },
     getIcon(typeId) {
@@ -219,12 +235,12 @@ export default {
       cellValue += "";
       if (!cellValue.includes(".")) cellValue += ".";
       return cellValue
-        .replace(/(\d)(?=(\d{3})+\.)/g, function($0, $1) {
+        .replace(/(\d)(?=(\d{3})+\.)/g, function ($0, $1) {
           return $1 + ",";
         })
         .replace(/\.$/, "");
     },
-    handelRowDetail: function(row) {
+    handelRowDetail: function (row) {
       var value = "";
       var expand = true;
       if (row.row.Matertials === null) {
@@ -240,7 +256,7 @@ export default {
       }
       return value;
     },
-    handelMaterailRowDetail: function(row) {
+    handelMaterailRowDetail: function (row) {
       if (row.row.Error == true) {
         return "warning-row";
       }
@@ -252,12 +268,12 @@ export default {
         if (row.length != 0) {
           return {
             rowspan: row.length,
-            colspan: 1
+            colspan: 1,
           };
         } else {
           return {
             rowspan: 0,
-            colspan: 0
+            colspan: 0,
           };
         }
       }
@@ -267,7 +283,7 @@ export default {
         message: message,
         type: "warning",
         showClose: true,
-        duration: 8000
+        duration: 8000,
       });
     },
     copyMaterial(row) {
@@ -276,13 +292,15 @@ export default {
         () => {
           this.$message({
             message: this.tableLabel.material.copySuccess,
-            type: "success"
+            type: "success",
+            duration: 2000,
           });
         },
-        function(e) {
+        function (e) {
           this.$message({
             message: this.tableLabel.material.copyFail,
-            type: "error"
+            type: "error",
+            duration: 2000,
           });
           console.log(e);
         }
@@ -298,13 +316,15 @@ export default {
         () => {
           this.$message({
             message: this.tableLabel.material.copySuccess,
-            type: "success"
+            type: "success",
+            duration: 2000,
           });
         },
-        function(e) {
+        function (e) {
           this.$message({
             message: this.tableLabel.material.copyFail,
-            type: "error"
+            type: "error",
+            duration: 2000,
           });
           console.log(e);
         }
@@ -317,12 +337,12 @@ export default {
       let date = new Date();
       let name =
         this.corporationName + this.dateFormat("YYYY-mm-dd_HH-MM-SS", date);
-      this.$nextTick(function() {
+      this.$nextTick(function () {
         let wb = XLSX.utils.table_to_book(document.getElementById("table"));
         let wbout = XLSX.write(wb, {
           bookType: "xlsx",
           bookSST: true,
-          type: "array"
+          type: "array",
         });
         try {
           FileSaver.saveAs(
@@ -344,7 +364,7 @@ export default {
         "d+": date.getDate().toString(),
         "H+": date.getHours().toString(),
         "M+": date.getMinutes().toString(),
-        "S+": date.getSeconds().toString()
+        "S+": date.getSeconds().toString(),
       };
       for (let k in opt) {
         ret = new RegExp("(" + k + ")").exec(fmt);
@@ -356,13 +376,210 @@ export default {
         }
       }
       return fmt;
-    }
+    },
+    sort_change(column) {
+      this.current_page = 1; // return to the first page after sorting
+      if (column.prop === "SaleIndex") {
+        if (column.order === "descending") {
+          this.tableData = this.tableData.sort(this.saleIndexDescSort);
+        } else if (column.order === "ascending") {
+          this.tableData = this.tableData.sort(this.saleIndexAscSort);
+        }
+      } else if (column.prop === "UnitProfit") {
+        if (column.order === "descending") {
+          this.tableData = this.tableData.sort(this.unitProfitDescSort);
+        } else if (column.order === "ascending") {
+          this.tableData = this.tableData.sort(this.unitProfitAscSort);
+        }
+      } else if (column.prop === "Profit") {
+        if (column.order === "descending") {
+          this.tableData = this.tableData.sort(this.profitDescSort);
+        } else if (column.order === "ascending") {
+          this.tableData = this.tableData.sort(this.profitAscSort);
+        }
+      } else if (column.prop === "Volume") {
+        if (column.order === "descending") {
+          this.tableData = this.tableData.sort(this.volumeDescSort);
+        } else if (column.order === "ascending") {
+          this.tableData = this.tableData.sort(this.volumeAscSort);
+        }
+      } else if (column.prop === "LpCost") {
+        if (column.order === "descending") {
+          this.tableData = this.tableData.sort(this.lpCostDescSort);
+        } else if (column.order === "ascending") {
+          this.tableData = this.tableData.sort(this.lpCostAscSort);
+        }
+      } else if (column.prop === "IskCost") {
+        if (column.order === "descending") {
+          this.tableData = this.tableData.sort(this.iskCostDescSort);
+        } else if (column.order === "ascending") {
+          this.tableData = this.tableData.sort(this.iskCostAscSort);
+        }
+      } else if (column.prop === "MaterialCost") {
+        if (column.order === "descending") {
+          this.tableData = this.tableData.sort(this.materialCostDescSort);
+        } else if (column.order === "ascending") {
+          this.tableData = this.tableData.sort(this.materialCostAscSort);
+        }
+      } else if (column.prop === "Income") {
+        if (column.order === "descending") {
+          this.tableData = this.tableData.sort(this.incomeDescSort);
+        } else if (column.order === "ascending") {
+          this.tableData = this.tableData.sort(this.incomeAscSort);
+        }
+      }
+      this.showed_data = this.tableData.slice(0, this.pageSize); // show only one page
+    },
+    saleIndexDescSort(a, b) {
+      if (a.SaleIndex > b.SaleIndex) {
+        return -1;
+      } else if (a.SaleIndex < b.SaleIndex) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    saleIndexAscSort(a, b) {
+      if (a.SaleIndex < b.SaleIndex) {
+        return -1;
+      } else if (a.SaleIndex > b.SaleIndex) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    profitDescSort(a, b) {
+      if (a.Profit > b.Profit) {
+        return -1;
+      } else if (a.Profit < b.Profit) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    profitAscSort(a, b) {
+      if (a.Profit < b.Profit) {
+        return -1;
+      } else if (a.Profit > b.Profit) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    volumeDescSort(a, b) {
+      if (a.Volume > b.Volume) {
+        return -1;
+      } else if (a.Volume < b.Volume) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    volumeAscSort(a, b) {
+      if (a.Volume < b.Volume) {
+        return -1;
+      } else if (a.Volume > b.Volume) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    unitProfitDescSort(a, b) {
+      if (a.UnitProfit > b.UnitProfit) {
+        return -1;
+      } else if (a.UnitProfit < b.UnitProfit) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    unitProfitAscSort(a, b) {
+      if (a.UnitProfit < b.UnitProfit) {
+        return -1;
+      } else if (a.UnitProfit > b.UnitProfit) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    lpCostDescSort(a, b) {
+      if (a.LpCost > b.LpCost) {
+        return -1;
+      } else if (a.LpCost < b.LpCost) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    lpCostAscSort(a, b) {
+      if (a.LpCost < b.LpCost) {
+        return -1;
+      } else if (a.LpCost > b.LpCost) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    iskCostDescSort(a, b) {
+      if (a.IskCost > b.IskCost) {
+        return -1;
+      } else if (a.IskCost < b.IskCost) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    iskCostAscSort(a, b) {
+      if (a.IskCost < b.IskCost) {
+        return -1;
+      } else if (a.IskCost > b.IskCost) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    materialCostDescSort(a, b) {
+      if (a.MaterialCost > b.MaterialCost) {
+        return -1;
+      } else if (a.MaterialCost < b.MaterialCost) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    materialCostAscSort(a, b) {
+      if (a.MaterialCost < b.MaterialCost) {
+        return -1;
+      } else if (a.MaterialCost > b.MaterialCost) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    incomeDescSort(a, b) {
+      if (a.Income > b.Income) {
+        return -1;
+      } else if (a.Income < b.Income) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    incomeAscSort(a, b) {
+      if (a.Income < b.Income) {
+        return -1;
+      } else if (a.Income > b.Income) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
   },
   watch: {
     "$i18n.locale"() {
       this.tableLabel = this.$t("message.table");
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

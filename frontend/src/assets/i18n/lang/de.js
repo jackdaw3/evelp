@@ -72,8 +72,8 @@ const de = {
       filterContent: "Filter low-price && large-volume buying orders",
       bluePrint: "Blueprint",
       bluePrintContent: "Product - Material => Lp/Isk",
-      onclick: "Close",
       reset: "Reset",
+      close: "Close",
       buyPrice: "Buy Price",
       sellPrice: "Sell Price",
       tableFont: "Table Font",
@@ -82,6 +82,7 @@ const de = {
       tableFlat: "Flat",
       dataConfig: "Data Config",
       tableConfig: "Table Config",
+
     },
     orders: {
       sellOrders: "Sell Orders",
