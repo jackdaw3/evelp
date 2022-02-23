@@ -59,7 +59,7 @@ func TestGetHighestBuyPrice(t *testing.T) {
 
 	invaidHighestPrice2, err := sellOrders.HighestBuyPrice(scope1)
 	assert.Zero(t, invaidHighestPrice2)
-	assert.NoError(t, err)
+	assert.Error(t, err, "there is no buy order in the market")
 
 	highestPrice, err := buyOrders.HighestBuyPrice(scope1)
 	assert.Equal(t, float64(27850000), highestPrice)
@@ -95,7 +95,7 @@ func TestGetLowestSellPrice(t *testing.T) {
 
 	invaidLowestPrice2, err := buyOrders.LowestSellPrice(scope1)
 	assert.Zero(t, invaidLowestPrice2)
-	assert.NoError(t, err)
+	assert.Error(t, err, "there is no sell order in the market")
 
 	lowestPrice, err := sellOrders.LowestSellPrice(scope1)
 	assert.Equal(t, float64(36730000), lowestPrice)

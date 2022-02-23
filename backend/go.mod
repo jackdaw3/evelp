@@ -3,6 +3,7 @@ module evelp
 go 1.17
 
 require (
+	bou.ke/monkey v1.0.2
 	github.com/alicebob/miniredis/v2 v2.18.0
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.7.7

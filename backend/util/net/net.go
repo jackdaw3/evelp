@@ -29,7 +29,7 @@ func GetWithRetries(client *http.Client, request string) (*http.Response, error)
 			err = errors.Errorf("http request %s error status code %d", request, code)
 		}
 
-		log.Warnf("http request %s failed: %+v \nretrying in %v", request, err, backoff)
+		log.Debugf("http request %s failed: %+v \nretrying in %v", request, err.Error(), backoff)
 		time.Sleep(backoff)
 	}
 
