@@ -3,6 +3,7 @@ package dto
 import "math"
 
 type OfferDTO struct {
+	OfferId      int
 	ItemId       int
 	Name         string
 	Quantity     int

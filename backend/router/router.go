@@ -16,7 +16,7 @@ func LoadRouter(e *gin.Engine) {
 	e.GET("/order", order)
 	e.GET("/offer", offer)
 	e.GET("/history", itemHistory)
-
+	e.GET("/statis", itemStatis)
 	pprof.Register(e)
 
 }

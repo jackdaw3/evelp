@@ -49,10 +49,10 @@ var (
 
 func TestOffers(t *testing.T) {
 	defer monkey.UnpatchAll()
-	offerService := NewOfferSerivce(1000019, 1000002, 0.05, 7, "buy", "sell", "en")
+	offerService := NewOfferSerivce(1000002, 0.05, 7, "buy", "sell", "en")
 	mockOffers()
 
-	offers, err := offerService.Offers()
+	offers, err := offerService.Offers(1000019)
 
 	expectedUnitProfit1 := (64000000 - 10000000 - 4.45*1111) / 30000
 	expectedUnitProfit2 := (12300000 - (120600 + 400000)) / 10000

@@ -8,14 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func offer(c *gin.Context) {
-	regionId, err := strconv.Atoi(c.Query("regionId"))
+func itemStatis(c *gin.Context) {
+	offerId, err := strconv.Atoi(c.Query("offerId"))
 	if err != nil {
 		c.AbortWithError(500, err)
 		return
 	}
 
-	corporationId, err := strconv.Atoi(c.Query("corporationId"))
+	regionId, err := strconv.Atoi(c.Query("regionId"))
 	if err != nil {
 		c.AbortWithError(500, err)
 		return
@@ -24,18 +24,6 @@ func offer(c *gin.Context) {
 	scope, err := strconv.ParseFloat(c.Query("scope"), 64)
 	if err != nil {
 		c.AbortWithError(500, err)
-		return
-	}
-
-	days, err := strconv.Atoi(c.Query("days"))
-	if err != nil {
-		c.AbortWithError(500, err)
-		return
-	}
-
-	productPrice := c.Query("productPrice")
-	if productPrice == "" {
-		c.AbortWithError(500, errors.New("productPrice is empty"))
 		return
 	}
 
@@ -51,13 +39,18 @@ func offer(c *gin.Context) {
 		return
 	}
 
-	offerService := service.NewOfferSerivce(regionId, float64(scope), days, productPrice, materialPrice, lang)
-
-	offers, err := offerService.Offers(corporationId)
+	isBuyOrder, err := strconv.ParseBool(c.Query("isBuyOrder"))
 	if err != nil {
 		c.AbortWithError(500, err)
 		return
 	}
 
-	c.JSON(200, offers)
+	itemStatisService := service.NewItemStatisService(offerId, regionId, scope, materialPrice, lang)
+	itemStatis, err := itemStatisService.ItemStatis(isBuyOrder)
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
+	}
+
+	c.JSON(200, itemStatis)
 }

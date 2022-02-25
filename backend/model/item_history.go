@@ -20,7 +20,7 @@ func (ih ItemHistorys) Swap(i, j int) { ih[i], ih[j] = ih[j], ih[i] }
 
 func (i *ItemHistorys) AverageVolume(days int) int64 {
 	size := len(*i)
-	if size == 0 {
+	if size == 0 || days == 0 {
 		return 0
 	}
 	var sum int64

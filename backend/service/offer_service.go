@@ -11,7 +11,6 @@ import (
 )
 
 type OfferSerivce struct {
-	corporationId int
 	regionId      int
 	scope         float64
 	days          int
@@ -20,12 +19,31 @@ type OfferSerivce struct {
 	lang          string
 }
 
-func NewOfferSerivce(corporationId int, regionId int, scope float64, days int, productPrice string, materialPrice string, lang string) *OfferSerivce {
-	return &OfferSerivce{corporationId, regionId, scope, days, productPrice, materialPrice, lang}
+func NewOfferSerivce(regionId int, scope float64, days int, productPrice string, materialPrice string, lang string) *OfferSerivce {
+	return &OfferSerivce{regionId, scope, days, productPrice, materialPrice, lang}
 }
 
-func (o *OfferSerivce) Offers() (*dto.OfferDTOs, error) {
-	offers, err := model.GetOffersByCorporation(o.corporationId)
+func (o *OfferSerivce) Offer(offerId int) (*dto.OfferDTO, error) {
+	offer, err := model.GetOffer(offerId)
+	if err != nil {
+		return nil, err
+	}
+
+	var offerDTO *dto.OfferDTO
+	if offer.IsBluePrint {
+		offerDTO, err = o.convertBluePrint(offer)
+	} else {
+		offerDTO, err = o.convertOffer(offer)
+	}
+
+	if err != nil {
+		return nil, errors.WithMessagef(err, "get offer %d failed", offer.OfferId)
+	}
+
+	return offerDTO, nil
+}
+func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
+	offers, err := model.GetOffersByCorporation(corporationId)
 	if err != nil {
 		return nil, err
 	}
@@ -61,6 +79,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 		return nil, err
 	}
 
+	offerDTO.OfferId = offer.OfferId
 	offerDTO.ItemId = item.ItemId
 	offerDTO.Name = item.Name.Val(o.lang)
 	offerDTO.IsBluePrint = false
@@ -129,6 +148,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 		return nil, err
 	}
 
+	offerDTO.OfferId = offer.OfferId
 	offerDTO.ItemId = product.ItemId
 	offerDTO.IsBluePrint = true
 	offerDTO.Quantity = offer.Quantity

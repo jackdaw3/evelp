@@ -1,16 +1,36 @@
 package dto
 
 type ItemStatisDTO struct {
-	UnitProfitRange  string
-	AveUnitProfit    int
-	Quantity         int64
-	Income           float64
-	Cost             float64
-	Profit           float64
-	OrderDTOWrappers OrderDTOWrappers
+	UnitProfitRange string
+	AveUnitProfit   int
+	Quantity        int64
+	Income          float64
+	Cost            float64
+	Profit          float64
+	Orderwrappers   OrderDTOWrappers
 }
 
 type ItemStatisDTOs []*ItemStatisDTO
+
+func (is *ItemStatisDTO) GenerateUnitProfit(unitLpCost int) {
+	var quantity int64
+	var income float64
+	var cost float64
+	var profit float64
+
+	for _, orderw := range is.Orderwrappers {
+		quantity += orderw.OrderDTO.VolumeRemain
+		income += orderw.Income
+		cost += orderw.Income
+		profit += orderw.Profit
+	}
+
+	is.Quantity = quantity
+	is.Income = income
+	is.Cost = cost
+	is.Profit = profit
+	is.AveUnitProfit = int(is.Profit / float64((int64(unitLpCost) * is.Quantity)))
+}
 
 func (is ItemStatisDTOs) Len() int { return len(is) }
 

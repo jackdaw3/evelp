@@ -12,9 +12,8 @@ type OrderDTO struct {
 	VolumeRemain int64
 	VolumeTotal  int64
 	IsBuyOrder   bool
-
-	Price       float64
-	LastUpdated time.Time
+	Price        float64
+	LastUpdated  time.Time
 }
 
 type OrderDTOs []OrderDTO
