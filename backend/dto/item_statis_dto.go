@@ -4,9 +4,9 @@ type ItemStatisDTO struct {
 	UnitProfitRange string
 	AveUnitProfit   int
 	Quantity        int64
-	Income          float64
-	Cost            float64
-	Profit          float64
+	Income          int64
+	Cost            int64
+	Profit          int64
 	Orderwrappers   OrderDTOWrappers
 }
 
@@ -21,15 +21,15 @@ func (is *ItemStatisDTO) GenerateUnitProfit(unitLpCost int) {
 	for _, orderw := range is.Orderwrappers {
 		quantity += orderw.OrderDTO.VolumeRemain
 		income += orderw.Income
-		cost += orderw.Income
+		cost += orderw.Cost
 		profit += orderw.Profit
 	}
 
 	is.Quantity = quantity
-	is.Income = income
-	is.Cost = cost
-	is.Profit = profit
-	is.AveUnitProfit = int(is.Profit / float64((int64(unitLpCost) * is.Quantity)))
+	is.Income = int64(income)
+	is.Cost = int64(cost)
+	is.Profit = int64(profit)
+	is.AveUnitProfit = int(is.Profit / (int64(unitLpCost) * is.Quantity))
 }
 
 func (is ItemStatisDTOs) Len() int { return len(is) }
@@ -50,6 +50,6 @@ type OrderDTOWrappers []*OrderDTOWrapper
 
 func (o OrderDTOWrappers) Len() int { return len(o) }
 
-func (o OrderDTOWrappers) Less(i, j int) bool { return o[i].Profit > o[j].Profit }
+func (o OrderDTOWrappers) Less(i, j int) bool { return o[i].UnitProfit < o[j].UnitProfit }
 
 func (o OrderDTOWrappers) Swap(i, j int) { o[i], o[j] = o[j], o[i] }
