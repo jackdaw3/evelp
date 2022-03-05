@@ -113,8 +113,7 @@ export default {
       }
       const corporationId = parseInt(value[1]);
       this.corporation.loading = true;
-      const arr = this.$refs["cascader"].getCheckedNodes()[0].pathLabels;
-      this.$store.dispatch("setCorporationName", arr[0] + " " + arr[1]);
+      this.$store.dispatch("setCorporationId", corporationId);
       this.axios
         .get(backend + "offer", {
           params: {

@@ -12,10 +12,12 @@ func LoadRouter(e *gin.Engine) {
 
 	e.GET("/faction", faction)
 	e.GET("/corporation", corporation)
+	e.GET("/corporations", corporationsByFaction)
 	e.GET("/region", region)
 	e.GET("/order", order)
 	e.GET("/offer", offer)
 	e.GET("/history", itemHistory)
+	e.GET("/item", item)
 	e.GET("/statis", itemStatis)
 	pprof.Register(e)
 

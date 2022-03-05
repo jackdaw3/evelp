@@ -1,9 +1,14 @@
 <template>
   <div class="Table">
     <el-table
-      :data="tableData.filter(data => !search ||
-       (data.Name.toLowerCase().includes(search.toLowerCase())))
-        .slice((currentPage-1)*pageSize,currentPage*pageSize)"
+      :data="
+        tableData
+          .filter(
+            (data) =>
+              !search || data.Name.toLowerCase().includes(search.toLowerCase())
+          )
+          .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      "
       id="table"
       :cell-style="tableStyle"
       stripe
@@ -20,20 +25,28 @@
             style="width: 55%"
             :row-class-name="handelMaterailRowDetail"
             :span-method="objectSpanMethod"
-            :header-cell-style="{padding: '0'}"
+            :header-cell-style="{ padding: '0' }"
           >
-            <el-table-column :label="tableLabel.material.type" min-width="12%" align="center">
+            <el-table-column
+              :label="tableLabel.material.type"
+              min-width="12%"
+              align="center"
+            >
               <template slot-scope="scope">
-                <span
-                  v-if="scope.row.IsBluePrint === true"
-                >{{tableLabel.material.bluePrintMaterial}}</span>
-                <span v-else>{{tableLabel.material.lpStoreMaterail}}</span>
+                <span v-if="scope.row.IsBluePrint === true">{{
+                  tableLabel.material.bluePrintMaterial
+                }}</span>
+                <span v-else>{{ tableLabel.material.lpStoreMaterail }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="Name" :label="tableLabel.material.name" min-width="27%">
+            <el-table-column
+              prop="Name"
+              :label="tableLabel.material.name"
+              min-width="27%"
+            >
               <template slot-scope="scope">
                 <el-image
-                  style="height: 22px;vertical-align: middle"
+                  style="height: 22px; vertical-align: middle"
                   :src="getIcon(scope.row.ItemId)"
                   fit="contain"
                   lazy
@@ -45,27 +58,32 @@
                 <span>{{ scope.row.Name }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="Quantity" :label="tableLabel.material.quantity" min-width="10%"></el-table-column>
+            <el-table-column
+              prop="Quantity"
+              :label="tableLabel.material.quantity"
+              min-width="10%"
+            ></el-table-column>
             <el-table-column
               prop="Price"
               :label="tableLabel.material.price"
               :formatter="stateFormat"
-              min-width="15%"
+              min-width="14%"
             ></el-table-column>
             <el-table-column
               prop="Cost"
               :label="tableLabel.material.cost"
-              min-width="15%"
+              min-width="14%"
               :formatter="stateFormat"
             ></el-table-column>
-            <el-table-column :label="tableLabel.operation" min-width="13%">
+            <el-table-column :label="tableLabel.operation" min-width="15%">
               <template v-slot:header>
                 <el-button
                   size="mini"
                   type="primary"
                   plain
                   @click="copyAllMaterials(props.row.Matertials)"
-                >{{tableLabel.material.copy}}</el-button>
+                  >{{ tableLabel.material.copy }}</el-button
+                >
               </template>
               <template v-slot="scope">
                 <el-button
@@ -73,14 +91,16 @@
                   type="primary"
                   plain
                   @click="copyMaterial(scope.row)"
-                >{{tableLabel.material.copy}}</el-button>
+                  >{{ tableLabel.material.copy }}</el-button
+                >
                 <el-button
                   v-if="scope.row.Error === true"
                   size="mini"
                   type="warning"
                   plain
                   @click="errorMessage(scope.row.ErrorMessage)"
-                >{{tableLabel.material.error}}</el-button>
+                  >{{ tableLabel.material.error }}</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -89,7 +109,7 @@
       <el-table-column prop="Name" min-width="20%" :label="tableLabel.name">
         <template slot-scope="scope">
           <el-image
-            style="height: 22px;vertical-align: middle"
+            style="height: 22px; vertical-align: middle"
             :src="getIcon(scope.row.ItemId)"
             fit="contain"
             lazy
@@ -163,17 +183,24 @@
       ></el-table-column>
       <el-table-column :label="tableLabel.operation" min-width="9%">
         <template v-slot:header>
-          <el-input v-model="search" size="mini" :placeholder="tableLabel.lookUp" />
+          <el-input
+            v-model="search"
+            size="mini"
+            :placeholder="tableLabel.lookUp"
+          />
         </template>
         <template v-slot="scope">
-          <el-button size="mini" type="primary" plain @click="orders(scope)">{{ tableLabel.orders }}</el-button>
+          <el-button size="mini" type="primary" plain @click="orders(scope)">{{
+            tableLabel.orders
+          }}</el-button>
           <el-button
             v-if="scope.row.Error === true"
             size="mini"
             type="warning"
             plain
             @click="errorMessage(scope.row.ErrorMessage)"
-          >{{tableLabel.error}}</el-button>
+            >{{ tableLabel.error }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -184,7 +211,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
-      :page-sizes="[25,50,100,200,500]"
+      :page-sizes="[25, 50, 100, 200, 500]"
       :page-size="pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="tableData.length"
@@ -215,8 +242,8 @@ export default {
     form: function () {
       return this.$store.state.form;
     },
-    corporationName: function () {
-      return this.$store.state.corporationName;
+    corporationId: function () {
+      return this.$store.state.corporationId;
     },
   },
   methods: {
@@ -587,6 +614,17 @@ export default {
       } else {
         return 0;
       }
+    },
+    orders(scope) {
+      let routeUrl = this.$router.resolve({
+        name: "Order",
+        query: {
+          itemId: scope.row.ItemId,
+          offerId: scope.row.OfferId,
+          corporationId: this.corporationId,
+        },
+      });
+      window.open(routeUrl.href, "_blank");
     },
   },
   watch: {

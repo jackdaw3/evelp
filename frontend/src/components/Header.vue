@@ -40,6 +40,12 @@
 
 export default {
   mounted() {
+    if (localStorage.lang == null) {
+      localStorage.lang = "en";
+    }
+    if (localStorage.lang) {
+      this.$i18n.locale = localStorage.lang;
+    }
     this.language=this.langLabel(this.$i18n.locale)
   },
   data() {
