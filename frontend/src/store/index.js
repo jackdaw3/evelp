@@ -13,6 +13,7 @@ export default new Vuex.Store({
       scope: "0.05",
     },
     corporationId: "",
+    corporationName: "",
   },
   mutations: {
     setTableData(state, value) {
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     setCorporationId(state, value) {
       state.corporationId = value;
     },
+    setCorporationName(state, value) {
+      state.corporationName = value;
+    },
   },
   actions: {
     setTableData(context, value) {
@@ -34,6 +38,9 @@ export default new Vuex.Store({
     },
     setCorporationId(context, value) {
       context.commit("setCorporationId", value);
+    },
+    setCorporationName(context, value) {
+      context.commit("setCorporationName", value);
     },
   },
 });
