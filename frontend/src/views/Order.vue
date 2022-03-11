@@ -32,7 +32,7 @@ export default {
         offerId: 0,
         corporationId: 0,
       },
-      title: "1111",
+      title: "",
     };
   },
   methods: {

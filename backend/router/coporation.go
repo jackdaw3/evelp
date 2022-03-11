@@ -23,7 +23,7 @@ func corporation(c *gin.Context) {
 	c.JSON(200, corporation)
 }
 
-func corporationsByFaction(c *gin.Context) {
+func corporations(c *gin.Context) {
 	factionId, err := strconv.Atoi(c.Param("factionId"))
 	if err != nil {
 		c.AbortWithError(500, err)

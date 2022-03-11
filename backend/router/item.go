@@ -9,7 +9,7 @@ import (
 )
 
 func item(c *gin.Context) {
-	itemId, err := strconv.Atoi(c.Param("itemId"))
+	itemId, err := strconv.Atoi(c.Query("itemId"))
 	if err != nil {
 		c.AbortWithError(500, err)
 		return
