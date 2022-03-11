@@ -15,6 +15,7 @@ const de = {
       lpCost: "Lp Cost",
       iskCost: "Isk Cost",
       sumCost: "Material Cost",
+      price: "Unit Price",
       sumGain: "Income",
       sumProfit: "Profit",
       volume: "Volume",

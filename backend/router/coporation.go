@@ -1,40 +1,31 @@
 package router
 
 import (
-	"evelp/model"
+	"errors"
+	"evelp/service"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func corporation(c *gin.Context) {
-	corporationId, err := strconv.Atoi(c.Param("corporationId"))
+	corporationId, err := strconv.Atoi(c.Query("corporationId"))
 	if err != nil {
 		c.AbortWithError(500, err)
 		return
 	}
 
-	corporation, err := model.GetCorporation(corporationId)
+	lang := c.Query("lang")
+	if lang == "" {
+		c.AbortWithError(500, errors.New("lang is empty"))
+		return
+	}
+
+	corporationService := service.NewCorporationSerivce(corporationId, lang)
+	corporation, err := corporationService.Corporation()
 	if err != nil {
 		c.AbortWithError(500, err)
 		return
 	}
-
 	c.JSON(200, corporation)
-}
-
-func corporations(c *gin.Context) {
-	factionId, err := strconv.Atoi(c.Param("factionId"))
-	if err != nil {
-		c.AbortWithError(500, err)
-		return
-	}
-
-	corporations, err := model.GetCorporationsByFaction(factionId)
-	if err != nil {
-		c.AbortWithError(500, err)
-		return
-	}
-
-	c.JSON(200, corporations)
 }

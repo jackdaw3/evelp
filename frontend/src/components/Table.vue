@@ -1,6 +1,7 @@
 <template>
   <div class="Table">
     <el-table
+      ref="tableList"
       :data="
         tableData
           .filter(
@@ -110,7 +111,7 @@
       </el-table-column>
       <el-table-column
         prop="Quantity"
-        min-width="6%"
+        min-width="5%"
         :label="tableLabel.quantity"
         :formatter="stateFormat"
       ></el-table-column>
@@ -136,6 +137,13 @@
         sortable="custom"
       ></el-table-column>
       <el-table-column
+        :label="tableLabel.price"
+        prop="Price"
+        min-width="8%"
+        :formatter="stateFormat"
+        sortable="custom"
+      ></el-table-column>
+      <el-table-column
         :label="tableLabel.sumGain"
         prop="Income"
         min-width="8%"
@@ -152,23 +160,23 @@
       <el-table-column
         :label="tableLabel.volume"
         prop="Volume"
-        min-width="7%"
+        min-width="6%"
         :formatter="stateFormat"
         sortable="custom"
       ></el-table-column>
       <el-table-column
         :label="tableLabel.saleIndex"
         prop="SaleIndex"
-        min-width="7%"
+        min-width="6%"
         sortable="custom"
       ></el-table-column>
       <el-table-column
         :label="tableLabel.unitProfit"
         prop="UnitProfit"
-        min-width="7%"
+        min-width="6%"
         sortable="custom"
       ></el-table-column>
-      <el-table-column :label="tableLabel.operation" min-width="9%">
+      <el-table-column :label="tableLabel.operation" min-width="10%">
         <template v-slot:header>
           <el-input v-model="search" size="mini" :placeholder="tableLabel.lookUp" />
         </template>
@@ -457,6 +465,12 @@ export default {
         } else if (column.order === "ascending") {
           this.tableData = this.tableData.sort(this.incomeAscSort);
         }
+      } else if (column.prop === "Price") {
+        if (column.order === "descending") {
+          this.tableData = this.tableData.sort(this.priceDescSort);
+        } else if (column.order === "ascending") {
+          this.tableData = this.tableData.sort(this.priceAscSort);
+        }
       }
       this.showed_data = this.tableData.slice(0, this.pageSize);
     },
@@ -604,6 +618,24 @@ export default {
         return 0;
       }
     },
+    priceDescSort(a, b) {
+      if (a.Price > b.Price) {
+        return -1;
+      } else if (a.Price < b.Price) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
+    priceAscSort(a, b) {
+      if (a.Price < b.Price) {
+        return -1;
+      } else if (a.Price > b.Price) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
     orders(scope) {
       let routeUrl = this.$router.resolve({
         name: "Order",
@@ -619,6 +651,12 @@ export default {
   watch: {
     "$i18n.locale"() {
       this.tableLabel = this.$t("message.table");
+    },
+    tableData() {
+      this.currentPage = 1;
+      if (this.tableData.length == 0) {
+        this.$refs.tableList.clearSort();
+      }
     },
   },
 };

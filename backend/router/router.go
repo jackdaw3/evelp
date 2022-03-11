@@ -12,7 +12,6 @@ func LoadRouter(e *gin.Engine) {
 
 	e.GET("/faction", faction)
 	e.GET("/corporation", corporation)
-	e.GET("/corporations", corporations)
 	e.GET("/region", region)
 	e.GET("/order", order)
 	e.GET("/offer", offer)
