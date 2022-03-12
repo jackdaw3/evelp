@@ -228,8 +228,11 @@ export default {
     };
   },
   computed: {
-    tableData: function () {
-      return this.$store.state.tableData;
+    tableData: {
+      get() {
+        return this.$store.state.tableData;
+      },
+      set() {},
     },
     form: function () {
       return this.$store.state.form;
@@ -642,6 +645,7 @@ export default {
         query: {
           itemId: scope.row.ItemId,
           offerId: scope.row.OfferId,
+          isBluePrint: scope.row.IsBluePrint,
           corporationId: this.corporationId,
         },
       });

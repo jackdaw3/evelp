@@ -36,7 +36,7 @@ func (is *ItemStatisService) ItemStatis(isBuyOrder bool) (*dto.ItemStatisDTOs, e
 	} else {
 		itemId = offer.ItemId
 	}
-	orderService := NewOrderService(itemId, is.regionId, is.scope)
+	orderService := NewOrderService(itemId, is.regionId, false, is.scope)
 	orders, err := orderService.Orders(isBuyOrder, is.lang)
 	if err != nil {
 		return nil, err

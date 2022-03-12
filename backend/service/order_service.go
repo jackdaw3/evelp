@@ -12,15 +12,17 @@ import (
 )
 
 const order = "order"
+const time_format = "2006.01.02 15:04:05"
 
 type OrderService struct {
-	itemId   int
-	regionId int
-	scope    float64
+	itemId      int
+	regionId    int
+	isBluePrint bool
+	scope       float64
 }
 
-func NewOrderService(itemId int, regionId int, scope float64) *OrderService {
-	return &OrderService{itemId, regionId, scope}
+func NewOrderService(itemId int, regionId int, isBluePrint bool, scope float64) *OrderService {
+	return &OrderService{itemId, regionId, isBluePrint, scope}
 }
 
 func (o *OrderService) HighestBuyPrice() (float64, error) {
@@ -75,8 +77,8 @@ func (o *OrderService) Orders(isBuyOrder bool, lang string) (*dto.OrderDTOs, err
 		orderDTO.OrderId = order.OrderId
 		orderDTO.ItemId = order.ItemId
 		orderDTO.ItemName = itemName
-		orderDTO.Issued = order.Issued
-		orderDTO.LastUpdated = order.LastUpdated
+		orderDTO.Issued = order.Issued.Format(time_format)
+		orderDTO.LastUpdated = order.LastUpdatedToString()
 		orderDTO.Duration = order.Duration
 		orderDTO.IsBuyOrder = order.IsBuyOrder
 		orderDTO.Price = order.Price
@@ -105,7 +107,16 @@ func (o *OrderService) Orders(isBuyOrder bool, lang string) (*dto.OrderDTOs, err
 func (o *OrderService) ordersFromCache() (*model.Orders, error) {
 	var orders model.Orders
 
-	key := cache.Key(order, strconv.Itoa(o.regionId), strconv.Itoa(o.itemId))
+	var key string
+	if o.isBluePrint {
+		bluePrint := model.GetBluePrint(o.itemId)
+		if len(bluePrint.Products) == 0 {
+			return nil, errors.Errorf("offer %d's bluePrint %d have no product", o.itemId, bluePrint.BlueprintId)
+		}
+		key = cache.Key(order, strconv.Itoa(o.regionId), strconv.Itoa(bluePrint.Products[0].ItemId))
+	} else {
+		key = cache.Key(order, strconv.Itoa(o.regionId), strconv.Itoa(o.itemId))
+	}
 
 	if err := cache.Get(key, &orders); err != nil {
 		return nil, err

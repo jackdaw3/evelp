@@ -39,7 +39,12 @@ func order(c *gin.Context) {
 		return
 	}
 
-	oderService := service.NewOrderService(itemId, regionId, float64(scope))
+	isBluePrint, err := strconv.ParseBool(c.Query("isBluePrint"))
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
+	}
+	oderService := service.NewOrderService(itemId, regionId, isBluePrint, float64(scope))
 	orders, err := oderService.Orders(isBuyOrder, lang)
 	if err != nil {
 		c.AbortWithError(500, err)

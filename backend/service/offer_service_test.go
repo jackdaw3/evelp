@@ -92,18 +92,20 @@ func mockOffers() {
 		return nil, nil
 	})
 
-	monkey.Patch(NewOrderService, func(itemId int, regionId int, scope float64) *OrderService {
+	monkey.Patch(NewOrderService, func(itemId int, regionId int, isBluePrint bool, scope float64) *OrderService {
 		switch itemId {
 		case 34:
-			return &OrderService{34, 1000002, 0.05}
+			return &OrderService{34, 1000002, false, 0.05}
 		case 591:
-			return &OrderService{591, 1000002, 0.05}
+			return &OrderService{591, 1000002, false, 0.05}
 		case 17703:
-			return &OrderService{17703, 1000002, 0.05}
+			return &OrderService{17703, 1000002, false, 0.05}
 		case 17795:
-			return &OrderService{17795, 1000002, 0.05}
+			return &OrderService{17795, 1000002, false, 0.05}
 		case 17873:
-			return &OrderService{17873, 1000002, 0.05}
+			return &OrderService{17873, 1000002, false, 0.05}
+		case 17874:
+			return &OrderService{17874, 1000002, true, 0.05}
 		}
 		return nil
 	})
@@ -119,6 +121,8 @@ func mockOffers() {
 		case 17795:
 			return 120600, nil
 		case 17873:
+			return 80000000, nil
+		case 17874:
 			return 80000000, nil
 		}
 		return 0, nil
@@ -136,22 +140,26 @@ func mockOffers() {
 			return 110600, nil
 		case 17873:
 			return 64000000, nil
+		case 17874:
+			return 64000000, nil
 		}
 		return 0, nil
 	})
 
-	monkey.Patch(NewItemHistoryService, func(itemId int, regionId int) *ItemHistoryService {
+	monkey.Patch(NewItemHistoryService, func(itemId int, regionId int, isBluePrint bool) *ItemHistoryService {
 		switch itemId {
 		case 34:
-			return &ItemHistoryService{34, 1000002}
+			return &ItemHistoryService{34, 1000002, false}
 		case 591:
-			return &ItemHistoryService{591, 1000002}
+			return &ItemHistoryService{591, 1000002, false}
 		case 17703:
-			return &ItemHistoryService{17703, 1000002}
+			return &ItemHistoryService{17703, 1000002, false}
 		case 17795:
-			return &ItemHistoryService{17795, 1000002}
+			return &ItemHistoryService{17795, 1000002, false}
 		case 17873:
-			return &ItemHistoryService{17873, 1000002}
+			return &ItemHistoryService{17873, 1000002, false}
+		case 17874:
+			return &ItemHistoryService{17874, 1000002, true}
 		}
 		return nil
 	})

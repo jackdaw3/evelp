@@ -122,3 +122,10 @@ func TestGetLowestSellPrice(t *testing.T) {
 	assert.Equal(t, int64(38064210), int64(lowestPrice5))
 	assert.NoError(t, err)
 }
+
+func TestLastUpdatedToString(t *testing.T) {
+	order := Order{6173392220, 28758, time.Now(), 90, 30000142, 26350000, 28, 30, true, time.Now()}
+	time.Sleep(1 * time.Second)
+	duration := order.LastUpdatedToString()
+	assert.Equal(t, "1s ago", duration)
+}

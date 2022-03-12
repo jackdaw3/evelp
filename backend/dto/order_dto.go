@@ -1,19 +1,17 @@
 package dto
 
-import "time"
-
 type OrderDTO struct {
 	OrderId      int
 	ItemId       int
 	ItemName     string
 	SystemName   string
-	Issued       time.Time
+	Issued       string
 	Duration     int
 	VolumeRemain int64
 	VolumeTotal  int64
 	IsBuyOrder   bool
 	Price        float64
-	LastUpdated  time.Time
+	LastUpdated  string
 }
 
 type OrderDTOs []OrderDTO

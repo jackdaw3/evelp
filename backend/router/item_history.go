@@ -20,7 +20,13 @@ func itemHistory(c *gin.Context) {
 		return
 	}
 
-	itemHistoryService := service.NewItemHistoryService(itemId, regionId)
+	isBluePrint, err := strconv.ParseBool(c.Query("isBuyOrder"))
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
+	}
+
+	itemHistoryService := service.NewItemHistoryService(itemId, regionId, isBluePrint)
 	itemHistorys, err := itemHistoryService.History()
 	if err != nil {
 		c.AbortWithError(500, err)

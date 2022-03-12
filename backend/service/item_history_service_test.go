@@ -33,7 +33,7 @@ var (
 
 func TestHistory(t *testing.T) {
 	defer monkey.UnpatchAll()
-	histroyService := NewItemHistoryService(34, 10000002)
+	histroyService := NewItemHistoryService(34, 10000002, false)
 
 	monkey.Patch(cache.Get, func(key string, dest interface{}) error {
 		val, err := json.Marshal(itemHistorys)

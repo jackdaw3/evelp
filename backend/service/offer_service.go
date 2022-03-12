@@ -91,7 +91,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 	offerDTO.Matertials = materails
 	offerDTO.MaterialCost = materails.Cost()
 
-	oos := NewOrderService(offerDTO.ItemId, o.regionId, o.scope)
+	oos := NewOrderService(offerDTO.ItemId, o.regionId, false, o.scope)
 	var price float64
 	if o.productPrice == "buy" {
 		price, err = oos.HighestBuyPrice()
@@ -120,7 +120,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 		offerDTO.UnitProfit = int(offerDTO.Profit / float64(offerDTO.LpCost))
 	}
 
-	volume, err := o.AverageVolume(offerDTO.ItemId)
+	volume, err := o.averageVolume(offerDTO.ItemId, offerDTO.IsBluePrint)
 	if err != nil {
 		log.Warnf("get volume of item %v region %v failed: %v", oos.itemId, oos.regionId, err)
 	}
@@ -143,13 +143,8 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 		return nil, err
 	}
 
-	product, err := model.GetItem(bluePrint.Products[0].ItemId)
-	if err != nil {
-		return nil, err
-	}
-
 	offerDTO.OfferId = offer.OfferId
-	offerDTO.ItemId = product.ItemId
+	offerDTO.ItemId = offer.ItemId
 	offerDTO.IsBluePrint = true
 	offerDTO.Quantity = offer.Quantity
 	offerDTO.IskCost = offer.IskCost
@@ -162,7 +157,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	offerDTO.Matertials = materails
 	offerDTO.MaterialCost = materails.Cost()
 
-	oos := NewOrderService(offerDTO.ItemId, o.regionId, o.scope)
+	oos := NewOrderService(offerDTO.ItemId, o.regionId, offerDTO.IsBluePrint, o.scope)
 	var price float64
 	if o.productPrice == "buy" {
 		price, err = oos.HighestBuyPrice()
@@ -191,14 +186,12 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 		offerDTO.UnitProfit = int(offerDTO.Profit / float64(offerDTO.LpCost))
 	}
 
-	volume, err := o.AverageVolume(offerDTO.ItemId)
+	volume, err := o.averageVolume(offer.ItemId, offerDTO.IsBluePrint)
 	if err != nil {
 		log.Warnf("get volume of item %v region %v failed: %v", oos.itemId, oos.regionId, err)
 	}
 	offerDTO.Volume = volume
 	offerDTO.GenerateSaleIndex()
-
-	offerDTO.ItemId = bluePrintItem.ItemId
 	offerDTO.Name = bluePrintItem.Name.Val(o.lang)
 
 	return &offerDTO, nil
@@ -221,7 +214,7 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems, offerDTO *dto.Offe
 		materail.Quantity = r.Quantity
 		materail.IsBluePrint = false
 
-		mos := NewOrderService(mi.ItemId, o.regionId, o.scope)
+		mos := NewOrderService(mi.ItemId, o.regionId, false, o.scope)
 		var price float64
 		if o.materialPrice == "sell" {
 			price, err = mos.LowestSellPrice()
@@ -268,7 +261,7 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 		materail.IsBluePrint = true
 		materail.Quantity = m.Quantity
 
-		mos := NewOrderService(mi.ItemId, o.regionId, o.scope)
+		mos := NewOrderService(mi.ItemId, o.regionId, false, o.scope)
 		var price float64
 		if o.materialPrice == "sell" {
 			price, err = mos.LowestSellPrice()
@@ -300,8 +293,8 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 	return materails
 }
 
-func (o *OfferSerivce) AverageVolume(itemId int) (int64, error) {
-	ihs := NewItemHistoryService(itemId, o.regionId)
+func (o *OfferSerivce) averageVolume(itemId int, isBluePrint bool) (int64, error) {
+	ihs := NewItemHistoryService(itemId, o.regionId, isBluePrint)
 	itemHistorys, err := ihs.History()
 	if err != nil {
 		return 0, err

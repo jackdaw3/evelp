@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"math"
 	"sort"
 	"time"
@@ -65,6 +66,30 @@ func (o *Orders) LowestSellPrice(scope float64) (float64, error) {
 	}
 	sort.Sort(sellOrders)
 	return sellOrders.ordersPrice(scope)
+}
+
+func (o *Order) LastUpdatedToString() string {
+	var (
+		value  string
+		hour   int64
+		minute int64
+		second int64
+	)
+
+	duration := int64(time.Since(o.LastUpdated).Seconds())
+	hour = duration / 3600
+	minute = (duration % 3600) / 60
+	second = duration % 60
+
+	if hour != 0 {
+		value = fmt.Sprintf("%dh%dm%ds ago", hour, minute, second)
+	} else if minute != 0 {
+		value = fmt.Sprintf("%dm%ds ago", minute, second)
+	} else if second != 0 {
+		value = fmt.Sprintf("%ds ago", second)
+	}
+
+	return value
 }
 
 func (o *Orders) ordersPrice(scope float64) (float64, error) {

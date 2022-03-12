@@ -12,40 +12,37 @@
     </div>
 
     <el-tabs type="card">
-      <el-tab-pane label="卖单"></el-tab-pane>
+      <el-tab-pane label="卖单">
+        <el-row :gutter="50">
+          <el-col :span="12">
+            <OrderTable :data="sellOrders"></OrderTable>
+          </el-col>
+          <el-col :span="12">
+            <StatisTable></StatisTable>
+          </el-col>
+        </el-row>
+      </el-tab-pane>
       <el-tab-pane label="买单"></el-tab-pane>
       <el-tab-pane label="历史"></el-tab-pane>
     </el-tabs>
     <br />
-    <el-row :gutter="62">
-      <el-col :span="12">
-        <el-table :data="tableData" style="width: 100%" stripe>
-          <el-table-column prop="date" label="日期" width="180"></el-table-column>
-          <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-          <el-table-column prop="address" label="地址"></el-table-column>
-        </el-table>
-      </el-col>
-
-      <el-col :span="12">
-        <el-table :data="tableData" style="width: 100%;margin-right: 0px" stripe>
-          <el-table-column prop="date" label="日期" width="180"></el-table-column>
-          <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-          <el-table-column prop="address" label="地址"></el-table-column>
-        </el-table>
-      </el-col>
-    </el-row>
   </div>
 </template>
 
 <script>
 import Header from "@/components/Header.vue";
+import OrderTable from "@/components/OrderTable.vue";
+import StatisTable from "@/components/StatisTable.vue";
 
 const backend = "http://localhost:9000/";
+const the_forge = "10000002";
 
 export default {
   name: "Order",
   components: {
     Header,
+    OrderTable,
+    StatisTable,
   },
   created() {
     if (localStorage.lang == null) {
@@ -57,6 +54,7 @@ export default {
     this.getParams();
     this.getItemName(this.order.itemId);
     this.getCorporationName(this.order.corporationId);
+    this.getSellOrders();
   },
   computed: {
     form: function () {
@@ -69,37 +67,18 @@ export default {
         itemId: 0,
         itemName: "",
         offerId: 0,
+        isBluePrint: false,
         corporationId: 0,
         corporationName: "",
       },
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+      sellOrders: [],
     };
   },
   methods: {
     getParams() {
       this.order.itemId = this.$route.query.itemId;
       this.order.offerId = this.$route.query.offerId;
+      this.order.isBluePrint = this.$route.query.isBluePrint;
       this.order.corporationId = this.$route.query.corporationId;
     },
     getItemName(itemId) {
@@ -125,6 +104,22 @@ export default {
         })
         .then((response) => {
           this.order.corporationName = response.data.CorporationName;
+        });
+    },
+    getSellOrders() {
+      this.axios
+        .get(backend + "order", {
+          params: {
+            regionId: the_forge,
+            scope: this.form.scope,
+            itemId: this.order.itemId,
+            isBluePrint: this.order.isBluePrint,
+            isBuyOrder: false,
+            lang: this.$i18n.locale,
+          },
+        })
+        .then((response) => {
+          this.sellOrders = response.data;
         });
     },
   },
