@@ -18,8 +18,8 @@ func LoadRouter(e *gin.Engine) {
 	e.GET("/history", itemHistory)
 	e.GET("/item", item)
 	e.GET("/statis", itemStatis)
-	pprof.Register(e)
 
+	pprof.Register(e)
 }
 
 func Cors() gin.HandlerFunc {

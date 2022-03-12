@@ -12,7 +12,7 @@ const (
 	privateKeyPath = "./testdata/test_private_key.pem"
 )
 
-func TestEncrypt(t *testing.T) {
+func TestEncryptAndDecrypt(t *testing.T) {
 	encryptData, err := Encrypt(helloWorld, publicKeyPath)
 	assert.NoError(t, err)
 

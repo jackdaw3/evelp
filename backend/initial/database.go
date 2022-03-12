@@ -33,7 +33,7 @@ func database() error {
 	if err != nil {
 		return err
 	}
-	log.Infof("connect to mysql: %s", dsn)
+	log.Infof("connect to mysql: %s", fmt.Sprintf("%s:%s", global.Conf.MySQL.Host, global.Conf.MySQL.Port))
 
 	sqlDB, err := db.DB()
 	if err != nil {

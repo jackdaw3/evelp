@@ -37,11 +37,12 @@ func (o OfferDTOs) Less(i, j int) bool { return o[i].UnitProfit > o[j].UnitProfi
 func (o OfferDTOs) Swap(i, j int) { o[i], o[j] = o[j], o[i] }
 
 func (o *OfferDTO) GenerateSaleIndex() {
-	var saleIndex int
-
-	var quantityScore float64
-	var iskStreamScore float64
-	var unitProfitScore float64
+	var (
+		saleIndex       int
+		quantityScore   float64
+		iskStreamScore  float64
+		unitProfitScore float64
+	)
 
 	quantityScore = (2.25/math.Pi)*math.Atan(float64(o.Volume)/20) + 1
 	iskStream := o.Price * float64(o.Volume)

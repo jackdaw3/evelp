@@ -87,7 +87,8 @@ func TestGetHighestBuyPrice(t *testing.T) {
 }
 
 func TestGetLowestSellPrice(t *testing.T) {
-	setUp()
+	err := setUp()
+	assert.NoError(t, err)
 
 	invaidLowestPrice1, err := multipleItemOrders.LowestSellPrice(scope1)
 	assert.Zero(t, invaidLowestPrice1)
