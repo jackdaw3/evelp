@@ -12,7 +12,6 @@ import (
 )
 
 const order = "order"
-const time_format = "2006.01.02 15:04:05"
 
 type OrderService struct {
 	itemId      int
@@ -77,9 +76,8 @@ func (o *OrderService) Orders(isBuyOrder bool, lang string) (*dto.OrderDTOs, err
 		orderDTO.OrderId = order.OrderId
 		orderDTO.ItemId = order.ItemId
 		orderDTO.ItemName = itemName
-		orderDTO.Issued = order.Issued.Format(time_format)
+		orderDTO.Expiration = order.ExpirationToString()
 		orderDTO.LastUpdated = order.LastUpdatedToString()
-		orderDTO.Duration = order.Duration
 		orderDTO.IsBuyOrder = order.IsBuyOrder
 		orderDTO.Price = order.Price
 		orderDTO.VolumeRemain = order.VolumeRemain

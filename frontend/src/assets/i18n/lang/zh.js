@@ -61,12 +61,11 @@ const zh = {
     order: {
       orderId: "订单号",
       systemName: "星系",
-      issued: "时间",
       volumeRemain: "数量",
-      duration: "有效期",
       price: "价格",
       unitProfit: "LP比例",
-      lastUpdated: "更新时间",
+      expiration: "过期时间",
+      lastUpdated: "上次更新",
     },
     statis: {
       lpRange: "LP比例范围",

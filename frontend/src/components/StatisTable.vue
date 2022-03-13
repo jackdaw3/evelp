@@ -1,6 +1,6 @@
 <template>
   <div class="StatisTable">
-    <el-table :data="data" stripe  :cell-style="tableStyle" style="width: 100%">
+    <el-table :data="data" stripe :cell-style="tableStyle" style="width: 100%">
       <el-table-column prop="UnitProfitRange" :label="statisLabel.lpRange"></el-table-column>
       <el-table-column prop="Quantity" :label="statisLabel.number"></el-table-column>
       <el-table-column prop="Cost" :label="statisLabel.sumCost" sortable></el-table-column>
@@ -12,6 +12,9 @@
 </template>
 <script>
 export default {
+  props: {
+    data: Array,
+  },
   data() {
     return {
       statisLabel: this.$t("message.statis"),
@@ -28,16 +31,10 @@ export default {
         .replace(/\.$/, "");
     },
     tableStyle() {
-      if (localStorage.tableStyle == "default") {
-        return { "font-size": localStorage.tableFontSize + "px" };
-      }
-      if (localStorage.tableStyle == "flat") {
-        return {
-          padding: "0",
-          "font-size": localStorage.tableFontSize + "px",
-        };
-      }
-      return "";
+      return {
+        padding: "0",
+        "font-size": "14px",
+      };
     },
   },
   watch: {

@@ -25,18 +25,7 @@ func (is *ItemStatisService) ItemStatis(isBuyOrder bool) (*dto.ItemStatisDTOs, e
 		return nil, err
 	}
 
-	var itemId int
-	if offer.IsBluePrint {
-		bluePrint := model.GetBluePrint(offer.ItemId)
-		product, err := model.GetItem(bluePrint.Products[0].ItemId)
-		if err != nil {
-			return nil, err
-		}
-		itemId = product.ItemId
-	} else {
-		itemId = offer.ItemId
-	}
-	orderService := NewOrderService(itemId, is.regionId, false, is.scope)
+	orderService := NewOrderService(offer.ItemId, is.regionId, offer.IsBluePrint, is.scope)
 	orders, err := orderService.Orders(isBuyOrder, is.lang)
 	if err != nil {
 		return nil, err
@@ -70,6 +59,7 @@ func (is *ItemStatisService) ItemStatis(isBuyOrder bool) (*dto.ItemStatisDTOs, e
 	var itemStatisDTOS dto.ItemStatisDTOs
 	var hi int = orderwList[0].UnitProfit
 	itemStatis := new(dto.ItemStatisDTO)
+	//TODO
 	for i := 0; i < len(orderwList); i++ {
 		orderw := orderwList[i]
 		if orderw.UnitProfit >= hi-100 {

@@ -82,11 +82,48 @@ func (o *Order) LastUpdatedToString() string {
 	second = duration % 60
 
 	if hour != 0 {
-		value = fmt.Sprintf("%dh%dm%ds ago", hour, minute, second)
+		value = fmt.Sprintf("%dh ago", hour)
 	} else if minute != 0 {
-		value = fmt.Sprintf("%dm%ds ago", minute, second)
+		value = fmt.Sprintf("%dm ago", minute)
 	} else if second != 0 {
 		value = fmt.Sprintf("%ds ago", second)
+	} else {
+		value = "just now"
+	}
+
+	return value
+}
+
+func (o *Order) ExpirationToString() string {
+	var (
+		value  string
+		day    int64
+		hour   int64
+		minute int64
+		second int64
+	)
+
+	expirationTime := o.Issued.Add(time.Hour * 24 * time.Duration(o.Duration))
+	if expirationTime.Before(time.Now()) {
+		return "expired"
+	}
+	duration := int64(time.Until(expirationTime).Seconds())
+
+	day = duration / (3600 * 24)
+	hour = (duration % (3600 * 24)) / 3600
+	minute = (duration % 3600) / 60
+	second = duration % 60
+
+	if day != 0 {
+		value = fmt.Sprintf("%dd %dh %dm %ds later", day, hour, minute, second)
+	} else if hour != 0 {
+		value = fmt.Sprintf("%dh %dm %ds later", hour, minute, second)
+	} else if minute != 0 {
+		value = fmt.Sprintf("%dm %ds later", minute, second)
+	} else if second != 0 {
+		value = fmt.Sprintf("%ds later", second)
+	} else {
+		value = "immediately"
 	}
 
 	return value

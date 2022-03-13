@@ -29,7 +29,7 @@ func (h *ItemHistoryService) History() (*model.ItemHistorys, error) {
 		if len(bluePrint.Products) == 0 {
 			return nil, errors.Errorf("offer %d's bluePrint %d have no product", h.itemId, bluePrint.BlueprintId)
 		}
-		key = cache.Key(order, strconv.Itoa(h.regionId), strconv.Itoa(bluePrint.Products[0].ItemId))
+		key = cache.Key(history, strconv.Itoa(h.regionId), strconv.Itoa(bluePrint.Products[0].ItemId))
 	} else {
 		key = cache.Key(history, strconv.Itoa(h.regionId), strconv.Itoa(h.itemId))
 

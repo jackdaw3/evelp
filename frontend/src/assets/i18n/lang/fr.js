@@ -43,11 +43,10 @@ const fr = {
     order: {
       orderId: "OrderId",
       systemName: "Location",
-      issued: "Issued",
       volumeRemain: "Remaining Volume",
-      duration: "Duration",
       price: "Price",
       unitProfit: "Isk/Lp",
+      expiration: "Expiration",
       lastUpdated: "Last Updated",
     },
     statis: {

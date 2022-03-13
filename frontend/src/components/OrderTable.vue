@@ -1,25 +1,23 @@
 <template>
   <div class="OrderTable">
-    <el-table :data="data" stripe :cell-style="tableStyle" style="width: 100%" border>
-      <el-table-column prop="OrderId" :label="orderLabel.orderId" min-width="12%"></el-table-column>
-      <el-table-column prop="SystemName" :label="orderLabel.systemName" min-width="10%"></el-table-column>
-      <el-table-column prop="Issued" :label="orderLabel.issued" min-width="20%"></el-table-column>
-      <el-table-column prop="Duration" :label="orderLabel.duration" min-width="8%"></el-table-column>
+    <el-table :data="data" stripe :cell-style="tableStyle" style="width: 100%">
+      <el-table-column prop="OrderId" :label="orderLabel.orderId" min-width="15%"></el-table-column>
+      <el-table-column prop="SystemName" :label="orderLabel.systemName" min-width="15%"></el-table-column>
       <el-table-column
-        prop="VolumeRemain"
         :label="orderLabel.volumeRemain"
         :formatter="volumeFormat"
         sortable
-        min-width="12%"
+        min-width="15%"
       ></el-table-column>
       <el-table-column
         prop="Price"
         :label="orderLabel.price"
         :formatter="stateFormat"
         sortable
-        min-width="18%"
+        min-width="20%"
       ></el-table-column>
-      <el-table-column prop="LastUpdated" :label="orderLabel.lastUpdated" min-width="20%"></el-table-column>
+      <el-table-column prop="Expiration" :label="orderLabel.expiration" min-width="20%"></el-table-column>
+      <el-table-column prop="LastUpdated" :label="orderLabel.lastUpdated" min-width="15%"></el-table-column>
     </el-table>
   </div>
 </template>
@@ -27,11 +25,6 @@
 export default {
   props: {
     data: Array,
-  },
-  computed: {
-    form: function () {
-      return this.$store.state.form;
-    },
   },
   data() {
     return {

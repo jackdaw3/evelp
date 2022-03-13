@@ -12,8 +12,6 @@ func TestGenerateUnitProfit(t *testing.T) {
 		&OrderDTOWrapper{
 			OrderDTO: OrderDTO{OrderId: 6206480166,
 				ItemId:       28813,
-				Issued:       time.Now().GoString(),
-				Duration:     90,
 				VolumeRemain: 1,
 				VolumeTotal:  1,
 				IsBuyOrder:   true,
@@ -27,8 +25,6 @@ func TestGenerateUnitProfit(t *testing.T) {
 		&OrderDTOWrapper{
 			OrderDTO: OrderDTO{OrderId: 6205771440,
 				ItemId:       28813,
-				Issued:       time.Now().GoString(),
-				Duration:     90,
 				VolumeRemain: 2,
 				VolumeTotal:  2,
 				IsBuyOrder:   true,

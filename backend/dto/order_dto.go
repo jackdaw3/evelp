@@ -5,12 +5,11 @@ type OrderDTO struct {
 	ItemId       int
 	ItemName     string
 	SystemName   string
-	Issued       string
-	Duration     int
 	VolumeRemain int64
 	VolumeTotal  int64
 	IsBuyOrder   bool
 	Price        float64
+	Expiration   string
 	LastUpdated  string
 }
 

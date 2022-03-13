@@ -18,7 +18,7 @@
             <OrderTable :data="sellOrders"></OrderTable>
           </el-col>
           <el-col :span="12">
-            <StatisTable></StatisTable>
+            <StatisTable :data="sellStatis"></StatisTable>
           </el-col>
         </el-row>
       </el-tab-pane>
@@ -55,6 +55,7 @@ export default {
     this.getItemName(this.order.itemId);
     this.getCorporationName(this.order.corporationId);
     this.getSellOrders();
+    this.getSellStatis();
   },
   computed: {
     form: function () {
@@ -72,6 +73,7 @@ export default {
         corporationName: "",
       },
       sellOrders: [],
+      sellStatis: [],
     };
   },
   methods: {
@@ -120,6 +122,22 @@ export default {
         })
         .then((response) => {
           this.sellOrders = response.data;
+        });
+    },
+    getSellStatis() {
+      this.axios
+        .get(backend + "statis", {
+          params: {
+            offerId: this.order.offerId,
+            regionId: the_forge,
+            scope: this.form.scope,
+            materialPrice: this.form.materialPrice,
+            isBuyOrder: false,
+            lang: this.$i18n.locale,
+          },
+        })
+        .then((response) => {
+          this.sellStatis = response.data;
         });
     },
   },
