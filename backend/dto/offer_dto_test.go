@@ -14,5 +14,5 @@ func TestGenerateSalaIndex(t *testing.T) {
 
 	offerDTO.GenerateSaleIndex()
 
-	assert.Equal(t, 181, offerDTO.SaleIndex)
+	assert.Equal(t, 226, offerDTO.SaleIndex)
 }

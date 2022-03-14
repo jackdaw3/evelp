@@ -27,6 +27,12 @@ func itemStatis(c *gin.Context) {
 		return
 	}
 
+	tax, err := strconv.ParseFloat(c.Query("tax"), 64)
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
+	}
+
 	materialPrice := c.Query("materialPrice")
 	if materialPrice == "" {
 		c.AbortWithError(500, errors.New("materialPrice is empty"))
@@ -45,7 +51,7 @@ func itemStatis(c *gin.Context) {
 		return
 	}
 
-	itemStatisService := service.NewItemStatisService(offerId, regionId, scope, materialPrice, lang)
+	itemStatisService := service.NewItemStatisService(offerId, regionId, scope, materialPrice, tax, lang)
 	itemStatis, err := itemStatisService.ItemStatis(isBuyOrder)
 	if err != nil {
 		c.AbortWithError(500, err)

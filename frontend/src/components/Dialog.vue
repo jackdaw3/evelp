@@ -51,6 +51,15 @@
             <el-option :label="dialogLabel.season" value="90"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item :label="dialogLabel.tax">
+          <el-slider
+            v-model="form.tax"
+            :max="20"
+            show-input
+            :format-tooltip="taxFormat"
+            style="width:90%"
+          ></el-slider>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="reset" size="medium">{{ dialogLabel.reset }}</el-button>
@@ -61,16 +70,16 @@
 </template>
 <script>
 export default {
+  computed: {
+    form: function () {
+      return this.$store.state.form;
+    },
+  },
   data() {
     return {
       dialogVisible: false,
       dialogLabel: this.$t("message.dialog"),
     };
-  },
-  computed: {
-    form: function () {
-      return this.$store.state.form;
-    },
   },
   methods: {
     reset() {
@@ -78,9 +87,15 @@ export default {
       this.form.productPrice = "buy";
       this.form.days = "7";
       this.form.scope = "0.05";
+      this.form.tax = 0;
     },
     closeDialog() {
+      this.$store.dispatch("setForm", this.form);
+      localStorage.form = JSON.stringify(this.form);
       this.$emit("form-change");
+    },
+    taxFormat(e) {
+      return e + "%";
     },
   },
   watch: {

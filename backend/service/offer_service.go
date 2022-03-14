@@ -16,11 +16,12 @@ type OfferSerivce struct {
 	days          int
 	productPrice  string
 	materialPrice string
+	tax           float64
 	lang          string
 }
 
-func NewOfferSerivce(regionId int, scope float64, days int, productPrice string, materialPrice string, lang string) *OfferSerivce {
-	return &OfferSerivce{regionId, scope, days, productPrice, materialPrice, lang}
+func NewOfferSerivce(regionId int, scope float64, days int, productPrice string, materialPrice string, tax float64, lang string) *OfferSerivce {
+	return &OfferSerivce{regionId, scope, days, productPrice, materialPrice, tax, lang}
 }
 
 func (o *OfferSerivce) Offer(offerId int) (*dto.OfferDTO, error) {
@@ -113,7 +114,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 		log.Warnf("get %s price of item %v in region %v failed: %v", o.productPrice, oos.itemId, oos.regionId, err)
 	}
 	offerDTO.Price = price
-	offerDTO.Income = offerDTO.Price * float64(offer.Quantity)
+	offerDTO.Income = offerDTO.Price * ((100 - o.tax) / 100) * float64(offer.Quantity)
 	offerDTO.Profit = offerDTO.Income - (offerDTO.MaterialCost + offerDTO.IskCost)
 
 	if offerDTO.LpCost > 0 {
@@ -179,7 +180,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 		log.Warnf("get %s price of item %v in region %v failed: %v", o.productPrice, oos.itemId, oos.regionId, err)
 	}
 	offerDTO.Price = price
-	offerDTO.Income = offerDTO.Price * float64(offer.Quantity)
+	offerDTO.Income = offerDTO.Price * ((100 - o.tax) / 100) * float64(offer.Quantity)
 	offerDTO.Profit = offerDTO.Income - (offerDTO.MaterialCost + offerDTO.IskCost)
 
 	if offerDTO.LpCost > 0 {

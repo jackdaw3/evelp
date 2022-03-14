@@ -46,12 +46,15 @@ export default {
     Header,
     Table,
   },
-  mounted() {
+  created() {
     if (localStorage.lang == null) {
       localStorage.lang = "en";
     }
     if (localStorage.lang) {
       this.$i18n.locale = localStorage.lang;
+    }
+    if (localStorage.form) {
+      this.$store.dispatch("setForm", JSON.parse(localStorage.form));
     }
     this.loadFactions();
   },
@@ -125,6 +128,7 @@ export default {
             corporationId: corporationId,
             lang: this.$i18n.locale,
             days: this.form.days,
+            tax: this.form.tax,
             productPrice: this.form.productPrice,
             materialPrice: this.form.materialPrice,
           },

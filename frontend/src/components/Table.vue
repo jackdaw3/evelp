@@ -130,7 +130,7 @@
         sortable="custom"
       ></el-table-column>
       <el-table-column
-        :label="tableLabel.sumCost"
+        :label="tableLabel.cost"
         prop="MaterialCost"
         min-width="8%"
         :formatter="stateFormat"
@@ -144,14 +144,14 @@
         sortable="custom"
       ></el-table-column>
       <el-table-column
-        :label="tableLabel.sumGain"
+        :label="this.tableLabel.income"
         prop="Income"
         min-width="8%"
         :formatter="stateFormat"
         sortable="custom"
       ></el-table-column>
       <el-table-column
-        :label="tableLabel.sumProfit"
+        :label="tableLabel.profit"
         prop="Profit"
         min-width="8%"
         :formatter="stateFormat"
@@ -314,7 +314,7 @@ export default {
         message: message,
         type: "warning",
         showClose: true,
-        duration: 8000,
+        duration: 5000,
       });
     },
     copyMaterial(row) {
@@ -377,7 +377,10 @@ export default {
       let name =
         this.corporationName +
         "-" +
-        this.dateFormat("YYYY-mm-dd_HH-MM-SS", date);
+        this.dateFormat("YYYY_mm_dd-HH_MM_SS", date) +
+        "-" +
+        this.form.tax +
+        "%";
       this.$nextTick(function () {
         let wb = XLSX.utils.table_to_book(document.getElementById("table"));
         let wbout = XLSX.write(wb, {
@@ -647,6 +650,9 @@ export default {
           offerId: scope.row.OfferId,
           isBluePrint: scope.row.IsBluePrint,
           corporationId: this.corporationId,
+          materialPrice: this.form.materialPrice,
+          scope: this.form.scope,
+          tax: this.form.tax,
         },
       });
       window.open(routeUrl.href, "_blank");

@@ -49,7 +49,7 @@ var (
 
 func TestOffers(t *testing.T) {
 	defer monkey.UnpatchAll()
-	offerService := NewOfferSerivce(1000002, 0.05, 7, "buy", "sell", "en")
+	offerService := NewOfferSerivce(1000002, 0.05, 7, "buy", "sell", 0, "en")
 	mockOffers()
 
 	offers, err := offerService.Offers(1000019)

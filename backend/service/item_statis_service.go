@@ -13,11 +13,12 @@ type ItemStatisService struct {
 	regionId      int
 	scope         float64
 	materialPrice string
+	tax           float64
 	lang          string
 }
 
-func NewItemStatisService(offerId, regionId int, scope float64, materialPrice string, lang string) *ItemStatisService {
-	return &ItemStatisService{offerId, regionId, scope, materialPrice, lang}
+func NewItemStatisService(offerId, regionId int, scope float64, materialPrice string, tax float64, lang string) *ItemStatisService {
+	return &ItemStatisService{offerId, regionId, scope, materialPrice, tax, lang}
 }
 
 func (is *ItemStatisService) ItemStatis(isBuyOrder bool) (*dto.ItemStatisDTOs, error) {
@@ -32,7 +33,7 @@ func (is *ItemStatisService) ItemStatis(isBuyOrder bool) (*dto.ItemStatisDTOs, e
 		return nil, err
 	}
 
-	offerService := NewOfferSerivce(is.regionId, is.scope, 0, "", is.materialPrice, is.lang)
+	offerService := NewOfferSerivce(is.regionId, is.scope, 0, "", is.materialPrice, is.tax, is.lang)
 	offerDTO, err := offerService.Offer(is.offerId)
 	if err != nil {
 		return nil, err
@@ -45,7 +46,12 @@ func (is *ItemStatisService) ItemStatis(isBuyOrder bool) (*dto.ItemStatisDTOs, e
 	for _, order := range *orders {
 		orderw := new(dto.OrderDTOWrapper)
 		orderw.OrderDTO = order
-		orderw.Income = order.Price * float64(order.VolumeRemain)
+
+		if is.tax > 0 {
+			orderw.Income = order.Price * ((100 - is.tax) / 100) * float64(order.VolumeRemain)
+		} else {
+			orderw.Income = order.Price * float64(order.VolumeRemain)
+		}
 		orderw.Cost = unitCost * float64(order.VolumeRemain)
 		orderw.Profit = orderw.Income - orderw.Cost
 		orderw.UnitProfit = int(orderw.Profit / float64(int64(unitLpCost)*order.VolumeRemain))
@@ -58,7 +64,7 @@ func (is *ItemStatisService) ItemStatis(isBuyOrder bool) (*dto.ItemStatisDTOs, e
 	}
 
 	var (
-		itemStatisDTOS dto.ItemStatisDTOs
+		itemStatisDTOs dto.ItemStatisDTOs
 		deviation      int
 	)
 	itemStatis := new(dto.ItemStatisDTO)
@@ -76,11 +82,11 @@ func (is *ItemStatisService) ItemStatis(isBuyOrder bool) (*dto.ItemStatisDTOs, e
 
 		itemStatis.UnitProfitRange = fmt.Sprintf("%d ~ %d", tmp, orderwList[i-1].UnitProfit)
 		itemStatis.GenerateUnitProfit(unitLpCost)
-		itemStatisDTOS = append(itemStatisDTOS, itemStatis)
+		itemStatisDTOs = append(itemStatisDTOs, itemStatis)
 
 		itemStatis = new(dto.ItemStatisDTO)
 		deviation = 0
 	}
 
-	return &itemStatisDTOS, nil
+	return &itemStatisDTOs, nil
 }

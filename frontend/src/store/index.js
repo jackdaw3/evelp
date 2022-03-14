@@ -11,6 +11,7 @@ export default new Vuex.Store({
       productPrice: "buy",
       days: "7",
       scope: "0.05",
+      tax: 0,
     },
     corporationId: "",
     corporationName: "",

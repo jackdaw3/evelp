@@ -33,6 +33,12 @@ func offer(c *gin.Context) {
 		return
 	}
 
+	tax, err := strconv.ParseFloat(c.Query("tax"), 64)
+	if err != nil {
+		c.AbortWithError(500, err)
+		return
+	}
+
 	productPrice := c.Query("productPrice")
 	if productPrice == "" {
 		c.AbortWithError(500, errors.New("productPrice is empty"))
@@ -51,7 +57,7 @@ func offer(c *gin.Context) {
 		return
 	}
 
-	offerService := service.NewOfferSerivce(regionId, float64(scope), days, productPrice, materialPrice, lang)
+	offerService := service.NewOfferSerivce(regionId, scope, days, productPrice, materialPrice, tax, lang)
 
 	offers, err := offerService.Offers(corporationId)
 	if err != nil {

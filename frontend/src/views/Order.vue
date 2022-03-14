@@ -68,11 +68,6 @@ export default {
     this.getOrders(false);
     this.getStatis(false);
   },
-  computed: {
-    form: function () {
-      return this.$store.state.form;
-    },
-  },
   data() {
     return {
       order: {
@@ -82,6 +77,9 @@ export default {
         isBluePrint: false,
         corporationId: 0,
         corporationName: "",
+        materialPrice: "sell",
+        scope: "0.05",
+        tax: 0,
       },
       sellOrders: [],
       sellStatis: [],
@@ -95,6 +93,9 @@ export default {
       this.order.offerId = this.$route.query.offerId;
       this.order.isBluePrint = this.$route.query.isBluePrint;
       this.order.corporationId = this.$route.query.corporationId;
+      this.order.materialPrice = this.$route.query.materialPrice;
+      this.order.scope = this.$route.query.scope;
+      this.order.tax = this.$route.query.tax;
     },
     getItemName(itemId) {
       this.axios
@@ -122,11 +123,13 @@ export default {
         });
     },
     getOrders(isBuyOrder) {
+      console.log(this.form);
       this.axios
         .get(backend + "order", {
           params: {
             regionId: the_forge,
-            scope: this.form.scope,
+            scope: this.order.scope,
+            tax: this.order.tax,
             itemId: this.order.itemId,
             isBluePrint: this.order.isBluePrint,
             isBuyOrder: isBuyOrder,
@@ -147,8 +150,9 @@ export default {
           params: {
             offerId: this.order.offerId,
             regionId: the_forge,
-            scope: this.form.scope,
-            materialPrice: this.form.materialPrice,
+            scope: this.order.scope,
+            materialPrice: this.order.materialPrice,
+            tax: this.order.tax,
             isBuyOrder: isBuyOrder,
             lang: this.$i18n.locale,
           },
