@@ -12,8 +12,18 @@
     </div>
 
     <el-tabs type="card">
+      <el-tab-pane label="买单">
+        <el-row :gutter="35">
+          <el-col :span="12">
+            <OrderTable :data="buyOrders"></OrderTable>
+          </el-col>
+          <el-col :span="12">
+            <StatisTable :data="buyStatis"></StatisTable>
+          </el-col>
+        </el-row>
+      </el-tab-pane>
       <el-tab-pane label="卖单">
-        <el-row :gutter="50">
+        <el-row :gutter="35">
           <el-col :span="12">
             <OrderTable :data="sellOrders"></OrderTable>
           </el-col>
@@ -22,7 +32,6 @@
           </el-col>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="买单"></el-tab-pane>
       <el-tab-pane label="历史"></el-tab-pane>
     </el-tabs>
     <br />
@@ -54,8 +63,10 @@ export default {
     this.getParams();
     this.getItemName(this.order.itemId);
     this.getCorporationName(this.order.corporationId);
-    this.getSellOrders();
-    this.getSellStatis();
+    this.getOrders(true);
+    this.getStatis(true);
+    this.getOrders(false);
+    this.getStatis(false);
   },
   computed: {
     form: function () {
@@ -74,6 +85,8 @@ export default {
       },
       sellOrders: [],
       sellStatis: [],
+      buyOrders: [],
+      buyStatis: [],
     };
   },
   methods: {
@@ -108,7 +121,7 @@ export default {
           this.order.corporationName = response.data.CorporationName;
         });
     },
-    getSellOrders() {
+    getOrders(isBuyOrder) {
       this.axios
         .get(backend + "order", {
           params: {
@@ -116,15 +129,19 @@ export default {
             scope: this.form.scope,
             itemId: this.order.itemId,
             isBluePrint: this.order.isBluePrint,
-            isBuyOrder: false,
+            isBuyOrder: isBuyOrder,
             lang: this.$i18n.locale,
           },
         })
         .then((response) => {
-          this.sellOrders = response.data;
+          if (!isBuyOrder) {
+            this.sellOrders = response.data;
+          } else {
+            this.buyOrders = response.data;
+          }
         });
     },
-    getSellStatis() {
+    getStatis(isBuyOrder) {
       this.axios
         .get(backend + "statis", {
           params: {
@@ -132,12 +149,16 @@ export default {
             regionId: the_forge,
             scope: this.form.scope,
             materialPrice: this.form.materialPrice,
-            isBuyOrder: false,
+            isBuyOrder: isBuyOrder,
             lang: this.$i18n.locale,
           },
         })
         .then((response) => {
-          this.sellStatis = response.data;
+          if (!isBuyOrder) {
+            this.sellStatis = response.data;
+          } else {
+            this.buyStatis = response.data;
+          }
         });
     },
   },

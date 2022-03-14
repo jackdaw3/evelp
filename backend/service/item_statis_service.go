@@ -4,6 +4,7 @@ import (
 	"evelp/dto"
 	"evelp/model"
 	"fmt"
+	"math"
 	"sort"
 )
 
@@ -56,23 +57,29 @@ func (is *ItemStatisService) ItemStatis(isBuyOrder bool) (*dto.ItemStatisDTOs, e
 		sort.Sort(orderwList)
 	}
 
-	var itemStatisDTOS dto.ItemStatisDTOs
-	var hi int = orderwList[0].UnitProfit
+	var (
+		itemStatisDTOS dto.ItemStatisDTOs
+		deviation      int
+	)
 	itemStatis := new(dto.ItemStatisDTO)
-	//TODO
-	for i := 0; i < len(orderwList); i++ {
-		orderw := orderwList[i]
-		if orderw.UnitProfit >= hi-100 {
-			itemStatis.UnitProfitRange = fmt.Sprintf("%d ~ %d", hi, orderw.UnitProfit)
-			itemStatis.Orderwrappers = append(itemStatis.Orderwrappers, orderw)
-			if i != len(orderwList)-1 {
-				continue
+
+	for i := 0; i < len(orderwList); {
+		tmp := orderwList[i].UnitProfit
+		for i < len(orderwList) {
+			deviation = int(math.Abs(float64(tmp - orderwList[i].UnitProfit)))
+			if deviation > 100 {
+				break
 			}
+			itemStatis.Orderwrappers = append(itemStatis.Orderwrappers, orderwList[i])
+			i++
 		}
+
+		itemStatis.UnitProfitRange = fmt.Sprintf("%d ~ %d", tmp, orderwList[i-1].UnitProfit)
 		itemStatis.GenerateUnitProfit(unitLpCost)
 		itemStatisDTOS = append(itemStatisDTOS, itemStatis)
+
 		itemStatis = new(dto.ItemStatisDTO)
-		hi = orderwList[i].UnitProfit
+		deviation = 0
 	}
 
 	return &itemStatisDTOS, nil

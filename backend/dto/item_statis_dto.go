@@ -34,7 +34,7 @@ func (is *ItemStatisDTO) GenerateUnitProfit(unitLpCost int) {
 
 func (is ItemStatisDTOs) Len() int { return len(is) }
 
-func (is ItemStatisDTOs) Less(i, j int) bool { return is[i].AveUnitProfit > is[j].AveUnitProfit }
+func (is ItemStatisDTOs) Less(i, j int) bool { return is[i].AveUnitProfit < is[j].AveUnitProfit }
 
 func (is ItemStatisDTOs) Swap(i, j int) { is[i], is[j] = is[j], is[i] }
 

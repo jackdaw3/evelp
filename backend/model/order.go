@@ -87,8 +87,6 @@ func (o *Order) LastUpdatedToString() string {
 		value = fmt.Sprintf("%dm ago", minute)
 	} else if second != 0 {
 		value = fmt.Sprintf("%ds ago", second)
-	} else {
-		value = "just now"
 	}
 
 	return value
@@ -122,8 +120,6 @@ func (o *Order) ExpirationToString() string {
 		value = fmt.Sprintf("%dm %ds later", minute, second)
 	} else if second != 0 {
 		value = fmt.Sprintf("%ds later", second)
-	} else {
-		value = "immediately"
 	}
 
 	return value

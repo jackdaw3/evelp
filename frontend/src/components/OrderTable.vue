@@ -4,7 +4,7 @@
       <el-table-column prop="OrderId" :label="orderLabel.orderId" min-width="15%"></el-table-column>
       <el-table-column prop="SystemName" :label="orderLabel.systemName" min-width="15%"></el-table-column>
       <el-table-column
-        :label="orderLabel.volumeRemain"
+        :label="orderLabel.volume"
         :formatter="volumeFormat"
         sortable
         min-width="15%"

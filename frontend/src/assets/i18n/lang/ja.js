@@ -41,9 +41,12 @@ const ja = {
       },
     },
     order: {
+      sellOrder: "Sell Order",
+      buyOrder: "Buy Order",
+      history: "History",
       orderId: "OrderId",
       systemName: "Location",
-      volumeRemain: "Remaining Volume",
+      volume: "Volume",
       price: "Price",
       unitProfit: "Isk/Lp",
       expiration: "Expiration",
@@ -52,10 +55,11 @@ const ja = {
     statis: {
       lpRange: "Isk/Lp Range",
       number: "Quantity",
-      sumCost: "Cost",
-      sumIncome: "Income",
-      sumProfit: "Profit",
+      cost: "Cost",
+      income: "Income",
+      profit: "Profit",
       aveLpPrice: "Avg Isk/Lp",
+      unitProfit: "Isk/Lp",
     },
     materialLabel: {
       name: "Material",

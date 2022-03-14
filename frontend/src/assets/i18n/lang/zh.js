@@ -59,9 +59,12 @@ const zh = {
       },
     },
     order: {
+      sellOrder: "卖单",
+      buyOrder: "买单",
+      history: "历史",
       orderId: "订单号",
       systemName: "星系",
-      volumeRemain: "数量",
+      volume: "数量",
       price: "价格",
       unitProfit: "LP比例",
       expiration: "过期时间",
@@ -70,10 +73,11 @@ const zh = {
     statis: {
       lpRange: "LP比例范围",
       number: "数量",
-      sumCost: "成本",
-      sumIncome: "收入",
-      sumProfit: "利润",
+      cost: "成本",
+      income: "收入",
+      profit: "利润",
       aveLpPrice: "平均LP比例",
+      unitProfit: "Lp比例",
     },
     noData: "没有数据",
     materialLabel: {
