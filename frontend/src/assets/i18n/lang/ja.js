@@ -61,6 +61,15 @@ const ja = {
       aveLpPrice: "Avg Isk/Lp",
       unitProfit: "Isk/Lp",
     },
+    stock: {
+      average: "Avg(d)",
+      minAndmax: "Min(d)-Max(d)",
+      average5d: "Moving Avg(5d)",
+      average20d: "Moving Avg(20d)",
+      minAndmax5d: "Min(5d)-Max(5d)",
+      volume: "Volume",
+      price: "Price",
+    },
     materialLabel: {
       name: "Material",
       quantity: "Quantity",

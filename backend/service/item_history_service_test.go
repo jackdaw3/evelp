@@ -31,7 +31,7 @@ var (
 	}
 )
 
-func TestHistory(t *testing.T) {
+func TestAverageVolume(t *testing.T) {
 	defer monkey.UnpatchAll()
 	histroyService := NewItemHistoryService(34, 10000002, false)
 
@@ -44,8 +44,11 @@ func TestHistory(t *testing.T) {
 		return nil
 	})
 
-	historys, err := histroyService.History()
+	volume, err := histroyService.AverageVolume(2)
 	assert.NoError(t, err)
-	assert.Equal(t, len(*itemHistorys), len(*historys))
+	assert.Equal(t, (6358751950+3910212408)/2, int(volume))
 
+	volume, err = histroyService.AverageVolume(7)
+	assert.NoError(t, err)
+	assert.Equal(t, (6358751950+3910212408)/2, int(volume))
 }

@@ -20,7 +20,7 @@ func itemHistory(c *gin.Context) {
 		return
 	}
 
-	isBluePrint, err := strconv.ParseBool(c.Query("isBuyOrder"))
+	isBluePrint, err := strconv.ParseBool(c.Query("isBluePrint"))
 	if err != nil {
 		c.AbortWithError(500, err)
 		return

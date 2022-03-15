@@ -164,11 +164,7 @@ func mockOffers() {
 		return nil
 	})
 
-	monkey.PatchInstanceMethod(reflect.TypeOf(&ItemHistoryService{}), "History", func(*ItemHistoryService) (*model.ItemHistorys, error) {
-		return &model.ItemHistorys{}, nil
-	})
-
-	monkey.PatchInstanceMethod(reflect.TypeOf(&model.ItemHistorys{}), "AverageVolume", func(*model.ItemHistorys, int) int64 {
-		return 10
+	monkey.PatchInstanceMethod(reflect.TypeOf(&ItemHistoryService{}), "AverageVolume", func(*ItemHistoryService, int) (int64, error) {
+		return 10, nil
 	})
 }

@@ -121,7 +121,8 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 		offerDTO.UnitProfit = int(offerDTO.Profit / float64(offerDTO.LpCost))
 	}
 
-	volume, err := o.averageVolume(offerDTO.ItemId, offerDTO.IsBluePrint)
+	ihs := NewItemHistoryService(offerDTO.ItemId, o.regionId, offerDTO.IsBluePrint)
+	volume, err := ihs.AverageVolume(o.days)
 	if err != nil {
 		log.Warnf("get volume of item %v region %v failed: %v", oos.itemId, oos.regionId, err)
 	}
@@ -187,7 +188,8 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 		offerDTO.UnitProfit = int(offerDTO.Profit / float64(offerDTO.LpCost))
 	}
 
-	volume, err := o.averageVolume(offer.ItemId, offerDTO.IsBluePrint)
+	ihs := NewItemHistoryService(offerDTO.ItemId, o.regionId, offerDTO.IsBluePrint)
+	volume, err := ihs.AverageVolume(o.days)
 	if err != nil {
 		log.Warnf("get volume of item %v region %v failed: %v", oos.itemId, oos.regionId, err)
 	}
@@ -292,15 +294,4 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 	}
 
 	return materails
-}
-
-func (o *OfferSerivce) averageVolume(itemId int, isBluePrint bool) (int64, error) {
-	ihs := NewItemHistoryService(itemId, o.regionId, isBluePrint)
-	itemHistorys, err := ihs.History()
-	if err != nil {
-		return 0, err
-	}
-
-	volume := itemHistorys.AverageVolume(o.days)
-	return volume, nil
 }

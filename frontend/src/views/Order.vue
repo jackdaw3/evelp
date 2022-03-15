@@ -32,7 +32,9 @@
           </el-col>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane :label="orderLabel.history"></el-tab-pane>
+      <el-tab-pane :label="orderLabel.history" :lazy="stockLazy">
+        <Stock :style="{height: stockHeight}" :history="history"></Stock>
+      </el-tab-pane>
     </el-tabs>
     <br />
   </div>
@@ -42,6 +44,7 @@
 import Header from "@/components/Header.vue";
 import OrderTable from "@/components/OrderTable.vue";
 import StatisTable from "@/components/StatisTable.vue";
+import Stock from "@/components/Stock.vue";
 
 const backend = "http://localhost:9000/";
 const the_forge = "10000002";
@@ -52,6 +55,7 @@ export default {
     Header,
     OrderTable,
     StatisTable,
+    Stock,
   },
   created() {
     if (localStorage.lang == null) {
@@ -67,6 +71,12 @@ export default {
     this.getStatis(true);
     this.getOrders(false);
     this.getStatis(false);
+    this.getHistory();
+  },
+  computed: {
+    stockHeight() {
+      return window.screen.height * 0.68 + "px";
+    },
   },
   data() {
     return {
@@ -81,6 +91,18 @@ export default {
         scope: "0.05",
         tax: 0,
       },
+      history: {
+        average: [],
+        average5d: [],
+        average20d: [],
+        minAndmax: [],
+        minAndmax5d: [],
+        volume: [],
+        borderWidth: 0,
+        title: "",
+        label: this.$t("message.stock"),
+      },
+      stockLazy: true,
       sellOrders: [],
       sellStatis: [],
       buyOrders: [],
@@ -109,6 +131,7 @@ export default {
         .then((response) => {
           document.title = response.data.ItemName;
           this.order.itemName = response.data.ItemName;
+          this.history.title = response.data.ItemName;
         });
     },
     getCorporationName(corporationId) {
@@ -124,7 +147,6 @@ export default {
         });
     },
     getOrders(isBuyOrder) {
-      console.log(this.form);
       this.axios
         .get(backend + "order", {
           params: {
@@ -166,10 +188,53 @@ export default {
           }
         });
     },
+    getHistory() {
+      this.axios
+        .get(backend + "history", {
+          params: {
+            regionId: the_forge,
+            itemId: this.order.itemId,
+            isBluePrint: this.order.isBluePrint,
+          },
+        })
+        .then((response) => {
+          for (let i = 0; i < response.data.length; i++) {
+            this.history.average.push([
+              Date.parse(new Date(response.data[i].Date)),
+              response.data[i].Average,
+            ]);
+            this.history.volume.push([
+              Date.parse(new Date(response.data[i].Date)),
+              response.data[i].Volume,
+            ]);
+            this.history.minAndmax.push([
+              Date.parse(new Date(response.data[i].Date)),
+              response.data[i].Lowest,
+              response.data[i].Highest,
+            ]);
+            this.history.average5d.push([
+              Date.parse(new Date(response.data[i].Date)),
+              response.data[i].Average5d,
+            ]);
+            this.history.average20d.push([
+              Date.parse(new Date(response.data[i].Date)),
+              response.data[i].Average20d,
+            ]);
+            this.history.minAndmax5d.push([
+              Date.parse(new Date(response.data[i].Date)),
+              response.data[i].Lowest5d,
+              response.data[i].Highest5d,
+            ]);
+          }
+          this.history.borderWidth =
+            document.documentElement.clientWidth * 0.0388;
+        });
+    },
   },
   watch: {
     "$i18n.locale"() {
       this.orderLabel = this.$t("message.order");
+      this.history.label = this.$t("message.stock");
       this.getItemName(this.order.itemId);
       this.getCorporationName(this.order.corporationId);
     },
