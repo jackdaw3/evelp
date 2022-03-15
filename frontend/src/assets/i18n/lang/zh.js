@@ -17,7 +17,7 @@ const zh = {
       productPlaceholder: "请选择类型",
       scope: "加权价格",
       scopePlaceholder: "请选择取价范围",
-      days: "交易量区间",
+      days: "交易区间",
       daysPlaceholder: "请选择交易区间",
       tax: "交易税",
       week: "一周",

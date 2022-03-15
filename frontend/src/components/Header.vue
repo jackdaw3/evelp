@@ -19,9 +19,13 @@
     <el-divider direction="vertical"></el-divider>
     <span>{{ headerLabel.market }}</span>
 
-    <el-dropdown @command="langChange" style="float: right;margin-right: 15px;margin-top:8px;cursor: pointer">
-      <span class="el-dropdown-link" >
-        {{ language }}<i class="el-icon-arrow-down el-icon--right"></i>
+    <el-dropdown
+      @command="langChange"
+      style="float: right;margin-right: 15px;margin-top:8px;cursor: pointer"
+    >
+      <span class="el-dropdown-link">
+        {{ language }}
+        <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="de">Deutsch</el-dropdown-item>
@@ -36,8 +40,6 @@
 </template>
 
 <script>
-
-
 export default {
   mounted() {
     if (localStorage.lang == null) {
@@ -46,17 +48,17 @@ export default {
     if (localStorage.lang) {
       this.$i18n.locale = localStorage.lang;
     }
-    this.language=this.langLabel(this.$i18n.locale)
+    this.language = this.langLabel(this.$i18n.locale);
   },
   data() {
     return {
       headerLabel: this.$t("message.header"),
-      language: ""
+      language: "",
     };
   },
   methods: {
     langChange(lang) {
-      this.$i18n.locale = lang
+      this.$i18n.locale = lang;
     },
     langLabel(lang) {
       switch (lang) {
@@ -72,29 +74,29 @@ export default {
           return "Pусский";
         case "zh":
           return "中文";
-          }
-    }
+      }
+    },
   },
   watch: {
-    '$i18n.locale'() {
-      this.headerLabel = this.$t('message.header')
-      this.language=this.langLabel(this.$i18n.locale)
-    }
+    "$i18n.locale"() {
+      localStorage.lang = this.$i18n.locale;
+      this.headerLabel = this.$t("message.header");
+      this.language = this.langLabel(this.$i18n.locale);
+    },
   },
 };
-
 </script>
 
 <style>
-  A:link {
-    color: black;
-    text-decoration: none
-  }
-  .el-dropdown-link {
-    cursor: pointer;
-    color: #409EFF;
-  }
-  .el-icon-arrow-down {
-    font-size: 12px;
-  }
+A:link {
+  color: black;
+  text-decoration: none;
+}
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
 </style>

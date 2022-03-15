@@ -13,10 +13,12 @@ type ItemStatisDTO struct {
 type ItemStatisDTOs []*ItemStatisDTO
 
 func (is *ItemStatisDTO) GenerateUnitProfit(unitLpCost int) {
-	var quantity int64
-	var income float64
-	var cost float64
-	var profit float64
+	var (
+		quantity int64
+		income   float64
+		cost     float64
+		profit   float64
+	)
 
 	for _, orderw := range is.Orderwrappers {
 		quantity += orderw.OrderDTO.VolumeRemain

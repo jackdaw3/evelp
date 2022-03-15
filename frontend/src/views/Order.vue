@@ -12,7 +12,7 @@
     </div>
 
     <el-tabs type="card">
-      <el-tab-pane label="买单">
+      <el-tab-pane :label="orderLabel.buyOrder">
         <el-row :gutter="35">
           <el-col :span="12">
             <OrderTable :data="buyOrders"></OrderTable>
@@ -22,7 +22,7 @@
           </el-col>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="卖单">
+      <el-tab-pane :label="orderLabel.sellOrder">
         <el-row :gutter="35">
           <el-col :span="12">
             <OrderTable :data="sellOrders"></OrderTable>
@@ -32,7 +32,7 @@
           </el-col>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="历史"></el-tab-pane>
+      <el-tab-pane :label="orderLabel.history"></el-tab-pane>
     </el-tabs>
     <br />
   </div>
@@ -85,6 +85,7 @@ export default {
       sellStatis: [],
       buyOrders: [],
       buyStatis: [],
+      orderLabel: this.$t("message.order"),
     };
   },
   methods: {
@@ -168,6 +169,7 @@ export default {
   },
   watch: {
     "$i18n.locale"() {
+      this.orderLabel = this.$t("message.order");
       this.getItemName(this.order.itemId);
       this.getCorporationName(this.order.corporationId);
     },

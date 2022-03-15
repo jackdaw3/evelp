@@ -188,7 +188,6 @@ export default {
       this.corporation.placeholder = this.$t("message.corporation.placeholder");
       this.loadFactions(this.facList);
       this.reloadTable();
-      localStorage.lang = this.$i18n.locale;
     },
   },
 };
