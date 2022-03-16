@@ -10,8 +10,34 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var (
-	itemHistorys = &model.ItemHistorys{
+func TestAverageVolume(t *testing.T) {
+	defer monkey.UnpatchAll()
+	itemHistorys := mockHistoryData()
+	mockHistory(itemHistorys)
+
+	histroyService := NewItemHistoryService(34, 10000002, false)
+	volume, err := histroyService.AverageVolume(2)
+	assert.NoError(t, err)
+	assert.Equal(t, (6358751950+3910212408)/2, int(volume))
+
+	volume, err = histroyService.AverageVolume(7)
+	assert.NoError(t, err)
+	assert.Equal(t, (6358751950+3910212408)/2, int(volume))
+}
+
+func TestHistory(t *testing.T) {
+	defer monkey.UnpatchAll()
+	itemHistorys := mockHistoryData()
+	mockHistory(itemHistorys)
+
+	histroyService := NewItemHistoryService(34, 10000002, false)
+	history, err := histroyService.History()
+	assert.NoError(t, err)
+	assert.Equal(t, 2, len(*history))
+}
+
+func mockHistoryData() *model.ItemHistorys {
+	return &model.ItemHistorys{
 		&model.ItemHistory{ItemId: 34,
 			Average:    6.81,
 			Highest:    6.96,
@@ -29,12 +55,9 @@ var (
 			Date:       "2021-01-02",
 		},
 	}
-)
+}
 
-func TestAverageVolume(t *testing.T) {
-	defer monkey.UnpatchAll()
-	histroyService := NewItemHistoryService(34, 10000002, false)
-
+func mockHistory(itemHistorys *model.ItemHistorys) {
 	monkey.Patch(cache.Get, func(key string, dest interface{}) error {
 		val, err := json.Marshal(itemHistorys)
 		if err != nil {
@@ -43,12 +66,4 @@ func TestAverageVolume(t *testing.T) {
 		json.Unmarshal([]byte(val), dest)
 		return nil
 	})
-
-	volume, err := histroyService.AverageVolume(2)
-	assert.NoError(t, err)
-	assert.Equal(t, (6358751950+3910212408)/2, int(volume))
-
-	volume, err = histroyService.AverageVolume(7)
-	assert.NoError(t, err)
-	assert.Equal(t, (6358751950+3910212408)/2, int(volume))
 }
