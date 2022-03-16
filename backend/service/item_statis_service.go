@@ -40,7 +40,7 @@ func (is *ItemStatisService) ItemStatis(isBuyOrder bool) (*dto.ItemStatisDTOs, e
 	}
 
 	unitCost := (offerDTO.MaterialCost + offerDTO.IskCost) / float64(offerDTO.Quantity)
-	unitLpCost := offerDTO.LpCost / offerDTO.Quantity
+	unitLpCost := float64(offerDTO.LpCost) / float64(offerDTO.Quantity)
 
 	var orderwList dto.OrderDTOWrappers
 	for _, order := range *orders {
@@ -54,7 +54,7 @@ func (is *ItemStatisService) ItemStatis(isBuyOrder bool) (*dto.ItemStatisDTOs, e
 		}
 		orderw.Cost = unitCost * float64(order.VolumeRemain)
 		orderw.Profit = orderw.Income - orderw.Cost
-		orderw.UnitProfit = int(orderw.Profit / float64(int64(unitLpCost)*order.VolumeRemain))
+		orderw.UnitProfit = int(orderw.Profit / (unitLpCost * float64(order.VolumeRemain)))
 		orderwList = append(orderwList, orderw)
 	}
 	if isBuyOrder {

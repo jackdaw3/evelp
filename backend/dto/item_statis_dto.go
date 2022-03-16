@@ -12,7 +12,7 @@ type ItemStatisDTO struct {
 
 type ItemStatisDTOs []*ItemStatisDTO
 
-func (is *ItemStatisDTO) GenerateUnitProfit(unitLpCost int) {
+func (is *ItemStatisDTO) GenerateUnitProfit(unitLpCost float64) {
 	var (
 		quantity int64
 		income   float64
@@ -31,7 +31,7 @@ func (is *ItemStatisDTO) GenerateUnitProfit(unitLpCost int) {
 	is.Income = int64(income)
 	is.Cost = int64(cost)
 	is.Profit = int64(profit)
-	is.AveUnitProfit = int(is.Profit / (int64(unitLpCost) * is.Quantity))
+	is.AveUnitProfit = int(profit / (unitLpCost * float64(is.Quantity)))
 }
 
 func (is ItemStatisDTOs) Len() int { return len(is) }
