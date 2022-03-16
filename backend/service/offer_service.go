@@ -201,21 +201,21 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 }
 
 func (o *OfferSerivce) conertMaterials(rs model.RequireItems, offerDTO *dto.OfferDTO) dto.MatertialDTOs {
-	var materails dto.MatertialDTOs
+	var materials dto.MatertialDTOs
 
 	for _, r := range rs {
-		var materail dto.MaterialDTO
+		var material dto.MaterialDTO
 		mi, err := model.GetItem(r.ItemId)
 		if err != nil {
 			log.Errorf(err, "get item %v failed", r.ItemId)
 			continue
 		}
 
-		materail.ItemId = mi.ItemId
-		materail.Name = mi.Name.Val(o.lang)
+		material.ItemId = mi.ItemId
+		material.Name = mi.Name.Val(o.lang)
 
-		materail.Quantity = r.Quantity
-		materail.IsBluePrint = false
+		material.Quantity = r.Quantity
+		material.IsBluePrint = false
 
 		mos := NewOrderService(mi.ItemId, o.regionId, false, o.scope)
 		var price float64
@@ -228,7 +228,7 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems, offerDTO *dto.Offe
 			offerDTO.Error = true
 			errorMessage := fmt.Sprintf("get %s price of lp store material %s in The Forge failed: %s",
 				o.materialPrice,
-				materail.Name,
+				material.Name,
 				errors.Cause(err).Error(),
 			)
 			if len(offerDTO.ErrorMessage) > 0 {
@@ -236,33 +236,33 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems, offerDTO *dto.Offe
 			} else {
 				offerDTO.ErrorMessage = errorMessage
 			}
-			materail.Error = true
-			materail.ErrorMessage = errorMessage
+			material.Error = true
+			material.ErrorMessage = errorMessage
 			log.Warnf("get %s price of item %v in region %v failed: %v", o.materialPrice, mos.itemId, mos.regionId, err)
 		}
-		materail.Price = price
-		materail.Cost = materail.Price * float64(materail.Quantity)
-		materails = append(materails, materail)
+		material.Price = price
+		material.Cost = material.Price * float64(material.Quantity)
+		materials = append(materials, material)
 	}
 
-	return materails
+	return materials
 }
 
 func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offerDTO *dto.OfferDTO) dto.MatertialDTOs {
-	var materails dto.MatertialDTOs
+	var materials dto.MatertialDTOs
 
 	for _, m := range ms {
-		var materail dto.MaterialDTO
+		var material dto.MaterialDTO
 		mi, err := model.GetItem(m.ItemId)
 		if err != nil {
 			log.Errorf(err, "get item %v failed", m.ItemId)
 			continue
 		}
 
-		materail.ItemId = mi.ItemId
-		materail.Name = mi.Name.Val(o.lang)
-		materail.IsBluePrint = true
-		materail.Quantity = m.Quantity
+		material.ItemId = mi.ItemId
+		material.Name = mi.Name.Val(o.lang)
+		material.IsBluePrint = true
+		material.Quantity = m.Quantity
 
 		mos := NewOrderService(mi.ItemId, o.regionId, false, o.scope)
 		var price float64
@@ -275,7 +275,7 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 			offerDTO.Error = true
 			errorMessage := fmt.Sprintf("get %s price of manufact material %s in The Forge failed: %s",
 				o.materialPrice,
-				materail.Name,
+				material.Name,
 				errors.Cause(err).Error(),
 			)
 			if len(offerDTO.ErrorMessage) > 0 {
@@ -283,15 +283,15 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 			} else {
 				offerDTO.ErrorMessage = errorMessage
 			}
-			materail.Error = true
-			materail.ErrorMessage = errorMessage
+			material.Error = true
+			material.ErrorMessage = errorMessage
 			log.Warnf("get %s price of item %v in region %v failed: %v", o.materialPrice, mos.itemId, mos.regionId, err)
 		}
-		materail.Price = price
-		materail.Cost = materail.Price * float64(materail.Quantity)
+		material.Price = price
+		material.Cost = material.Price * float64(material.Quantity)
 
-		materails = append(materails, materail)
+		materials = append(materials, material)
 	}
 
-	return materails
+	return materials
 }

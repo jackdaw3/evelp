@@ -47,6 +47,21 @@ var (
 	}
 )
 
+func TestOffer(t *testing.T) {
+	defer monkey.UnpatchAll()
+	mockOffers()
+
+	monkey.Patch(model.GetOffer, func(offerId int) (*model.Offer, error) {
+		return &offer, nil
+	})
+
+	offerService := NewOfferSerivce(1000002, 0.05, 7, "buy", "sell", 0, "en")
+	offerDTO, err := offerService.Offer(offer.ItemId)
+
+	assert.NoError(t, err)
+	assert.Equal(t, 17703, offerDTO.ItemId)
+}
+
 func TestOffers(t *testing.T) {
 	defer monkey.UnpatchAll()
 	offerService := NewOfferSerivce(1000002, 0.05, 7, "buy", "sell", 0, "en")
