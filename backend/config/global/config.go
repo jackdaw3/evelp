@@ -2,10 +2,6 @@ package global
 
 import "time"
 
-var (
-	Conf *Config
-)
-
 type AppConfig struct {
 	ServerPort string `yaml:"serverPort"`
 	LogLevel   string `yaml:"logLevel"`

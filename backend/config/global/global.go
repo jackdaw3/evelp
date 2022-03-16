@@ -9,6 +9,7 @@ import (
 var (
 	ENV       string
 	WORKSPACE string
+	Conf      *Config
 	DB        *gorm.DB
 	ANTS      *ants.Pool
 	REDIS     *redis.Client

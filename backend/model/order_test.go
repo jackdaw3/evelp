@@ -1,6 +1,7 @@
 package model
 
 import (
+	"strings"
 	"testing"
 	"time"
 
@@ -22,7 +23,7 @@ var (
 	scope5 float64 = 0.5
 )
 
-func setUp() error {
+func setUpOrder() error {
 
 	time1, _ := time.Parse(time.RFC3339, "2022-01-13T22:51:59Z")
 	time2, _ := time.Parse(time.RFC3339, "2022-01-11T18:36:34Z")
@@ -50,7 +51,7 @@ func setUp() error {
 	return nil
 }
 func TestGetHighestBuyPrice(t *testing.T) {
-	err := setUp()
+	err := setUpOrder()
 	assert.NoError(t, err)
 
 	invaidHighestPrice1, err := multipleItemOrders.HighestBuyPrice(scope1)
@@ -87,7 +88,7 @@ func TestGetHighestBuyPrice(t *testing.T) {
 }
 
 func TestGetLowestSellPrice(t *testing.T) {
-	err := setUp()
+	err := setUpOrder()
 	assert.NoError(t, err)
 
 	invaidLowestPrice1, err := multipleItemOrders.LowestSellPrice(scope1)
@@ -128,4 +129,10 @@ func TestLastUpdatedToString(t *testing.T) {
 	time.Sleep(1 * time.Second)
 	duration := order.LastUpdatedToString()
 	assert.Equal(t, "1s ago", duration)
+}
+
+func TestExpirationToString(t *testing.T) {
+	order := Order{6173392220, 28758, time.Now(), 90, 30000142, 26350000, 28, 30, true, time.Now()}
+	expiration := order.ExpirationToString()
+	assert.Equal(t, true, strings.Contains(expiration, "90d"))
 }
