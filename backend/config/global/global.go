@@ -7,11 +7,11 @@ import (
 )
 
 var (
-	ENV       string
-	WORKSPACE string
+	Env       string
+	Workspace string
 	Conf      *Config
 	DB        *gorm.DB
-	ANTS      *ants.Pool
-	REDIS     *redis.Client
-	LANGS     [6]string = [6]string{DE, EN, FR, JA, RU, ZH}
+	Ants      *ants.Pool
+	Redis     *redis.Client
+	Langs     [6]string = [6]string{DE, EN, FR, JA, RU, ZH}
 )

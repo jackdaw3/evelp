@@ -41,7 +41,7 @@ func (s *starSystemsData) Refresh() error {
 		}
 
 		wg.Add(1)
-		global.ANTS.Submit(s.getStarSystem(starSystem, &wg))
+		global.Ants.Submit(s.getStarSystem(starSystem, &wg))
 	}
 
 	wg.Wait()
@@ -85,7 +85,7 @@ func (s *starSystemsData) getStarSystem(starSystem *model.StarSystem, wg *sync.W
 	return func() {
 		defer wg.Done()
 
-		for _, lang := range global.LANGS {
+		for _, lang := range global.Langs {
 			req := fmt.Sprintf("%s/universe/systems/%d/?datasource=%s&language=%s",
 				global.Conf.Data.Remote.Address,
 				starSystem.SystemId,

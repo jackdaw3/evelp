@@ -65,7 +65,7 @@ func setUp() error {
 		return err
 	}
 
-	global.REDIS = redis.NewClient(&redis.Options{
+	global.Redis = redis.NewClient(&redis.Options{
 		Addr: server.Addr(),
 	})
 

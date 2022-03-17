@@ -10,13 +10,9 @@ import (
 	"github.com/robfig/cron/v3"
 )
 
-var (
-	client = &http.Client{}
-)
+var client = &http.Client{}
 
-const (
-	the_forge = 10000002
-)
+const the_forge = 10000002
 
 func CacheData() error {
 	log.Info("start refresh cache data")
@@ -25,6 +21,12 @@ func CacheData() error {
 	ordersData := new(ordersData)
 	ordersData.orders = orders
 	ordersData.expirationTime = global.Conf.Redis.OrderExpireTime * time.Hour
+	items, err := model.GetAllItems()
+	if err != nil {
+		return err
+	}
+	ordersData.items = items
+
 	go func() {
 		for {
 			if err := ordersData.Refresh(); err != nil {
@@ -35,6 +37,12 @@ func CacheData() error {
 
 	itemHistroyData := new(itemHistroy)
 	itemHistroyData.expirationTime = global.Conf.Redis.HistoryExpireTime * time.Hour
+	products, err := model.GetAllProducts()
+	if err != nil {
+		return err
+	}
+	itemHistroyData.products = products
+
 	cron := cron.New(cron.WithSeconds())
 	if _, err := cron.AddFunc("@daily", itemHistroyData.invoke()); err != nil {
 		return err

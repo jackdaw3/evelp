@@ -41,7 +41,7 @@ func (r *reginosData) Refresh() error {
 		}
 
 		wg.Add(1)
-		if err := global.ANTS.Submit(r.getRegion(region, &wg)); err != nil {
+		if err := global.Ants.Submit(r.getRegion(region, &wg)); err != nil {
 			return err
 		}
 	}
@@ -87,7 +87,7 @@ func (r *reginosData) getRegion(region *model.Region, wg *sync.WaitGroup) func()
 	return func() {
 		defer wg.Done()
 
-		for _, lang := range global.LANGS {
+		for _, lang := range global.Langs {
 			req := fmt.Sprintf("%s/universe/regions/%d/?datasource=%s&language=%s",
 				global.Conf.Data.Remote.Address,
 				region.RegionId,

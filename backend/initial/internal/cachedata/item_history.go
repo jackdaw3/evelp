@@ -11,50 +11,18 @@ import (
 	"io/ioutil"
 	"strconv"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 type itemHistroy struct {
 	expirationTime time.Duration
+	products       map[int]interface{}
 }
 
 func (i *itemHistroy) invoke() func() {
 	return func() {
-		products := make(map[int]struct{})
+		log.Debug("start load items history to redis")
 
-		offers, err := model.GetOffers()
-		if err != nil {
-			log.Error(err, "get offers failed")
-			return
-		}
-
-		for _, offer := range *offers {
-			if offer.IsBluePrint {
-				bluePrint, err := model.GetBluePrint(offer.ItemId)
-				if err != nil {
-					log.Errorf(err, "get blue print %d failed", offer.ItemId)
-					continue
-				}
-				if len(bluePrint.Products) == 0 {
-					log.Error(errors.Errorf("offer %d's bluePrint %d have no product", offer.OfferId, bluePrint.BlueprintId))
-					continue
-				}
-				product, err := model.GetItem(bluePrint.Products[0].ItemId)
-				if err != nil {
-					log.Errorf(err, "get item %d failed", bluePrint.Products[0].ItemId)
-					continue
-				}
-				products[product.ItemId] = struct{}{}
-
-			} else {
-				products[offer.ItemId] = struct{}{}
-			}
-		}
-
-		log.Debugf("start load %d items history to redis", len(products))
-
-		for p := range products {
+		for p := range i.products {
 			req := fmt.Sprintf("%s/markets/%d/history/?datasource=%s&type_id=%d",
 				global.Conf.Data.Remote.Address,
 				the_forge,

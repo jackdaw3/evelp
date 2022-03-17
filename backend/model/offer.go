@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"evelp/config/global"
+	"evelp/log"
 	"evelp/util/cache"
 	"fmt"
 	"sort"
@@ -156,4 +157,68 @@ func SaveOffers(offers *Offers) error {
 		}
 	}
 	return nil
+}
+
+func GetAllItems() (map[int]interface{}, error) {
+	offers, err := GetOffers()
+	if err != nil {
+		return nil, nil
+	}
+
+	items := make(map[int]interface{})
+	for _, offer := range *offers {
+		if offer.IsBluePrint {
+			bluePrint, err := GetBluePrint(offer.ItemId)
+			if err != nil {
+				log.Errorf(err, "get blueprint %d failed", offer.ItemId)
+			}
+			if len(bluePrint.Products) > 0 {
+				for _, product := range bluePrint.Products {
+					items[product.ItemId] = struct{}{}
+				}
+			}
+			if len(bluePrint.Materials) > 0 {
+				for _, material := range bluePrint.Materials {
+					items[material.ItemId] = struct{}{}
+				}
+			}
+
+		} else {
+			items[offer.ItemId] = struct{}{}
+		}
+
+		if len(offer.RequireItems) > 0 {
+			for _, requireItem := range offer.RequireItems {
+				items[requireItem.ItemId] = struct{}{}
+			}
+		}
+	}
+
+	return items, nil
+}
+
+func GetAllProducts() (map[int]interface{}, error) {
+	offers, err := GetOffers()
+	if err != nil {
+		return nil, nil
+	}
+
+	items := make(map[int]interface{})
+	for _, offer := range *offers {
+		if offer.IsBluePrint {
+			bluePrint, err := GetBluePrint(offer.ItemId)
+			if err != nil {
+				log.Errorf(err, "get blueprint %d failed", offer.ItemId)
+			}
+			if len(bluePrint.Products) > 0 {
+				for _, product := range bluePrint.Products {
+					items[product.ItemId] = struct{}{}
+				}
+			}
+		} else {
+			items[offer.ItemId] = struct{}{}
+		}
+	}
+
+	return items, nil
 }

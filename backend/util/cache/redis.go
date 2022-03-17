@@ -18,7 +18,7 @@ func Set(key string, value interface{}, expirationTime time.Duration) error {
 		return errors.Wrapf(err, "redis marshal value %v failed", value)
 	}
 
-	if err := global.REDIS.Set(ctx, key, val, expirationTime).Err(); err != nil {
+	if err := global.Redis.Set(ctx, key, val, expirationTime).Err(); err != nil {
 		return errors.Wrapf(err, "redis set key %v value %v failed", key, val)
 	}
 
@@ -30,7 +30,7 @@ func Get(key string, dest interface{}) error {
 		return err
 	}
 
-	val, err := global.REDIS.Get(ctx, key).Result()
+	val, err := global.Redis.Get(ctx, key).Result()
 	if err != nil {
 		return errors.Wrapf(err, "redis get %v failed", key)
 	}
@@ -41,7 +41,7 @@ func Get(key string, dest interface{}) error {
 }
 
 func Exist(key string) error {
-	val, err := global.REDIS.Exists(ctx, key).Result()
+	val, err := global.Redis.Exists(ctx, key).Result()
 	if err != nil {
 		return errors.Wrapf(err, "redis check %v exist failed", key)
 	}

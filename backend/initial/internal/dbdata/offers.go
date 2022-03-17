@@ -54,7 +54,7 @@ func (o *offersData) getOffersMap() error {
 
 	for _, corporation := range *corporations {
 		wg.Add(1)
-		if err := global.ANTS.Submit(o.getOffers(corporation.CorporationId, &wg)); err != nil {
+		if err := global.Ants.Submit(o.getOffers(corporation.CorporationId, &wg)); err != nil {
 			return err
 		}
 	}

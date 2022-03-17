@@ -30,6 +30,6 @@ func initRedis() error {
 	}
 	log.Infof("%v connect to redis server: %s", pong, global.Conf.Redis.Address)
 
-	global.REDIS = rdb
+	global.Redis = rdb
 	return nil
 }

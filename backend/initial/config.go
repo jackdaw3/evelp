@@ -32,23 +32,23 @@ func initEnv() error {
 	if env == "" {
 		return errors.New("no ENV environment variable find on this machine")
 	} else {
-		global.ENV = env
+		global.Env = env
 	}
-	log.Infof("Env: %s", global.ENV)
+	log.Infof("Env: %s", global.Env)
 
 	var err error
-	global.WORKSPACE, err = os.Getwd()
+	global.Workspace, err = os.Getwd()
 	if err != nil {
 		return errors.Wrap(err, "get workspace failed")
 	}
 
-	log.Infof("Workspace: %s", global.WORKSPACE)
+	log.Infof("Workspace: %s", global.Workspace)
 	return nil
 }
 
 func initViper() error {
-	viper.AddConfigPath(global.WORKSPACE + "/config")
-	viper.SetConfigName("application-" + global.ENV)
+	viper.AddConfigPath(global.Workspace + "/config")
+	viper.SetConfigName("application-" + global.Env)
 	viper.SetConfigType("yaml")
 
 	if err := viper.ReadInConfig(); err != nil {
@@ -63,11 +63,11 @@ func initViper() error {
 }
 
 func ginMode() {
-	if global.ENV == "local" {
+	if global.Env == "local" {
 		gin.SetMode(gin.DebugMode)
 	}
 
-	if global.ENV == "prod" {
+	if global.Env == "prod" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 }

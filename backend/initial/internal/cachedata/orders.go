@@ -24,6 +24,7 @@ var (
 type ordersData struct {
 	orders         map[string]*model.Orders
 	expirationTime time.Duration
+	items          map[int]interface{}
 }
 
 func (o *ordersData) Refresh() error {
@@ -55,7 +56,7 @@ func (o *ordersData) loadOrdersByRegion(regionId int) error {
 
 	for i := 1; i <= pages; i++ {
 		wg.Add(1)
-		global.ANTS.Submit(o.loadOrdersByRegionPage(regionId, i))
+		global.Ants.Submit(o.loadOrdersByRegionPage(regionId, i))
 	}
 
 	wg.Wait()
@@ -92,6 +93,10 @@ func (o *ordersData) loadOrdersByRegionPage(regionId int, page int) func() {
 		}
 
 		for _, order := range orders {
+			_, ok := o.items[order.ItemId]
+			if !ok {
+				continue
+			}
 			key := cache.Key("order", strconv.Itoa(regionId), strconv.Itoa(order.ItemId))
 			o.syncPutToMap(key, &order)
 		}
