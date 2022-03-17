@@ -1,13 +1,21 @@
 package service
 
 import (
+	"context"
 	"evelp/dto"
 	"evelp/log"
 	"evelp/model"
 	"fmt"
 	"sort"
+	"sync"
 
 	"github.com/pkg/errors"
+	"golang.org/x/sync/semaphore"
+)
+
+const (
+	weight = 1
+	limit  = 3
 )
 
 type OfferSerivce struct {
@@ -49,23 +57,44 @@ func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 		return nil, err
 	}
 
+	var (
+		wg sync.WaitGroup
+		mu sync.Mutex
+	)
+	sem := semaphore.NewWeighted(limit)
+
 	var offerDTOs dto.OfferDTOs
 	for _, offer := range *offers {
-		var offerDTO *dto.OfferDTO
-		var err error
-		if offer.IsBluePrint {
-			offerDTO, err = o.convertBluePrint(offer)
-		} else {
-			offerDTO, err = o.convertOffer(offer)
-		}
+		sem.Acquire(context.Background(), weight)
+		wg.Add(1)
 
-		if err != nil {
-			log.Errorf(err, "get offer %d failed", offer.OfferId)
-			continue
-		}
-		offerDTOs = append(offerDTOs, *offerDTO)
+		go func(offer *model.Offer) {
+			defer sem.Release(weight)
+			defer wg.Done()
+
+			var (
+				offerDTO *dto.OfferDTO
+				err      error
+			)
+
+			if offer.IsBluePrint {
+				offerDTO, err = o.convertBluePrint(offer)
+			} else {
+				offerDTO, err = o.convertOffer(offer)
+			}
+
+			if err != nil {
+				log.Errorf(err, "get offer %d failed", offer.OfferId)
+				return
+			}
+
+			defer mu.Unlock()
+			mu.Lock()
+			offerDTOs = append(offerDTOs, *offerDTO)
+		}(offer)
 	}
 
+	wg.Wait()
 	sort.Sort(offerDTOs)
 
 	return &offerDTOs, nil
