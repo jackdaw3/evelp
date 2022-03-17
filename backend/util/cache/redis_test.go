@@ -3,7 +3,6 @@ package cache
 import (
 	"encoding/json"
 	"evelp/config/global"
-	"evelp/model"
 	"fmt"
 	"testing"
 	"time"
@@ -22,18 +21,32 @@ const (
 	expirationTime = time.Hour
 )
 
+type order_test struct {
+	OrderId      int       `json:"order_id"`
+	ItemId       int       `json:"type_id"`
+	Issued       time.Time `json:"issued"`
+	Duration     int       `json:"duration"`
+	SystemId     int       `json:"system_id"`
+	Price        float64   `json:"price"`
+	VolumeRemain int64     `json:"volume_remain"`
+	VolumeTotal  int64     `json:"volume_total"`
+	IsBuyOrder   bool      `json:"is_buy_order"`
+	LastUpdated  time.Time `json:"last_updated"`
+}
+
 var (
-	order  *model.Order
 	server *miniredis.Miniredis
+	order  *order_test
 )
 
 func setUp() error {
+
 	issued, err := time.Parse(time.RFC3339, "2022-01-07T05:15:59Z")
 	if err != nil {
 		return err
 	}
 
-	order = &model.Order{
+	order = &order_test{
 		OrderId:      6173392220,
 		ItemId:       28758,
 		Issued:       issued,
@@ -67,7 +80,7 @@ func TestGet(t *testing.T) {
 	assert.NoError(t, err)
 	server.Set(key, string(b))
 
-	result := new(model.Order)
+	result := new(order_test)
 
 	err = Get(key, result)
 	assert.NoError(t, err)

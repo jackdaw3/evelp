@@ -70,7 +70,12 @@ func (o *offersData) covertOffersWrapper(offersWrapper offersWrapper) {
 	for _, offer := range *offersWrapper.offers {
 		if value, ok := o.offersMap[offer.OfferId]; !ok {
 			offer.CorporationIds = append(offer.CorporationIds, offersWrapper.corporationId)
-			if bluePrint := model.GetBluePrint(offer.ItemId); !bluePrint.Empty() {
+			bluePrint, err := model.GetBluePrint(offer.ItemId)
+			if err != nil {
+				log.Errorf(err, "get blue print %d failed", offer.ItemId)
+				continue
+			}
+			if !bluePrint.Empty() {
 				offer.IsBluePrint = true
 			}
 			o.offersMap[offer.OfferId] = offer

@@ -9,12 +9,12 @@ import (
 )
 
 type Name struct {
-	De string `yaml:"de"`
-	En string `yaml:"en"`
-	Fr string `yaml:"fr"`
-	Ja string `yaml:"ja"`
-	Ru string `yaml:"ru"`
-	Zh string `yaml:"zh"`
+	De string `yaml:"de" json:"de"`
+	En string `yaml:"en" json:"en"`
+	Fr string `yaml:"fr" json:"fr"`
+	Ja string `yaml:"ja" json:"ja"`
+	Ru string `yaml:"ru" json:"ru"`
+	Zh string `yaml:"zh" json:"zh"`
 }
 
 func (n *Name) Scan(value interface{}) error {

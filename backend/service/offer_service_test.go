@@ -85,8 +85,8 @@ func mockOffers() {
 		return &model.Offers{&offer, &bluePrintOffer}, nil
 	})
 
-	monkey.Patch(model.GetBluePrint, func(int) *model.BluePrint {
-		return &bluePrint
+	monkey.Patch(model.GetBluePrint, func(int) (*model.BluePrint, error) {
+		return &bluePrint, nil
 	})
 
 	monkey.Patch(model.GetItem, func(id int) (*model.Item, error) {

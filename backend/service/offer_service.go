@@ -135,7 +135,10 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, error) {
 	var offerDTO dto.OfferDTO
 
-	bluePrint := model.GetBluePrint(offer.ItemId)
+	bluePrint, err := model.GetBluePrint(offer.ItemId)
+	if err != nil {
+		return nil, errors.WithMessagef(err, "get blue print %d failed", offer.ItemId)
+	}
 	if len(bluePrint.Products) == 0 {
 		return nil, errors.Errorf("offer %d's bluePrint %d have no product", offer.OfferId, bluePrint.BlueprintId)
 	}

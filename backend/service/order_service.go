@@ -107,7 +107,10 @@ func (o *OrderService) ordersFromCache() (*model.Orders, error) {
 
 	var key string
 	if o.isBluePrint {
-		bluePrint := model.GetBluePrint(o.itemId)
+		bluePrint, err := model.GetBluePrint(o.itemId)
+		if err != nil {
+			return nil, errors.WithMessagef(err, "get blue print %d failed", o.itemId)
+		}
 		if len(bluePrint.Products) == 0 {
 			return nil, errors.Errorf("offer %d's bluePrint %d have no product", o.itemId, bluePrint.BlueprintId)
 		}

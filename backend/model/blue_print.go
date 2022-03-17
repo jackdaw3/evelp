@@ -4,9 +4,17 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"evelp/config/global"
+	"evelp/util/cache"
+	"strconv"
+	"time"
 
 	"github.com/pkg/errors"
 	"gorm.io/gorm/clause"
+)
+
+const (
+	blue_print_key        = "blueprint"
+	blue_print_expiration = -1 * time.Second
 )
 
 type BluePrint struct {
@@ -91,16 +99,36 @@ func (m ManufactMaterials) Value() (driver.Value, error) {
 	return string(str), nil
 }
 
-func GetBluePrint(blueprintItemId int) *BluePrint {
+func GetBluePrint(blueprintItemId int) (*BluePrint, error) {
 	var bluePrint BluePrint
-	global.DB.Find(&bluePrint, blueprintItemId)
-	return &bluePrint
+
+	key := cache.Key(blue_print_key, strconv.Itoa(blueprintItemId))
+	exist := cache.Exist(key)
+
+	if exist == nil {
+		if err := cache.Get(key, &bluePrint); err != nil {
+			return nil, err
+		}
+		return &bluePrint, nil
+	} else {
+		result := global.DB.First(&bluePrint, blueprintItemId)
+		if err := cache.Set(key, bluePrint, blue_print_expiration); err != nil {
+			return nil, err
+		}
+		return &bluePrint, result.Error
+	}
 }
 
 func SaveBluePrint(bluePrint *BluePrint) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&bluePrint).Error; err != nil {
 		return errors.Wrap(err, "save blueprint to DB failed")
 	}
+
+	key := cache.Key(blue_print_key, strconv.Itoa(bluePrint.BlueprintId))
+	if err := cache.Set(key, *bluePrint, blue_print_expiration); err != nil {
+		return err
+	}
+
 	return nil
 }
 

@@ -2,15 +2,23 @@ package model
 
 import (
 	"evelp/config/global"
+	"evelp/util/cache"
 	"reflect"
+	"strconv"
+	"time"
 
 	"github.com/pkg/errors"
 	"gorm.io/gorm/clause"
 )
 
+const (
+	system_key        = "system"
+	system_expiration = -1 * time.Second
+)
+
 type StarSystem struct {
-	SystemId int  `gorm:"type:int;not null;primary_key;autoIncrement:false"`
-	Name     Name `gorm:"type:text"`
+	SystemId int  `gorm:"type:int;not null;primary_key;autoIncrement:false" json:"system_id"`
+	Name     Name `gorm:"type:text" json:"name"`
 }
 
 type StarSystems []*StarSystem
@@ -27,14 +35,34 @@ func (s StarSystems) Swap(i, j int) {
 
 func GetStarSystem(systemId int) (*StarSystem, error) {
 	var starSystem StarSystem
-	result := global.DB.First(&starSystem, systemId)
-	return &starSystem, result.Error
+
+	key := cache.Key(system_key, strconv.Itoa(systemId))
+	exist := cache.Exist(key)
+
+	if exist == nil {
+		if err := cache.Get(key, &starSystem); err != nil {
+			return nil, err
+		}
+		return &starSystem, nil
+	} else {
+		result := global.DB.First(&starSystem, systemId)
+		if err := cache.Set(key, starSystem, system_expiration); err != nil {
+			return nil, err
+		}
+		return &starSystem, result.Error
+	}
 }
 
 func SaveStarSystem(starSystem *StarSystem) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&starSystem).Error; err != nil {
 		return errors.Wrap(err, "save star system to DB failed")
 	}
+
+	key := cache.Key(system_key, strconv.Itoa(starSystem.SystemId))
+	if err := cache.Set(key, *starSystem, system_expiration); err != nil {
+		return err
+	}
+
 	return nil
 }
 

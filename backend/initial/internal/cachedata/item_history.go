@@ -31,7 +31,11 @@ func (i *itemHistroy) invoke() func() {
 
 		for _, offer := range *offers {
 			if offer.IsBluePrint {
-				bluePrint := model.GetBluePrint(offer.ItemId)
+				bluePrint, err := model.GetBluePrint(offer.ItemId)
+				if err != nil {
+					log.Errorf(err, "get blue print %d failed", offer.ItemId)
+					continue
+				}
 				if len(bluePrint.Products) == 0 {
 					log.Error(errors.Errorf("offer %d's bluePrint %d have no product", offer.OfferId, bluePrint.BlueprintId))
 					continue

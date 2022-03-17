@@ -141,10 +141,10 @@ func mockOrders() {
 		return nil
 	})
 
-	monkey.Patch(model.GetBluePrint, func(bluePrintId int) *model.BluePrint {
+	monkey.Patch(model.GetBluePrint, func(bluePrintId int) (*model.BluePrint, error) {
 		if bluePrintId == bluePrint.BlueprintId {
-			return bluePrint
+			return bluePrint, nil
 		}
-		return nil
+		return nil, nil
 	})
 }
