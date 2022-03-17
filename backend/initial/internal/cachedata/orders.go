@@ -27,7 +27,7 @@ type ordersData struct {
 }
 
 func (o *ordersData) Refresh() error {
-	log.Infof("start load orders to redis")
+	log.Debugf("start load orders to redis")
 
 	log.Debugf("start load %d region's orders", the_forge)
 	if err := o.loadOrdersByRegion(the_forge); err != nil {
@@ -42,7 +42,7 @@ func (o *ordersData) Refresh() error {
 	}
 
 	o.clearMap()
-	log.Infof("orders saved to reids")
+	log.Debugf("orders saved to reids")
 
 	return nil
 }

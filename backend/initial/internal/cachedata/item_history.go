@@ -52,7 +52,7 @@ func (i *itemHistroy) invoke() func() {
 			}
 		}
 
-		log.Infof("start load %d items history to redis", len(products))
+		log.Debugf("start load %d items history to redis", len(products))
 
 		for p := range products {
 			req := fmt.Sprintf("%s/markets/%d/history/?datasource=%s&type_id=%d",
@@ -90,6 +90,6 @@ func (i *itemHistroy) invoke() func() {
 			}
 		}
 
-		log.Infof("Items histroy saved to reids")
+		log.Debugf("Items histroy saved to reids")
 	}
 }
