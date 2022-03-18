@@ -15,20 +15,20 @@
       <el-tab-pane :label="orderLabel.buyOrder">
         <el-row :gutter="35">
           <el-col :span="12">
-            <OrderTable :data="buyOrders" :loading="order.buyLoading"></OrderTable>
+            <OrderTable :data="buyOrders" :loading="buyLoading"></OrderTable>
           </el-col>
           <el-col :span="12">
-            <StatisTable :data="buyStatis" :loading="order.buyStatisLoading"></StatisTable>
+            <StatisTable :data="buyStatis" :loading="buyStatisLoading"></StatisTable>
           </el-col>
         </el-row>
       </el-tab-pane>
       <el-tab-pane :label="orderLabel.sellOrder">
         <el-row :gutter="35">
           <el-col :span="12">
-            <OrderTable :data="sellOrders" :loading="order.sellStatisLoading"></OrderTable>
+            <OrderTable :data="sellOrders" :loading="sellLoading"></OrderTable>
           </el-col>
           <el-col :span="12">
-            <StatisTable :data="sellStatis" :loading="order.sellStatisLoading"></StatisTable>
+            <StatisTable :data="sellStatis" :loading="sellStatisLoading"></StatisTable>
           </el-col>
         </el-row>
       </el-tab-pane>
@@ -83,10 +83,6 @@ export default {
         materialPrice: "sell",
         scope: "0.05",
         tax: 0,
-        sellLoading: false,
-        buyLoading: false,
-        sellStatisLoading: false,
-        buyStatisLoading: false,
       },
       history: {
         average: [],
@@ -105,6 +101,10 @@ export default {
       buyOrders: [],
       buyStatis: [],
       orderLabel: this.$t("message.order"),
+      sellLoading: false,
+      buyLoading: false,
+      sellStatisLoading: false,
+      buyStatisLoading: false,
     };
   },
   methods: {
@@ -148,18 +148,15 @@ export default {
       this.getItemName(this.order.itemId);
       this.getCorporationName(this.order.corporationId);
 
-      this.order.buyLoading = true;
-      this.order.buyStatisLoading = true;
-      this.order.sellLoading = true;
-      this.order.sellStatisLoading = true;
+      this.buyLoading = true;
+      this.buyStatisLoading = true;
+      this.sellLoading = true;
+      this.sellStatisLoading = true;
+
       this.getOrders(true);
-      this.order.buyLoading = false;
       this.getStatis(true);
-      this.order.buyStatisLoading = false;
       this.getOrders(false);
-      this.order.sellLoading = false;
       this.getStatis(false);
-      this.order.sellStatisLoading = false;
       this.getHistory();
     },
     getOrders(isBuyOrder) {
@@ -178,8 +175,17 @@ export default {
         .then((response) => {
           if (!isBuyOrder) {
             this.sellOrders = response.data;
+            this.sellLoading = false;
           } else {
             this.buyOrders = response.data;
+            this.buyLoading = false;
+          }
+        })
+        .catch(() => {
+          if (isBuyOrder) {
+            this.buyLoading = false;
+          } else {
+            this.sellLoading = false;
           }
         });
     },
@@ -199,8 +205,17 @@ export default {
         .then((response) => {
           if (!isBuyOrder) {
             this.sellStatis = response.data;
+            this.sellStatisLoading = false;
           } else {
             this.buyStatis = response.data;
+            this.buyStatisLoading = false;
+          }
+        })
+        .catch(() => {
+          if (isBuyOrder) {
+            this.buyStatisLoading = false;
+          } else {
+            this.sellStatisLoading = false;
           }
         });
     },
