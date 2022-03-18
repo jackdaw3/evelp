@@ -37,7 +37,7 @@ const zh = {
       price: "单价",
       income: "收入",
       profit: "利润",
-      volume: "日成交量",
+      volume: "交易量",
       saleIndex: "出货指数",
       unitProfit: "LP比例",
       lookUp: "物品名关键字搜索",

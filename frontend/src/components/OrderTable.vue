@@ -14,9 +14,9 @@
         :label="orderLabel.price"
         :formatter="stateFormat"
         sortable
-        min-width="20%"
+        min-width="18%"
       ></el-table-column>
-      <el-table-column prop="Expiration" :label="orderLabel.expiration" min-width="20%"></el-table-column>
+      <el-table-column prop="Expiration" :label="orderLabel.expiration" min-width="22%"></el-table-column>
       <el-table-column prop="LastUpdated" :label="orderLabel.lastUpdated" min-width="15%"></el-table-column>
     </el-table>
   </div>
