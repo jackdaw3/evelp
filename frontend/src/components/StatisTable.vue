@@ -1,6 +1,6 @@
 <template>
   <div class="StatisTable">
-    <el-table :data="data" stripe :cell-style="tableStyle" style="width: 100%">
+    <el-table :data="data" stripe :cell-style="tableStyle" style="width: 100%" v-loading="loading">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-table
@@ -16,11 +16,7 @@
               :label="orderLabel.systemName"
               min-width="15%"
             ></el-table-column>
-            <el-table-column
-              :label="orderLabel.volume"
-              :formatter="volumeFormat"
-              min-width="15%"
-            ></el-table-column>
+            <el-table-column :label="orderLabel.volume" :formatter="volumeFormat" min-width="15%"></el-table-column>
             <el-table-column
               prop="OrderDTO.Price"
               :label="orderLabel.price"
@@ -71,6 +67,7 @@
 export default {
   props: {
     data: Array,
+    loading: Boolean,
   },
   data() {
     return {

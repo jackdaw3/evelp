@@ -15,20 +15,20 @@
       <el-tab-pane :label="orderLabel.buyOrder">
         <el-row :gutter="35">
           <el-col :span="12">
-            <OrderTable :data="buyOrders"></OrderTable>
+            <OrderTable :data="buyOrders" :loading="order.buyLoading"></OrderTable>
           </el-col>
           <el-col :span="12">
-            <StatisTable :data="buyStatis"></StatisTable>
+            <StatisTable :data="buyStatis" :loading="order.buyStatisLoading"></StatisTable>
           </el-col>
         </el-row>
       </el-tab-pane>
       <el-tab-pane :label="orderLabel.sellOrder">
         <el-row :gutter="35">
           <el-col :span="12">
-            <OrderTable :data="sellOrders"></OrderTable>
+            <OrderTable :data="sellOrders" :loading="order.sellStatisLoading"></OrderTable>
           </el-col>
           <el-col :span="12">
-            <StatisTable :data="sellStatis"></StatisTable>
+            <StatisTable :data="sellStatis" :loading="order.sellStatisLoading"></StatisTable>
           </el-col>
         </el-row>
       </el-tab-pane>
@@ -64,14 +64,7 @@ export default {
     if (localStorage.lang) {
       this.$i18n.locale = localStorage.lang;
     }
-    this.getParams();
-    this.getItemName(this.order.itemId);
-    this.getCorporationName(this.order.corporationId);
-    this.getOrders(true);
-    this.getStatis(true);
-    this.getOrders(false);
-    this.getStatis(false);
-    this.getHistory();
+    this.initial();
   },
   computed: {
     stockHeight() {
@@ -90,6 +83,10 @@ export default {
         materialPrice: "sell",
         scope: "0.05",
         tax: 0,
+        sellLoading: false,
+        buyLoading: false,
+        sellStatisLoading: false,
+        buyStatisLoading: false,
       },
       history: {
         average: [],
@@ -145,6 +142,25 @@ export default {
         .then((response) => {
           this.order.corporationName = response.data.CorporationName;
         });
+    },
+    initial() {
+      this.getParams();
+      this.getItemName(this.order.itemId);
+      this.getCorporationName(this.order.corporationId);
+
+      this.order.buyLoading = true;
+      this.order.buyStatisLoading = true;
+      this.order.sellLoading = true;
+      this.order.sellStatisLoading = true;
+      this.getOrders(true);
+      this.order.buyLoading = false;
+      this.getStatis(true);
+      this.order.buyStatisLoading = false;
+      this.getOrders(false);
+      this.order.sellLoading = false;
+      this.getStatis(false);
+      this.order.sellStatisLoading = false;
+      this.getHistory();
     },
     getOrders(isBuyOrder) {
       this.axios

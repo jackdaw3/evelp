@@ -90,9 +90,23 @@ export default {
       this.form.tax = 0;
     },
     closeDialog() {
-      this.$store.dispatch("setForm", this.form);
-      localStorage.form = JSON.stringify(this.form);
-      this.$emit("form-change");
+      if (!localStorage.form) {
+        this.$store.dispatch("setForm", this.form);
+        localStorage.form = JSON.stringify(this.form);
+        this.$emit("form-change");
+      } else {
+        const old = JSON.parse(localStorage.form);
+        if (
+          this.form.materialPrice != old.materialPrice ||
+          this.form.productPrice != old.productPrice ||
+          this.form.days != old.days ||
+          this.form.tax != old.tax
+        ) {
+          this.$store.dispatch("setForm", this.form);
+          localStorage.form = JSON.stringify(this.form);
+          this.$emit("form-change");
+        }
+      }
     },
     taxFormat(e) {
       return e + "%";
