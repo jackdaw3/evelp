@@ -6,16 +6,12 @@ import (
 	"evelp/log"
 	"evelp/model"
 	"fmt"
+	"runtime"
 	"sort"
 	"sync"
 
 	"github.com/pkg/errors"
 	"golang.org/x/sync/semaphore"
-)
-
-const (
-	weight = 1
-	limit  = 3
 )
 
 type OfferSerivce struct {
@@ -51,6 +47,7 @@ func (o *OfferSerivce) Offer(offerId int) (*dto.OfferDTO, error) {
 
 	return offerDTO, nil
 }
+
 func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 	offers, err := model.GetOffersByCorporation(corporationId)
 	if err != nil {
@@ -58,8 +55,10 @@ func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 	}
 
 	var (
-		wg sync.WaitGroup
-		mu sync.Mutex
+		wg     sync.WaitGroup
+		mu     sync.Mutex
+		limit  = int64(runtime.NumCPU())
+		weight = int64(1)
 	)
 	sem := semaphore.NewWeighted(limit)
 
@@ -98,7 +97,6 @@ func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 	sort.Sort(offerDTOs)
 
 	return &offerDTOs, nil
-
 }
 
 func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
