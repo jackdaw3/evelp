@@ -15,6 +15,7 @@ const (
 	item_expiration = -1 * time.Second
 )
 
+//easyjson:json
 type Item struct {
 	ItemId int     `gorm:"type:int;not null;primary_key;autoIncrement:false" json:"item_id"`
 	Name   Name    `gorm:"type:text" yaml:"name" json:"name"`
@@ -42,7 +43,7 @@ func GetItem(id int) (*Item, error) {
 		return &item, nil
 	} else {
 		result := global.DB.First(&item, id)
-		if err := cache.Set(key, item, item_expiration); err != nil {
+		if err := cache.Set(key, &item, item_expiration); err != nil {
 			return nil, err
 		}
 		return &item, result.Error
@@ -55,7 +56,7 @@ func SaveItem(item *Item) error {
 	}
 
 	key := cache.Key(item_key, strconv.Itoa(item.ItemId))
-	if err := cache.Set(key, *item, item_expiration); err != nil {
+	if err := cache.Set(key, item, item_expiration); err != nil {
 		return err
 	}
 

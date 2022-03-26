@@ -16,11 +16,13 @@ const (
 	system_expiration = -1 * time.Second
 )
 
+//easyjson:json
 type StarSystem struct {
 	SystemId int  `gorm:"type:int;not null;primary_key;autoIncrement:false" json:"system_id"`
 	Name     Name `gorm:"type:text" json:"name"`
 }
 
+//easyjson:json
 type StarSystems []*StarSystem
 
 func (s StarSystems) Len() int { return len(s) }
@@ -46,7 +48,7 @@ func GetStarSystem(systemId int) (*StarSystem, error) {
 		return &starSystem, nil
 	} else {
 		result := global.DB.First(&starSystem, systemId)
-		if err := cache.Set(key, starSystem, system_expiration); err != nil {
+		if err := cache.Set(key, &starSystem, system_expiration); err != nil {
 			return nil, err
 		}
 		return &starSystem, result.Error
@@ -59,7 +61,7 @@ func SaveStarSystem(starSystem *StarSystem) error {
 	}
 
 	key := cache.Key(system_key, strconv.Itoa(starSystem.SystemId))
-	if err := cache.Set(key, *starSystem, system_expiration); err != nil {
+	if err := cache.Set(key, starSystem, system_expiration); err != nil {
 		return err
 	}
 

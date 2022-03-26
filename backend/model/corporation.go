@@ -17,12 +17,14 @@ const (
 	corporation_expiration  = -1 * time.Second
 )
 
+//easyjson:json
 type Corporation struct {
 	CorporationId int  `gorm:"type:int;not null;primary_key;autoIncrement:false"`
 	FactionId     int  `gorm:"type:int" yaml:"factionID"`
 	Name          Name `gorm:"type:text" yaml:"nameID"`
 }
 
+//easyjson:json
 type Corporations []Corporation
 
 func (c Corporations) Len() int { return len(c) }
@@ -46,7 +48,7 @@ func GetCorporation(corporationId int) (*Corporation, error) {
 		return &corporation, nil
 	} else {
 		result := global.DB.First(&corporation, corporationId)
-		if err := cache.Set(key, corporation, corporation_expiration); err != nil {
+		if err := cache.Set(key, &corporation, corporation_expiration); err != nil {
 			return nil, err
 		}
 		return &corporation, result.Error
@@ -65,7 +67,7 @@ func GetCorporations() (*Corporations, error) {
 		return &corporations, nil
 	} else {
 		result := global.DB.Find(&corporations)
-		if err := cache.Set(corporations_key, corporations, corporation_expiration); err != nil {
+		if err := cache.Set(corporations_key, &corporations, corporation_expiration); err != nil {
 			return nil, err
 		}
 		return &corporations, result.Error
@@ -85,7 +87,7 @@ func GetCorporationsByFaction(factionId int) (*Corporations, error) {
 		return &corporations, nil
 	} else {
 		result := global.DB.Where("faction_id = ?", factionId).Find(&corporations)
-		if err := cache.Set(key, corporations, corporation_expiration); err != nil {
+		if err := cache.Set(key, &corporations, corporation_expiration); err != nil {
 			return nil, err
 		}
 		return &corporations, result.Error
@@ -98,7 +100,7 @@ func SaveCorporation(corporation *Corporation) error {
 	}
 
 	key := cache.Key(corporation_key, strconv.Itoa(corporation.CorporationId))
-	if err := cache.Set(key, *corporation, corporation_expiration); err != nil {
+	if err := cache.Set(key, corporation, corporation_expiration); err != nil {
 		return err
 	}
 

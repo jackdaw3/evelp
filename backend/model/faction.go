@@ -7,6 +7,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+//easyjson:json
 type Faction struct {
 	FactionId int  `gorm:"type:int;not null;primary_key;autoIncrement:false"`
 	Name      Name `gorm:"type:text" yaml:"nameID"`

@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 )
 
+//easyjson:json
 type Order struct {
 	OrderId      int       `json:"order_id"`
 	ItemId       int       `json:"type_id"`
@@ -22,6 +23,7 @@ type Order struct {
 	LastUpdated  time.Time `json:"last_updated"`
 }
 
+//easyjson:json
 type Orders []Order
 
 func (o Orders) Len() int { return len(o) }

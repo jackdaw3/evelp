@@ -1,5 +1,6 @@
 package model
 
+//easyjson:json
 type ItemHistory struct {
 	ItemId     int
 	Average    float64 `json:"average"`
@@ -10,6 +11,7 @@ type ItemHistory struct {
 	Date       string  `json:"date"`
 }
 
+//easyjson:json
 type ItemHistorys []*ItemHistory
 
 func (ih ItemHistorys) Len() int { return len(ih) }

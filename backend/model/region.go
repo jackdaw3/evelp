@@ -8,11 +8,13 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+//easyjson:json
 type Region struct {
 	RegionId int  `gorm:"type:int;not null;primary_key;autoIncrement:false"`
 	Name     Name `gorm:"type:text"`
 }
 
+//easyjson:json
 type Regions []*Region
 
 func (r Regions) Len() int { return len(r) }

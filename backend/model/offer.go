@@ -22,6 +22,7 @@ const (
 	offer_expiration      = -1 * time.Second
 )
 
+//easyjson:json
 type Offer struct {
 	OfferId        int            `gorm:"type:int;not null;primary_key;autoIncrement:false" json:"offer_id"`
 	ItemId         int            `gorm:"type:int;not null" json:"type_id"`
@@ -34,6 +35,7 @@ type Offer struct {
 	IsBluePrint    bool           `gorm:"type:bool;default:false" json:"is_blue_print"`
 }
 
+//easyjson:json
 type Offers []*Offer
 
 type CorporationIds []int
@@ -89,7 +91,7 @@ func GetOffer(offerId int) (*Offer, error) {
 		return &offer, nil
 	} else {
 		result := global.DB.First(&offer, offerId)
-		if err := cache.Set(key, offer, offer_expiration); err != nil {
+		if err := cache.Set(key, &offer, offer_expiration); err != nil {
 			return nil, err
 		}
 		return &offer, result.Error
@@ -108,7 +110,7 @@ func GetOffers() (*Offers, error) {
 		return &offers, nil
 	} else {
 		result := global.DB.Find(&offers)
-		if err := cache.Set(offers_key, offers, offer_expiration); err != nil {
+		if err := cache.Set(offers_key, &offers, offer_expiration); err != nil {
 			return nil, err
 		}
 		return &offers, result.Error
@@ -129,7 +131,7 @@ func GetOffersByCorporation(corporationId int) (*Offers, error) {
 	} else {
 		criteria := fmt.Sprintf("%%%s%%", strconv.Itoa(corporationId))
 		result := global.DB.Where("corporation_ids LIKE ?", criteria).Find(&offers)
-		if err := cache.Set(key, offers, offer_expiration); err != nil {
+		if err := cache.Set(key, &offers, offer_expiration); err != nil {
 			return nil, err
 		}
 		return &offers, result.Error
@@ -142,7 +144,7 @@ func SaveOffer(offer *Offer) error {
 	}
 
 	key := cache.Key(offer_key, strconv.Itoa(offer.OfferId))
-	if err := cache.Set(key, *offer, offer_expiration); err != nil {
+	if err := cache.Set(key, offer, offer_expiration); err != nil {
 		return err
 	}
 

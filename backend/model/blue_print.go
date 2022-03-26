@@ -17,6 +17,7 @@ const (
 	blue_print_expiration = -1 * time.Second
 )
 
+//easyjson:json
 type BluePrint struct {
 	BlueprintId int               `gorm:"type:int;not null;primary_key"`
 	Products    ManufactProducts  `gorm:"type:text;not null"`
@@ -33,10 +34,13 @@ type ManufactMaterial struct {
 	Quantity int64
 }
 
+//easyjson:json
 type BluePrints []BluePrint
 
+//easyjson:json
 type ManufactProducts []ManufactProduct
 
+//easyjson:json
 type ManufactMaterials []ManufactMaterial
 
 func (b BluePrints) Len() int { return len(b) }
@@ -112,7 +116,7 @@ func GetBluePrint(blueprintItemId int) (*BluePrint, error) {
 		return &bluePrint, nil
 	} else {
 		result := global.DB.First(&bluePrint, blueprintItemId)
-		if err := cache.Set(key, bluePrint, blue_print_expiration); err != nil {
+		if err := cache.Set(key, &bluePrint, blue_print_expiration); err != nil {
 			return nil, err
 		}
 		return &bluePrint, result.Error
@@ -125,7 +129,7 @@ func SaveBluePrint(bluePrint *BluePrint) error {
 	}
 
 	key := cache.Key(blue_print_key, strconv.Itoa(bluePrint.BlueprintId))
-	if err := cache.Set(key, *bluePrint, blue_print_expiration); err != nil {
+	if err := cache.Set(key, bluePrint, blue_print_expiration); err != nil {
 		return err
 	}
 
