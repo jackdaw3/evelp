@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"encoding/json"
 	"evelp/config/global"
+	"evelp/log"
 	"evelp/util/cache"
 	"strconv"
 	"time"
@@ -12,10 +13,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-const (
-	blue_print_key        = "blueprint"
-	blue_print_expiration = -1 * time.Second
-)
+const blue_print_key = "blueprint"
 
 //easyjson:json
 type BluePrint struct {
@@ -107,20 +105,16 @@ func GetBluePrint(blueprintItemId int) (*BluePrint, error) {
 	var bluePrint BluePrint
 
 	key := cache.Key(blue_print_key, strconv.Itoa(blueprintItemId))
-	exist := cache.Exist(key)
-
-	if exist == nil {
-		if err := cache.Get(key, &bluePrint); err != nil {
-			return nil, err
-		}
-		return &bluePrint, nil
-	} else {
+	if err := cache.Get(key, &bluePrint); err != nil {
+		log.Debugf("failed to get bluePrint %d from cache: %s", blueprintItemId, err.Error())
 		result := global.DB.First(&bluePrint, blueprintItemId)
-		if err := cache.Set(key, &bluePrint, blue_print_expiration); err != nil {
+		if err := cache.Set(key, &bluePrint, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &bluePrint, result.Error
 	}
+
+	return &bluePrint, nil
 }
 
 func SaveBluePrint(bluePrint *BluePrint) error {
@@ -129,7 +123,7 @@ func SaveBluePrint(bluePrint *BluePrint) error {
 	}
 
 	key := cache.Key(blue_print_key, strconv.Itoa(bluePrint.BlueprintId))
-	if err := cache.Set(key, bluePrint, blue_print_expiration); err != nil {
+	if err := cache.Set(key, bluePrint, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 		return err
 	}
 

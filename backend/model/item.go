@@ -2,6 +2,7 @@ package model
 
 import (
 	"evelp/config/global"
+	"evelp/log"
 	"evelp/util/cache"
 	"strconv"
 	"time"
@@ -10,10 +11,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-const (
-	item_key        = "item"
-	item_expiration = -1 * time.Second
-)
+const item_key = "item"
 
 //easyjson:json
 type Item struct {
@@ -34,20 +32,16 @@ func GetItem(id int) (*Item, error) {
 	var item Item
 
 	key := cache.Key(item_key, strconv.Itoa(id))
-	exist := cache.Exist(key)
-
-	if exist == nil {
-		if err := cache.Get(key, &item); err != nil {
-			return nil, err
-		}
-		return &item, nil
-	} else {
+	if err := cache.Get(key, &item); err != nil {
+		log.Debugf("failed to get item %d from cache: %s", id, err.Error())
 		result := global.DB.First(&item, id)
-		if err := cache.Set(key, &item, item_expiration); err != nil {
+		if err := cache.Set(key, &item, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &item, result.Error
 	}
+
+	return &item, nil
 }
 
 func SaveItem(item *Item) error {
@@ -56,7 +50,7 @@ func SaveItem(item *Item) error {
 	}
 
 	key := cache.Key(item_key, strconv.Itoa(item.ItemId))
-	if err := cache.Set(key, item, item_expiration); err != nil {
+	if err := cache.Set(key, item, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 		return err
 	}
 

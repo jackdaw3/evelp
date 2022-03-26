@@ -2,6 +2,7 @@ package model
 
 import (
 	"evelp/config/global"
+	"evelp/log"
 	"evelp/util/cache"
 	"reflect"
 	"strconv"
@@ -11,10 +12,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-const (
-	system_key        = "system"
-	system_expiration = -1 * time.Second
-)
+const system_key = "system"
 
 //easyjson:json
 type StarSystem struct {
@@ -39,20 +37,16 @@ func GetStarSystem(systemId int) (*StarSystem, error) {
 	var starSystem StarSystem
 
 	key := cache.Key(system_key, strconv.Itoa(systemId))
-	exist := cache.Exist(key)
-
-	if exist == nil {
-		if err := cache.Get(key, &starSystem); err != nil {
-			return nil, err
-		}
-		return &starSystem, nil
-	} else {
+	if err := cache.Get(key, &starSystem); err != nil {
+		log.Debugf("failed to get starSystem %d from cache: %s", systemId, err.Error())
 		result := global.DB.First(&starSystem, systemId)
-		if err := cache.Set(key, &starSystem, system_expiration); err != nil {
+		if err := cache.Set(key, &starSystem, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &starSystem, result.Error
 	}
+
+	return &starSystem, nil
 }
 
 func SaveStarSystem(starSystem *StarSystem) error {
@@ -61,7 +55,7 @@ func SaveStarSystem(starSystem *StarSystem) error {
 	}
 
 	key := cache.Key(system_key, strconv.Itoa(starSystem.SystemId))
-	if err := cache.Set(key, starSystem, system_expiration); err != nil {
+	if err := cache.Set(key, starSystem, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 		return err
 	}
 

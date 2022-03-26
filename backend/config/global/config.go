@@ -41,13 +41,18 @@ type MySQLConfig struct {
 	AutoMigrate     bool   `yaml:"autoMigrate"`
 }
 
+type RedisExpireTime struct {
+	History time.Duration `yaml:"history"`
+	Order   time.Duration `yaml:"order"`
+	Offer   time.Duration `yaml:"model"`
+	Model   time.Duration `yaml:"model"`
+}
 type RedisConfig struct {
-	Address           string        `yaml:"address"`
-	Password          string        `yaml:"password"`
-	Database          int           `yaml:"database"`
-	HistoryExpireTime time.Duration `yaml:"history_expire_time"`
-	OrderExpireTime   time.Duration `yaml:"order_expire_time"`
-	Refresh           bool          `yaml:"refresh"`
+	Address    string          `yaml:"address"`
+	Password   string          `yaml:"password"`
+	Database   int             `yaml:"database"`
+	Refresh    bool            `yaml:"refresh"`
+	ExpireTime RedisExpireTime `yaml:"expireTime"`
 }
 
 type Config struct {

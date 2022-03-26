@@ -19,7 +19,6 @@ const (
 	offer_key             = "offer"
 	offers_key            = "offer:offers"
 	offer_corporation_key = "offer:corporation"
-	offer_expiration      = -1 * time.Second
 )
 
 //easyjson:json
@@ -82,60 +81,48 @@ func GetOffer(offerId int) (*Offer, error) {
 	var offer Offer
 
 	key := cache.Key(offer_key, strconv.Itoa(offerId))
-	exist := cache.Exist(key)
-
-	if exist == nil {
-		if err := cache.Get(key, &offer); err != nil {
-			return nil, err
-		}
-		return &offer, nil
-	} else {
+	if err := cache.Get(key, &offer); err != nil {
+		log.Debugf("failed to get offer %d from cache: %s", offerId, err.Error())
 		result := global.DB.First(&offer, offerId)
-		if err := cache.Set(key, &offer, offer_expiration); err != nil {
+		if err := cache.Set(key, &offer, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &offer, result.Error
 	}
+
+	return &offer, nil
 }
 
 func GetOffers() (*Offers, error) {
 	var offers Offers
 
-	exist := cache.Exist(offers_key)
-
-	if exist == nil {
-		if err := cache.Get(offers_key, &offers); err != nil {
-			return nil, err
-		}
-		return &offers, nil
-	} else {
+	if err := cache.Get(offers_key, &offers); err != nil {
+		log.Debugf("failed to get all offers from cache: %s", err.Error())
 		result := global.DB.Find(&offers)
-		if err := cache.Set(offers_key, &offers, offer_expiration); err != nil {
+		if err := cache.Set(offers_key, &offers, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &offers, result.Error
 	}
+
+	return &offers, nil
 }
 
 func GetOffersByCorporation(corporationId int) (*Offers, error) {
 	var offers Offers
 
 	key := cache.Key(offer_corporation_key, strconv.Itoa(corporationId))
-	exist := cache.Exist(key)
-
-	if exist == nil {
-		if err := cache.Get(key, &offers); err != nil {
-			return nil, err
-		}
-		return &offers, nil
-	} else {
+	if err := cache.Get(key, &offers); err != nil {
+		log.Debugf("failed to get corporation %d's offers from cache: %s", corporationId, err.Error())
 		criteria := fmt.Sprintf("%%%s%%", strconv.Itoa(corporationId))
 		result := global.DB.Where("corporation_ids LIKE ?", criteria).Find(&offers)
-		if err := cache.Set(key, &offers, offer_expiration); err != nil {
+		if err := cache.Set(key, &offers, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &offers, result.Error
 	}
+
+	return &offers, nil
 }
 
 func SaveOffer(offer *Offer) error {
@@ -144,7 +131,7 @@ func SaveOffer(offer *Offer) error {
 	}
 
 	key := cache.Key(offer_key, strconv.Itoa(offer.OfferId))
-	if err := cache.Set(key, offer, offer_expiration); err != nil {
+	if err := cache.Set(key, offer, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 		return err
 	}
 

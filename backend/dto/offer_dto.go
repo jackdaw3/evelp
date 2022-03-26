@@ -2,6 +2,7 @@ package dto
 
 import "math"
 
+//easyjson:json
 type OfferDTO struct {
 	OfferId      int
 	ItemId       int
@@ -28,6 +29,7 @@ const (
 	k3 = 45
 )
 
+//easyjson:json
 type OfferDTOs []OfferDTO
 
 func (o OfferDTOs) Len() int { return len(o) }

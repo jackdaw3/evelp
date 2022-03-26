@@ -8,7 +8,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-//easyjson:skip
 type Name struct {
 	De string `yaml:"de" json:"de"`
 	En string `yaml:"en" json:"en"`

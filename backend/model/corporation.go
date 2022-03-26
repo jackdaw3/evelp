@@ -2,6 +2,7 @@ package model
 
 import (
 	"evelp/config/global"
+	"evelp/log"
 	"evelp/util/cache"
 	"strconv"
 	"time"
@@ -14,7 +15,6 @@ const (
 	corporation_key         = "corporation"
 	corporations_key        = "corporation:corporations"
 	corporation_faction_key = "corporation:faction"
-	corporation_expiration  = -1 * time.Second
 )
 
 //easyjson:json
@@ -39,59 +39,47 @@ func GetCorporation(corporationId int) (*Corporation, error) {
 	var corporation Corporation
 
 	key := cache.Key(corporation_key, strconv.Itoa(corporationId))
-	exist := cache.Exist(key)
-
-	if exist == nil {
-		if err := cache.Get(key, &corporation); err != nil {
-			return nil, err
-		}
-		return &corporation, nil
-	} else {
+	if err := cache.Get(key, &corporation); err != nil {
+		log.Debugf("failed to get corporation %d from cache: %s", corporationId, err.Error())
 		result := global.DB.First(&corporation, corporationId)
-		if err := cache.Set(key, &corporation, corporation_expiration); err != nil {
+		if err := cache.Set(key, &corporation, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &corporation, result.Error
 	}
+
+	return &corporation, nil
 }
 
 func GetCorporations() (*Corporations, error) {
 	var corporations Corporations
 
-	exist := cache.Exist(corporations_key)
-
-	if exist == nil {
-		if err := cache.Get(corporations_key, &corporations); err != nil {
-			return nil, err
-		}
-		return &corporations, nil
-	} else {
+	if err := cache.Get(corporations_key, &corporations); err != nil {
+		log.Debugf("failed to get all corporations from cache: %s", err.Error())
 		result := global.DB.Find(&corporations)
-		if err := cache.Set(corporations_key, &corporations, corporation_expiration); err != nil {
+		if err := cache.Set(corporations_key, &corporations, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &corporations, result.Error
 	}
+
+	return &corporations, nil
 }
 
 func GetCorporationsByFaction(factionId int) (*Corporations, error) {
 	var corporations Corporations
 
 	key := cache.Key(corporation_faction_key, strconv.Itoa(factionId))
-	exist := cache.Exist(key)
-
-	if exist == nil {
-		if err := cache.Get(key, &corporations); err != nil {
-			return nil, err
-		}
-		return &corporations, nil
-	} else {
+	if err := cache.Get(key, &corporations); err != nil {
+		log.Debugf("failed to get faction %d's corporations from cache: %s", factionId, err.Error())
 		result := global.DB.Where("faction_id = ?", factionId).Find(&corporations)
-		if err := cache.Set(key, &corporations, corporation_expiration); err != nil {
+		if err := cache.Set(key, &corporations, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &corporations, result.Error
 	}
+
+	return &corporations, nil
 }
 
 func SaveCorporation(corporation *Corporation) error {
@@ -100,7 +88,7 @@ func SaveCorporation(corporation *Corporation) error {
 	}
 
 	key := cache.Key(corporation_key, strconv.Itoa(corporation.CorporationId))
-	if err := cache.Set(key, corporation, corporation_expiration); err != nil {
+	if err := cache.Set(key, corporation, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 		return err
 	}
 

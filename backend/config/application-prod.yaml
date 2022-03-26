@@ -19,9 +19,12 @@ redis:
   address: 127.0.0.1:6379
   password: Wb2/E7oq9ZHeFufPFtvqHkJrp+y6k4FmLSi3iZaK1ABS9X29wtLX6VIUUnZp14MDT4e7XgNPx1kNprUe2Lw4we7FGzO1SIFLHE15bFtlKKk7O7dc0ZXp6iEaLlimD3Jg7/6nDeUj7LJo3p0TKpSVydriAMq2UtV7CfuZIXAXnHg
   database: 0
-  history_expire_time: 48
-  order_expire_time: 12
   refresh: true
+  expireTime:
+    history: 51840
+    order: 17280
+    model: -1
+    offer: 5
 
 data: 
   local:  

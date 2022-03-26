@@ -25,10 +25,6 @@ func Set(key string, value Cacheable, expirationTime time.Duration) error {
 }
 
 func Get(key string, value Cacheable) error {
-	if err := Exist(key); err != nil {
-		return err
-	}
-
 	val, err := global.Redis.Get(ctx, key).Result()
 	if err != nil {
 		return errors.Wrapf(err, "redis get %v failed", key)
@@ -37,19 +33,6 @@ func Get(key string, value Cacheable) error {
 		return errors.Wrapf(err, "redis unmarshal value %v failed", val)
 	}
 	return nil
-}
-
-func Exist(key string) error {
-	val, err := global.Redis.Exists(ctx, key).Result()
-	if err != nil {
-		return errors.Wrapf(err, "redis check %v exist failed", key)
-	}
-
-	if val == 1 {
-		return nil
-	} else {
-		return errors.Errorf("redis key %v not exist", key)
-	}
 }
 
 func Key(args ...string) string {

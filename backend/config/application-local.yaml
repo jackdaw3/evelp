@@ -19,9 +19,12 @@ redis:
   address: 127.0.0.1:6379
   password: co9NAIXA4OHSHcSFdrSrK2fZ2yFGjKZasn0VTb1PQenoTcxB6EJNQl705DVbbWyR45X9/z3+2RtO/PZVKMVdwOGCvme4xGZB0+t+cvrCspQjcer8epmEihfJrzzSepflIE4SsWZHr/iBz90HDEz8wk0Jqqd2DhgT38vV5nt3mWE=
   database: 0
-  history_expire_time: -1
-  order_expire_time: -1
   refresh: false
+  expireTime:
+    history: -1
+    order: -1
+    model: -1
+    offer: 10
 
 data: 
   local:  
@@ -33,4 +36,4 @@ data:
     refresh: false
 
 crypto:
-  keyPath: C://Users//Administrator//dev//data//private_key.pem
+  keyPath: C://Users//71832//dev//certs//private_key.pem

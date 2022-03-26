@@ -20,7 +20,7 @@ func CacheData() error {
 	orders := make(map[string]*model.Orders)
 	ordersData := new(ordersData)
 	ordersData.orders = orders
-	ordersData.expirationTime = global.Conf.Redis.OrderExpireTime * time.Hour
+	ordersData.expirationTime = global.Conf.Redis.ExpireTime.Order * time.Minute
 	items, err := model.GetAllItems()
 	if err != nil {
 		return err
@@ -36,7 +36,7 @@ func CacheData() error {
 	}()
 
 	itemHistroyData := new(itemHistroy)
-	itemHistroyData.expirationTime = global.Conf.Redis.HistoryExpireTime * time.Hour
+	itemHistroyData.expirationTime = global.Conf.Redis.ExpireTime.History * time.Minute
 	products, err := model.GetAllProducts()
 	if err != nil {
 		return err
