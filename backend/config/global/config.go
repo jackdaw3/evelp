@@ -44,7 +44,7 @@ type MySQLConfig struct {
 type RedisExpireTime struct {
 	History time.Duration `yaml:"history"`
 	Order   time.Duration `yaml:"order"`
-	Offer   time.Duration `yaml:"model"`
+	Offer   time.Duration `yaml:"offer"`
 	Model   time.Duration `yaml:"model"`
 }
 type RedisConfig struct {

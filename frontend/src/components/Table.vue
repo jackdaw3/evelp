@@ -21,7 +21,6 @@
         <template slot-scope="props">
           <el-table
             :data="props.row.Matertials"
-            stripe
             :cell-style="tableStyle"
             style="width: 55%"
             :row-class-name="handelMaterailRowDetail"
