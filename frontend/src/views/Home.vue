@@ -36,7 +36,7 @@ import Dialog from "@/components/Dialog.vue";
 import Header from "@/components/Header.vue";
 import Table from "@/components/Table.vue";
 
-const backend = "http://localhost:9000/";
+const backend = "https://eve-lp.com/api/";
 const the_forge = "10000002";
 
 export default {

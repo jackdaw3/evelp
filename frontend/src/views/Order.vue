@@ -46,7 +46,7 @@ import OrderTable from "@/components/OrderTable.vue";
 import StatisTable from "@/components/StatisTable.vue";
 import Stock from "@/components/Stock.vue";
 
-const backend = "http://localhost:9000/";
+const backend = "https://eve-lp.com/api/";
 const the_forge = "10000002";
 
 export default {

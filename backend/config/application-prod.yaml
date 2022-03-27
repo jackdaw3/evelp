@@ -17,7 +17,7 @@ mysql:
 
 redis:
   address: 127.0.0.1:6379
-  password: Wb2/E7oq9ZHeFufPFtvqHkJrp+y6k4FmLSi3iZaK1ABS9X29wtLX6VIUUnZp14MDT4e7XgNPx1kNprUe2Lw4we7FGzO1SIFLHE15bFtlKKk7O7dc0ZXp6iEaLlimD3Jg7/6nDeUj7LJo3p0TKpSVydriAMq2UtV7CfuZIXAXnHg
+  password: aXsRmLMLWygWtIgDMNjCZNoy9w4X/rihrGMDwDexF+SQ5yjLPFfxvJBL0exAsWr1dzylhJljDgUZOu9k6F9WjzWcohkBkHB3wvaQrxHiwbuNv0ybMjQAZ56nKcZUbq275UNCBwiCm2+KoQjxqqJwdIOH+IJnyYKkJ3bTfDEwkHw=
   database: 0
   refresh: true
   expireTime:
