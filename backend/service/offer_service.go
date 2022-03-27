@@ -313,7 +313,7 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 		material.ItemId = mi.ItemId
 		material.Name = mi.Name.Val(o.lang)
 		material.IsBluePrint = true
-		material.Quantity = m.Quantity
+		material.Quantity = m.Quantity * int64(offerDTO.Quantity)
 
 		mos := NewOrderService(mi.ItemId, o.regionId, false, o.scope)
 		var price float64

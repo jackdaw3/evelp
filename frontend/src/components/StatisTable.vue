@@ -1,6 +1,6 @@
 <template>
   <div class="StatisTable">
-    <el-table :data="data" stripe :cell-style="tableStyle" style="width: 100%" v-loading="loading">
+    <el-table :data="data" stripe :cell-style="tableStyle" style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-table
@@ -67,7 +67,6 @@
 export default {
   props: {
     data: Array,
-    loading: Boolean,
   },
   data() {
     return {
@@ -77,7 +76,7 @@ export default {
   },
   methods: {
     stateFormat(row, column, cellValue) {
-      cellValue = Math.round(cellValue);
+      cellValue = Math.floor(cellValue);
       cellValue += "";
       if (!cellValue.includes(".")) cellValue += ".";
       return cellValue

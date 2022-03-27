@@ -15,25 +15,25 @@
       <el-tab-pane :label="orderLabel.buyOrder">
         <el-row :gutter="35">
           <el-col :span="12">
-            <OrderTable :data="buyOrders" :loading="buyLoading"></OrderTable>
+            <OrderTable :data="buyOrders"></OrderTable>
           </el-col>
           <el-col :span="12">
-            <StatisTable :data="buyStatis" :loading="buyStatisLoading"></StatisTable>
+            <StatisTable :data="buyStatis"></StatisTable>
           </el-col>
         </el-row>
       </el-tab-pane>
       <el-tab-pane :label="orderLabel.sellOrder">
         <el-row :gutter="35">
           <el-col :span="12">
-            <OrderTable :data="sellOrders" :loading="sellLoading"></OrderTable>
+            <OrderTable :data="sellOrders"></OrderTable>
           </el-col>
           <el-col :span="12">
-            <StatisTable :data="sellStatis" :loading="sellStatisLoading"></StatisTable>
+            <StatisTable :data="sellStatis"></StatisTable>
           </el-col>
         </el-row>
       </el-tab-pane>
       <el-tab-pane :label="orderLabel.history" :lazy="stockLazy">
-        <Stock :style="{height: stockHeight}" :history="history"></Stock>
+        <Stock :style="{ height: stockHeight }" :history="history"></Stock>
       </el-tab-pane>
     </el-tabs>
     <br />
@@ -101,10 +101,6 @@ export default {
       buyOrders: [],
       buyStatis: [],
       orderLabel: this.$t("message.order"),
-      sellLoading: false,
-      buyLoading: false,
-      sellStatisLoading: false,
-      buyStatisLoading: false,
     };
   },
   methods: {
@@ -148,11 +144,6 @@ export default {
       this.getItemName(this.order.itemId);
       this.getCorporationName(this.order.corporationId);
 
-      this.buyLoading = true;
-      this.buyStatisLoading = true;
-      this.sellLoading = true;
-      this.sellStatisLoading = true;
-
       this.getOrders(true);
       this.getStatis(true);
       this.getOrders(false);
@@ -175,17 +166,8 @@ export default {
         .then((response) => {
           if (!isBuyOrder) {
             this.sellOrders = response.data;
-            this.sellLoading = false;
           } else {
             this.buyOrders = response.data;
-            this.buyLoading = false;
-          }
-        })
-        .catch(() => {
-          if (isBuyOrder) {
-            this.buyLoading = false;
-          } else {
-            this.sellLoading = false;
           }
         });
     },
@@ -205,17 +187,8 @@ export default {
         .then((response) => {
           if (!isBuyOrder) {
             this.sellStatis = response.data;
-            this.sellStatisLoading = false;
           } else {
             this.buyStatis = response.data;
-            this.buyStatisLoading = false;
-          }
-        })
-        .catch(() => {
-          if (isBuyOrder) {
-            this.buyStatisLoading = false;
-          } else {
-            this.sellStatisLoading = false;
           }
         });
     },

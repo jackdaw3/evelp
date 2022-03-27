@@ -1,6 +1,6 @@
 <template>
   <div class="OrderTable">
-    <el-table :data="data" stripe :cell-style="tableStyle" style="width: 100%" v-loading="loading">
+    <el-table :data="data" stripe :cell-style="tableStyle" style="width: 100%">
       <el-table-column prop="OrderId" :label="orderLabel.orderId" min-width="15%"></el-table-column>
       <el-table-column prop="SystemName" :label="orderLabel.systemName" min-width="15%"></el-table-column>
       <el-table-column
@@ -25,7 +25,6 @@
 export default {
   props: {
     data: Array,
-    loading: Boolean,
   },
   data() {
     return {
