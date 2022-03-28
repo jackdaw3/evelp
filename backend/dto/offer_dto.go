@@ -2,7 +2,6 @@ package dto
 
 import "math"
 
-//easyjson:json
 type OfferDTO struct {
 	OfferId      int
 	ItemId       int

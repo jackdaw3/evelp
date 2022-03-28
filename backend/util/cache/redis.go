@@ -2,6 +2,7 @@ package cache
 
 import (
 	"context"
+	"encoding/json"
 	"evelp/config/global"
 	"strings"
 	"time"
@@ -11,8 +12,8 @@ import (
 
 var ctx = context.Background()
 
-func Set(key string, value Cacheable, expirationTime time.Duration) error {
-	val, err := value.MarshalJSON()
+func Set(key string, value interface{}, expirationTime time.Duration) error {
+	val, err := json.Marshal(value)
 	if err != nil {
 		return errors.Wrapf(err, "redis marshal value %v failed", value)
 	}
@@ -24,12 +25,12 @@ func Set(key string, value Cacheable, expirationTime time.Duration) error {
 	return nil
 }
 
-func Get(key string, value Cacheable) error {
+func Get(key string, dest interface{}) error {
 	val, err := global.Redis.Get(ctx, key).Result()
 	if err != nil {
 		return errors.Wrapf(err, "redis get %v failed", key)
 	}
-	if err := value.UnmarshalJSON([]byte(val)); err != nil {
+	if err := json.Unmarshal([]byte(val), dest); err != nil {
 		return errors.Wrapf(err, "redis unmarshal value %v failed", val)
 	}
 	return nil

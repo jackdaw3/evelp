@@ -24,7 +24,6 @@ redis:
     history: -1
     order: -1
     model: -1
-    offer: 10
 
 data: 
   local:  

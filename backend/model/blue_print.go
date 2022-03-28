@@ -15,7 +15,6 @@ import (
 
 const blue_print_key = "blueprint"
 
-//easyjson:json
 type BluePrint struct {
 	BlueprintId int               `gorm:"type:int;not null;primary_key"`
 	Products    ManufactProducts  `gorm:"type:text;not null"`
@@ -32,13 +31,10 @@ type ManufactMaterial struct {
 	Quantity int64
 }
 
-//easyjson:json
 type BluePrints []BluePrint
 
-//easyjson:json
 type ManufactProducts []ManufactProduct
 
-//easyjson:json
 type ManufactMaterials []ManufactMaterial
 
 func (b BluePrints) Len() int { return len(b) }
@@ -108,7 +104,7 @@ func GetBluePrint(blueprintItemId int) (*BluePrint, error) {
 	if err := cache.Get(key, &bluePrint); err != nil {
 		log.Debugf("failed to get bluePrint %d from cache: %s", blueprintItemId, err.Error())
 		result := global.DB.First(&bluePrint, blueprintItemId)
-		if err := cache.Set(key, &bluePrint, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
+		if err := cache.Set(key, bluePrint, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &bluePrint, result.Error
@@ -123,7 +119,7 @@ func SaveBluePrint(bluePrint *BluePrint) error {
 	}
 
 	key := cache.Key(blue_print_key, strconv.Itoa(bluePrint.BlueprintId))
-	if err := cache.Set(key, bluePrint, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
+	if err := cache.Set(key, *bluePrint, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 		return err
 	}
 

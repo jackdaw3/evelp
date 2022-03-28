@@ -6,8 +6,6 @@ import (
 	"evelp/model"
 	"net/http"
 	"time"
-
-	"github.com/robfig/cron/v3"
 )
 
 var client = &http.Client{}
@@ -43,11 +41,9 @@ func CacheData() error {
 	}
 	itemHistroyData.products = products
 
-	cron := cron.New(cron.WithSeconds())
-	if _, err := cron.AddFunc("@daily", itemHistroyData.invoke()); err != nil {
+	if err := itemHistroyData.Refresh(); err != nil {
 		return err
 	}
 
-	cron.Start()
 	return nil
 }

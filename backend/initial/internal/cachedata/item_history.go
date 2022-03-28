@@ -11,11 +11,23 @@ import (
 	"io/ioutil"
 	"strconv"
 	"time"
+
+	"github.com/robfig/cron/v3"
 )
 
 type itemHistroy struct {
 	expirationTime time.Duration
 	products       map[int]interface{}
+}
+
+func (i *itemHistroy) Refresh() error {
+	cron := cron.New(cron.WithSeconds())
+	if _, err := cron.AddFunc("@daily", i.invoke()); err != nil {
+		return err
+	}
+	cron.Start()
+
+	return nil
 }
 
 func (i *itemHistroy) invoke() func() {
@@ -53,7 +65,7 @@ func (i *itemHistroy) invoke() func() {
 			}
 
 			key := cache.Key("history", strconv.Itoa(the_forge), strconv.Itoa(p))
-			if err := cache.Set(key, &itemHistorys, i.expirationTime); err != nil {
+			if err := cache.Set(key, itemHistorys, i.expirationTime); err != nil {
 				log.Errorf(err, "save orders %v to redis failed", key)
 			}
 		}

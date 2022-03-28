@@ -5,7 +5,7 @@ clean:
 	go clean
 
 test:
-	go test ./... -gcflags=-l -cover
+	go test ./... -gcflags=-l --count=1 -cover
 
 run:
 	go run main.go

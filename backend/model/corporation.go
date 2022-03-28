@@ -17,14 +17,12 @@ const (
 	corporation_faction_key = "corporation:faction"
 )
 
-//easyjson:json
 type Corporation struct {
 	CorporationId int  `gorm:"type:int;not null;primary_key;autoIncrement:false"`
 	FactionId     int  `gorm:"type:int" yaml:"factionID"`
 	Name          Name `gorm:"type:text" yaml:"nameID"`
 }
 
-//easyjson:json
 type Corporations []Corporation
 
 func (c Corporations) Len() int { return len(c) }
@@ -42,7 +40,7 @@ func GetCorporation(corporationId int) (*Corporation, error) {
 	if err := cache.Get(key, &corporation); err != nil {
 		log.Debugf("failed to get corporation %d from cache: %s", corporationId, err.Error())
 		result := global.DB.First(&corporation, corporationId)
-		if err := cache.Set(key, &corporation, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
+		if err := cache.Set(key, corporation, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &corporation, result.Error
@@ -57,7 +55,7 @@ func GetCorporations() (*Corporations, error) {
 	if err := cache.Get(corporations_key, &corporations); err != nil {
 		log.Debugf("failed to get all corporations from cache: %s", err.Error())
 		result := global.DB.Find(&corporations)
-		if err := cache.Set(corporations_key, &corporations, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
+		if err := cache.Set(corporations_key, corporations, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &corporations, result.Error
@@ -88,7 +86,7 @@ func SaveCorporation(corporation *Corporation) error {
 	}
 
 	key := cache.Key(corporation_key, strconv.Itoa(corporation.CorporationId))
-	if err := cache.Set(key, corporation, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
+	if err := cache.Set(key, *corporation, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 		return err
 	}
 

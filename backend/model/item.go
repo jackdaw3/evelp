@@ -13,7 +13,6 @@ import (
 
 const item_key = "item"
 
-//easyjson:json
 type Item struct {
 	ItemId int     `gorm:"type:int;not null;primary_key;autoIncrement:false" json:"item_id"`
 	Name   Name    `gorm:"type:text" yaml:"name" json:"name"`
@@ -35,7 +34,7 @@ func GetItem(id int) (*Item, error) {
 	if err := cache.Get(key, &item); err != nil {
 		log.Debugf("failed to get item %d from cache: %s", id, err.Error())
 		result := global.DB.First(&item, id)
-		if err := cache.Set(key, &item, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
+		if err := cache.Set(key, item, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &item, result.Error
@@ -50,7 +49,7 @@ func SaveItem(item *Item) error {
 	}
 
 	key := cache.Key(item_key, strconv.Itoa(item.ItemId))
-	if err := cache.Set(key, item, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
+	if err := cache.Set(key, *item, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 		return err
 	}
 

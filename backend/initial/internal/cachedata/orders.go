@@ -37,7 +37,7 @@ func (o *ordersData) Refresh() error {
 
 	log.Debugf("start load %d region's orders to redis", the_forge)
 	for key, order := range o.orders {
-		if err := cache.Set(key, order, o.expirationTime); err != nil {
+		if err := cache.Set(key, *order, o.expirationTime); err != nil {
 			log.Errorf(err, "save order %s to redis failed", key)
 		}
 	}

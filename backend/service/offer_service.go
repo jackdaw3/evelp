@@ -2,19 +2,13 @@ package service
 
 import (
 	"context"
-	"crypto/md5"
-	"evelp/config/global"
 	"evelp/dto"
 	"evelp/log"
 	"evelp/model"
-	"evelp/util/cache"
 	"fmt"
 	"runtime"
 	"sort"
-	"strconv"
-	"strings"
 	"sync"
-	"time"
 
 	"github.com/pkg/errors"
 	"golang.org/x/sync/semaphore"
@@ -55,17 +49,7 @@ func (o *OfferSerivce) Offer(offerId int) (*dto.OfferDTO, error) {
 }
 
 func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
-	var (
-		offerDTOs  dto.OfferDTOs
-		offer_key  = "offer"
-		result_key = "result"
-		hashcode   = o.hashParameters(corporationId)
-	)
-
-	key := cache.Key(offer_key, result_key, hashcode)
-	if err := cache.Get(key, &offerDTOs); err == nil {
-		return &offerDTOs, nil
-	}
+	var offerDTOs dto.OfferDTOs
 
 	offers, err := model.GetOffersByCorporation(corporationId)
 	if err != nil {
@@ -112,10 +96,6 @@ func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 
 	wg.Wait()
 	sort.Sort(offerDTOs)
-
-	if err := cache.Set(key, &offerDTOs, global.Conf.Redis.ExpireTime.Offer*time.Minute); err != nil {
-		log.Debugf("failed to save corporation %d's offerDTOs to redis", corporationId)
-	}
 
 	return &offerDTOs, nil
 }
@@ -345,21 +325,4 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 	}
 
 	return materials
-}
-
-func (o *OfferSerivce) hashParameters(corporationId int) string {
-
-	var build strings.Builder
-	build.WriteString(strconv.Itoa(o.regionId))
-	build.WriteString(fmt.Sprintf("%f", o.scope))
-	build.WriteString(strconv.Itoa(o.days))
-	build.WriteString(o.productPrice)
-	build.WriteString(o.materialPrice)
-	build.WriteString(fmt.Sprintf("%f", o.tax))
-	build.WriteString(o.lang)
-	build.WriteString(strconv.Itoa(corporationId))
-
-	res := md5.Sum([]byte(build.String()))
-
-	return fmt.Sprintf("%x", res)
 }

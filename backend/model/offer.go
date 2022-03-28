@@ -21,7 +21,6 @@ const (
 	offer_corporation_key = "offer:corporation"
 )
 
-//easyjson:json
 type Offer struct {
 	OfferId        int            `gorm:"type:int;not null;primary_key;autoIncrement:false" json:"offer_id"`
 	ItemId         int            `gorm:"type:int;not null" json:"type_id"`
@@ -34,7 +33,6 @@ type Offer struct {
 	IsBluePrint    bool           `gorm:"type:bool;default:false" json:"is_blue_print"`
 }
 
-//easyjson:json
 type Offers []*Offer
 
 type CorporationIds []int
@@ -84,7 +82,7 @@ func GetOffer(offerId int) (*Offer, error) {
 	if err := cache.Get(key, &offer); err != nil {
 		log.Debugf("failed to get offer %d from cache: %s", offerId, err.Error())
 		result := global.DB.First(&offer, offerId)
-		if err := cache.Set(key, &offer, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
+		if err := cache.Set(key, offer, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &offer, result.Error
@@ -99,7 +97,7 @@ func GetOffers() (*Offers, error) {
 	if err := cache.Get(offers_key, &offers); err != nil {
 		log.Debugf("failed to get all offers from cache: %s", err.Error())
 		result := global.DB.Find(&offers)
-		if err := cache.Set(offers_key, &offers, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
+		if err := cache.Set(offers_key, offers, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &offers, result.Error
@@ -116,7 +114,7 @@ func GetOffersByCorporation(corporationId int) (*Offers, error) {
 		log.Debugf("failed to get corporation %d's offers from cache: %s", corporationId, err.Error())
 		criteria := fmt.Sprintf("%%%s%%", strconv.Itoa(corporationId))
 		result := global.DB.Where("corporation_ids LIKE ?", criteria).Find(&offers)
-		if err := cache.Set(key, &offers, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
+		if err := cache.Set(key, offers, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 			return nil, err
 		}
 		return &offers, result.Error
@@ -131,7 +129,7 @@ func SaveOffer(offer *Offer) error {
 	}
 
 	key := cache.Key(offer_key, strconv.Itoa(offer.OfferId))
-	if err := cache.Set(key, offer, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
+	if err := cache.Set(key, *offer, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
 		return err
 	}
 
