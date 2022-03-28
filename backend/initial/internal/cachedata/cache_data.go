@@ -2,6 +2,7 @@ package cachedata
 
 import (
 	"evelp/config/global"
+	"evelp/initial/internal/api"
 	"evelp/log"
 	"evelp/model"
 	"net/http"
@@ -16,33 +17,28 @@ func CacheData() error {
 	log.Info("start refresh cache data")
 
 	orders := make(map[string]*model.Orders)
-	ordersData := new(ordersData)
-	ordersData.orders = orders
-	ordersData.expirationTime = global.Conf.Redis.ExpireTime.Order * time.Minute
+	ordersDataInit := new(ordersData)
+	ordersDataInit.orders = orders
+	ordersDataInit.expirationTime = global.Conf.Redis.ExpireTime.Order * time.Minute
 	items, err := model.GetAllItems()
 	if err != nil {
 		return err
 	}
-	ordersData.items = items
+	ordersDataInit.items = items
 
-	go func() {
-		for {
-			if err := ordersData.Refresh(); err != nil {
-				log.Errorf(err, "refresh orders to cache failed")
-			}
-		}
-	}()
-
-	itemHistroyData := new(itemHistroy)
-	itemHistroyData.expirationTime = global.Conf.Redis.ExpireTime.History * time.Minute
+	itemHistroyDataInit := new(itemHistroy)
+	itemHistroyDataInit.expirationTime = global.Conf.Redis.ExpireTime.History * time.Minute
 	products, err := model.GetAllProducts()
 	if err != nil {
 		return err
 	}
-	itemHistroyData.products = products
+	itemHistroyDataInit.products = products
 
-	if err := itemHistroyData.Refresh(); err != nil {
-		return err
+	initializers := []api.Data{ordersDataInit, itemHistroyDataInit}
+	for _, itinitializer := range initializers {
+		if err := itinitializer.Refresh(); err != nil {
+			return err
+		}
 	}
 
 	return nil

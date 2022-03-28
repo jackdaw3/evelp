@@ -12,8 +12,6 @@ import (
 	"strconv"
 	"sync"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 var (
@@ -28,22 +26,28 @@ type ordersData struct {
 }
 
 func (o *ordersData) Refresh() error {
-	log.Debugf("start load orders to redis")
+	go func() {
+		for {
+			log.Debugf("start load orders to redis")
 
-	log.Debugf("start load %d region's orders", the_forge)
-	if err := o.loadOrdersByRegion(the_forge); err != nil {
-		return errors.WithMessagef(err, "load %d region orders failed", the_forge)
-	}
+			log.Debugf("start load %d region's orders", the_forge)
+			if err := o.loadOrdersByRegion(the_forge); err != nil {
+				log.Errorf(err, "load %d region orders failed", the_forge)
+				o.clearMap()
+				continue
+			}
 
-	log.Debugf("start load %d region's orders to redis", the_forge)
-	for key, order := range o.orders {
-		if err := cache.Set(key, *order, o.expirationTime); err != nil {
-			log.Errorf(err, "save order %s to redis failed", key)
+			log.Debugf("start load %d region's orders to redis", the_forge)
+			for key, order := range o.orders {
+				if err := cache.Set(key, *order, o.expirationTime); err != nil {
+					log.Errorf(err, "save order %s to redis failed", key)
+				}
+			}
+
+			o.clearMap()
+			log.Debugf("orders saved to reids")
 		}
-	}
-
-	o.clearMap()
-	log.Debugf("orders saved to reids")
+	}()
 
 	return nil
 }
