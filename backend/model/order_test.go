@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"bou.ke/monkey"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -135,4 +136,76 @@ func TestExpirationToString(t *testing.T) {
 	order := Order{6173392220, 28758, time.Now(), 90, 30000142, 26350000, 28, 30, true, time.Now()}
 	expiration := order.ExpirationToString()
 	assert.Equal(t, true, strings.Contains(expiration, "90d"))
+}
+
+func TestGetAllItems(t *testing.T) {
+	defer monkey.UnpatchAll()
+	monkey.Patch(GetOffers, func() (*Offers, error) {
+		offers := Offers{
+			&Offer{
+				OfferId:      3414,
+				ItemId:       9943,
+				RequireItems: RequireItems{RequireItem{ItemId: 1}},
+			},
+			&Offer{
+				OfferId: 3415,
+				ItemId:  10222,
+			},
+			&Offer{
+				OfferId:     1234,
+				ItemId:      1234,
+				IsBluePrint: true,
+			},
+		}
+		return &offers, nil
+	})
+
+	monkey.Patch(GetBluePrint, func(int) (*BluePrint, error) {
+		bluePrint := BluePrint{
+			BlueprintId: 1234,
+			Products:    ManufactProducts{ManufactProduct{ItemId: 1235}},
+			Materials:   ManufactMaterials{ManufactMaterial{ItemId: 1236}},
+		}
+		return &bluePrint, nil
+	})
+
+	m, err := GetAllItems()
+	assert.NoError(t, err)
+	assert.Equal(t, 5, len(m))
+}
+
+func TestGetAllProduct(t *testing.T) {
+	defer monkey.UnpatchAll()
+	monkey.Patch(GetOffers, func() (*Offers, error) {
+		offers := Offers{
+			&Offer{
+				OfferId:      3414,
+				ItemId:       9943,
+				RequireItems: RequireItems{RequireItem{ItemId: 1}},
+			},
+			&Offer{
+				OfferId: 3415,
+				ItemId:  10222,
+			},
+			&Offer{
+				OfferId:     1234,
+				ItemId:      1234,
+				IsBluePrint: true,
+			},
+		}
+		return &offers, nil
+	})
+
+	monkey.Patch(GetBluePrint, func(int) (*BluePrint, error) {
+		bluePrint := BluePrint{
+			BlueprintId: 1234,
+			Products:    ManufactProducts{ManufactProduct{ItemId: 1235}},
+			Materials:   ManufactMaterials{ManufactMaterial{ItemId: 1236}},
+		}
+		return &bluePrint, nil
+	})
+
+	m, err := GetAllProducts()
+	assert.NoError(t, err)
+	assert.Equal(t, 3, len(m))
 }
