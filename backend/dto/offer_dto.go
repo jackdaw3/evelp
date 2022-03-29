@@ -28,7 +28,6 @@ const (
 	k3 = 45
 )
 
-//easyjson:json
 type OfferDTOs []OfferDTO
 
 func (o OfferDTOs) Len() int { return len(o) }
