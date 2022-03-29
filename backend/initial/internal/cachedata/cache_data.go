@@ -17,26 +17,26 @@ func CacheData() error {
 	log.Info("start refresh cache data")
 
 	orders := make(map[string]*model.Orders)
-	ordersDataInit := new(ordersData)
-	ordersDataInit.orders = orders
-	ordersDataInit.expirationTime = global.Conf.Redis.ExpireTime.Order * time.Minute
+	ordersData := new(ordersData)
+	ordersData.orders = orders
+	ordersData.expirationTime = global.Conf.Redis.ExpireTime.Order * time.Minute
 	items, err := model.GetAllItems()
 	if err != nil {
 		return err
 	}
-	ordersDataInit.items = items
+	ordersData.items = items
 
-	itemHistroyDataInit := new(itemHistroy)
-	itemHistroyDataInit.expirationTime = global.Conf.Redis.ExpireTime.History * time.Minute
+	itemHistroyData := new(itemHistroy)
+	itemHistroyData.expirationTime = global.Conf.Redis.ExpireTime.History * time.Minute
 	products, err := model.GetAllProducts()
 	if err != nil {
 		return err
 	}
-	itemHistroyDataInit.products = products
+	itemHistroyData.products = products
 
-	initializers := []api.Data{ordersDataInit, itemHistroyDataInit}
-	for _, itinitializer := range initializers {
-		if err := itinitializer.Refresh(); err != nil {
+	cachedataList := []api.Data{ordersData, itemHistroyData}
+	for _, cachedata := range cachedataList {
+		if err := cachedata.Refresh(); err != nil {
 			return err
 		}
 	}
