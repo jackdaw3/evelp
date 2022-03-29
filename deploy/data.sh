@@ -1,5 +1,5 @@
 # Load EVE dev resources
-echo "downloading sde.zip from remote"
+echo "download sde.zip from remote"
 curl -O https://eve-static-data-export.s3-eu-west-1.amazonaws.com/tranquility/sde.zip
 
 echo "unzip sde.zip"
@@ -27,7 +27,7 @@ if [ $num -gt 0 ]; then
         rm *.csv
 fi
 
-echo "loading csv files from remote"
+echo "download csv files from remote"
 curl -O https://www.fuzzwork.co.uk/dump/latest/industryActivityProducts.csv
 curl -O https://www.fuzzwork.co.uk/dump/latest/industryActivityMaterials.csv
 
