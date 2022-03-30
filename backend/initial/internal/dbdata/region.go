@@ -19,20 +19,20 @@ type reginoData struct {
 }
 
 func (r *reginoData) Refresh() error {
-	log.Infof("start load regions from %s", global.Conf.Data.Remote.Address)
+	log.Infof("start to load regions from %s", global.Conf.Data.Remote.Address)
 	r.getAllRegions()
 	sort.Sort(r.regions)
 
 	for _, region := range *r.regions {
 		exist, err := region.IsExist()
 		if err != nil {
-			log.Errorf(err, "check region %d exist failed", region.RegionId)
+			log.Errorf(err, "failed to check region %d exist", region.RegionId)
 		}
 
 		if exist {
 			valid, err := region.IsVaild()
 			if err != nil {
-				log.Errorf(err, "check region %d valid failed", region.RegionId)
+				log.Errorf(err, "failed to check region %d valid", region.RegionId)
 			}
 
 			if valid {
@@ -47,7 +47,7 @@ func (r *reginoData) Refresh() error {
 	}
 
 	wg.Wait()
-	log.Info("regions have loaded and saved to DB")
+	log.Info("regions loaded and saved to DB")
 
 	return nil
 }
@@ -60,18 +60,18 @@ func (r *reginoData) getAllRegions() {
 
 	resp, err := net.GetWithRetries(client, req)
 	if err != nil {
-		log.Errorf(err, "get regions failed")
+		log.Errorf(err, "failed to get regions")
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Errorf(err, "get regions' body failed")
+		log.Errorf(err, "failed to get regions' body")
 	}
 
 	var idArray []int
 
 	if err = json.Unmarshal(body, &idArray); err != nil {
-		log.Errorf(err, "unmarshal regions json failed")
+		log.Errorf(err, "failed to unmarshal regions json")
 	}
 
 	var regions model.Regions
@@ -97,23 +97,23 @@ func (r *reginoData) getRegion(region *model.Region, wg *sync.WaitGroup) func() 
 
 			resp, err := net.GetWithRetries(client, req)
 			if err != nil {
-				log.Errorf(err, "get region %d failed", region.RegionId)
+				log.Errorf(err, "failed to get region %d", region.RegionId)
 			}
 
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				log.Errorf(err, "get region %d's body failed", region.RegionId)
+				log.Errorf(err, "failed to get region %d's body", region.RegionId)
 			}
 
 			var resultMap map[string]interface{}
 
 			if err = json.Unmarshal(body, &resultMap); err != nil {
-				log.Errorf(err, "unmarshal region %d json failed", region.RegionId)
+				log.Errorf(err, "failed to unmarshal region %d json", region.RegionId)
 			}
 
 			name, ok := resultMap["name"].(string)
 			if !ok {
-				log.Error(errors.Errorf("region %d %v cast to string failed", region.RegionId, resultMap["name"]))
+				log.Error(errors.Errorf("failedt to cast region %d %v to string", region.RegionId, resultMap["name"]))
 				continue
 			}
 
@@ -134,7 +134,7 @@ func (r *reginoData) getRegion(region *model.Region, wg *sync.WaitGroup) func() 
 		}
 
 		if err := model.SaveRegion(region); err != nil {
-			log.Error(errors.Errorf("region %d failed to save to DB", region.RegionId))
+			log.Error(errors.Errorf("failed to save region %d to DB", region.RegionId))
 		}
 	}
 }

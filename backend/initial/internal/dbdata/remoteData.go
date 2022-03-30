@@ -14,7 +14,7 @@ var (
 )
 
 func RemoteData() error {
-	log.Info("start load remote data to DB")
+	log.Info("start to load remote data to DB")
 	start := time.Now()
 
 	offerData := new(offerData)

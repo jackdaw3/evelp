@@ -82,7 +82,7 @@ func GetCorporationsByFaction(factionId int) (*Corporations, error) {
 
 func SaveCorporation(corporation *Corporation) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&corporation).Error; err != nil {
-		return errors.Wrap(err, "save corporation to DB failed")
+		return errors.Wrap(err, "failed to save corporation to DB ")
 	}
 
 	key := cache.Key(corporation_key, strconv.Itoa(corporation.CorporationId))

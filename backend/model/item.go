@@ -45,7 +45,7 @@ func GetItem(id int) (*Item, error) {
 
 func SaveItem(item *Item) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&item).Error; err != nil {
-		return errors.Wrap(err, "save item to DB failed")
+		return errors.Wrapf(err, "failed to save item %d to DB", item.ItemId)
 	}
 
 	key := cache.Key(item_key, strconv.Itoa(item.ItemId))

@@ -154,7 +154,7 @@ func GetOffersByCorporation(corporationId int) (*Offers, error) {
 
 func SaveOffer(offer *Offer) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&offer).Error; err != nil {
-		return errors.Wrap(err, "save offer to DB failed")
+		return errors.Wrapf(err, "failed to save offer %d to DB", offer.ItemId)
 	}
 
 	key := cache.Key(offer_key, strconv.Itoa(offer.OfferId))
@@ -186,7 +186,7 @@ func GetAllItems() (map[int]interface{}, error) {
 		if offer.IsBluePrint {
 			bluePrint, err := GetBluePrint(offer.ItemId)
 			if err != nil {
-				log.Errorf(err, "get blueprint %d failed", offer.ItemId)
+				log.Errorf(err, "failed to get blueprint %d", offer.ItemId)
 			}
 			if len(bluePrint.Products) > 0 {
 				for _, product := range bluePrint.Products {
@@ -224,7 +224,7 @@ func GetAllProducts() (map[int]interface{}, error) {
 		if offer.IsBluePrint {
 			bluePrint, err := GetBluePrint(offer.ItemId)
 			if err != nil {
-				log.Errorf(err, "get blueprint %d failed", offer.ItemId)
+				log.Errorf(err, "failed to get blueprint %d", offer.ItemId)
 			}
 			if len(bluePrint.Products) > 0 {
 				for _, product := range bluePrint.Products {

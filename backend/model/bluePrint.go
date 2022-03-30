@@ -115,7 +115,7 @@ func GetBluePrint(blueprintItemId int) (*BluePrint, error) {
 
 func SaveBluePrint(bluePrint *BluePrint) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&bluePrint).Error; err != nil {
-		return errors.Wrap(err, "save blueprint to DB failed")
+		return errors.Wrapf(err, "failed to save blueprint %d to DB", bluePrint.BlueprintId)
 	}
 
 	key := cache.Key(blue_print_key, strconv.Itoa(bluePrint.BlueprintId))

@@ -32,7 +32,7 @@ func (i *itemHistroy) Refresh() error {
 
 func (i *itemHistroy) invoke() func() {
 	return func() {
-		log.Debug("start load items history to redis")
+		log.Debug("start to load items history to redis")
 
 		for p := range i.products {
 			req := fmt.Sprintf("%s/markets/%d/history/?datasource=%s&type_id=%d",
@@ -44,19 +44,19 @@ func (i *itemHistroy) invoke() func() {
 
 			resp, err := net.GetWithRetries(client, req)
 			if err != nil {
-				log.Errorf(err, "get item %d histroy failed", p)
+				log.Errorf(err, "failed to get item %d histroy", p)
 				continue
 			}
 
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				log.Errorf(err, "read item %d histroybody failed", p)
+				log.Errorf(err, "failed to read item %d histroybody ", p)
 				continue
 			}
 
 			var itemHistorys model.ItemHistorys
 			if err = json.Unmarshal(body, &itemHistorys); err != nil {
-				log.Errorf(err, "unmarshal item %d histroy json failed", p)
+				log.Errorf(err, "failed to unmarshal item %d histroy json", p)
 				continue
 			}
 
@@ -66,7 +66,7 @@ func (i *itemHistroy) invoke() func() {
 
 			key := cache.Key("history", strconv.Itoa(the_forge), strconv.Itoa(p))
 			if err := cache.Set(key, itemHistorys, i.expirationTime); err != nil {
-				log.Errorf(err, "save orders %v to redis failed", key)
+				log.Errorf(err, "failed to save orders %v to redis", key)
 			}
 		}
 

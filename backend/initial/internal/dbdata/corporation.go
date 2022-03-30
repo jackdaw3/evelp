@@ -15,17 +15,17 @@ type corporationData struct {
 }
 
 func (cd *corporationData) Refresh() error {
-	log.Info("start load corporations", cd.filePath)
+	log.Info("start to load corporations", cd.filePath)
 	if err := cd.loadCorporations(); err != nil {
 		return err
 	}
-	log.Info("load ", cd.filePath, " finished")
+	log.Infof("loading %s completed", cd.filePath)
 
-	log.Info("start save corporations to DB")
+	log.Info("start to save corporations to DB")
 	if err := model.SaveCorporations(cd.corporations); err != nil {
 		return err
 	}
-	log.Info("corporations have saved to DB")
+	log.Info("corporations saved to DB")
 
 	return nil
 }

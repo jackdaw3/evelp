@@ -31,7 +31,7 @@ func (f *FactionSerivce) Factions() (*dto.FactionDTOs, error) {
 		var corporationDTOs dto.CorporationDTOs
 		corportations, err := model.GetCorporationsByFaction(factionDTO.FactionId)
 		if err != nil {
-			log.Errorf(err, "get faction %d's corporation list failed", factionDTO.FactionId)
+			log.Errorf(err, "failed to get faction %d's corporation list", factionDTO.FactionId)
 			continue
 		}
 

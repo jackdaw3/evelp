@@ -15,17 +15,17 @@ type factionData struct {
 }
 
 func (fd *factionData) Refresh() error {
-	log.Info("start load factions", fd.filePath)
+	log.Info("start to load factions", fd.filePath)
 	if err := fd.loadFactions(); err != nil {
 		return err
 	}
-	log.Info("load ", fd.filePath, " finished")
+	log.Info("loading ", fd.filePath, " completed")
 
-	log.Info("start save factions to DB")
+	log.Info("start to save factions to DB")
 	if err := model.SaveFactions(fd.factions); err != nil {
 		return err
 	}
-	log.Info("factions have saved to DB")
+	log.Info("factions saved to DB")
 
 	return nil
 }

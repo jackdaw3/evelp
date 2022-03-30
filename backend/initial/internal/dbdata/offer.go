@@ -25,14 +25,14 @@ type offersWrapper struct {
 }
 
 func (o *offerData) Refresh() error {
-	log.Infof("start load offers from %s", global.Conf.Data.Remote.Address)
+	log.Infof("start to load offers from %s", global.Conf.Data.Remote.Address)
 	o.offersMap = make(map[int]*model.Offer)
 	if err := o.getOffersMap(); err != nil {
 		return err
 	}
-	log.Info("offers have loaded")
+	log.Info("offers loaded")
 
-	log.Info("start save offers to DB")
+	log.Info("start to save offers to DB")
 	var offers model.Offers
 	for _, v := range o.offersMap {
 		offers = append(offers, v)
@@ -41,7 +41,7 @@ func (o *offerData) Refresh() error {
 	if err := model.SaveOffers(&offers); err != nil {
 		return err
 	}
-	log.Infof("%d offers have saved or updated to DB", offers.Len())
+	log.Infof("%d offers saved or updated to DB", offers.Len())
 
 	return nil
 }

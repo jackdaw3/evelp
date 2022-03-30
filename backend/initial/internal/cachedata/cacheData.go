@@ -14,7 +14,7 @@ var client = &http.Client{}
 const the_forge = 10000002
 
 func CacheData() error {
-	log.Info("start refresh cache data")
+	log.Info("start to refresh cache data")
 
 	orders := make(map[string]*model.Orders)
 	ordersData := new(orderData)

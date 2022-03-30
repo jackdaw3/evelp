@@ -80,19 +80,19 @@ func (o *orderData) ordersByRegionPage(regionId int, page int) func() {
 
 		resp, err := net.GetWithRetries(client, req)
 		if err != nil {
-			log.Errorf(err, "get %d region %d page's orders failed", regionId, page)
+			log.Errorf(err, "failed to get %d region %d page's orders", regionId, page)
 			return
 		}
 
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Errorf(err, "read %d region %d page's orders body failed", regionId, page)
+			log.Errorf(err, "failed to read %d region %d page's orders body", regionId, page)
 			return
 		}
 
 		var orders model.Orders
 		if err = json.Unmarshal(body, &orders); err != nil {
-			log.Errorf(err, "unmarshal %d region %d page's orders json failed", regionId, page)
+			log.Errorf(err, "failed to unmarshal %d region %d page's orders json", regionId, page)
 			return
 		}
 

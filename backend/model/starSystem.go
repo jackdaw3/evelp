@@ -49,7 +49,7 @@ func GetStarSystem(systemId int) (*StarSystem, error) {
 
 func SaveStarSystem(starSystem *StarSystem) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&starSystem).Error; err != nil {
-		return errors.Wrap(err, "save star system to DB failed")
+		return errors.Wrapf(err, "failed to save star system %d to DB", starSystem.SystemId)
 	}
 
 	key := cache.Key(system_key, strconv.Itoa(starSystem.SystemId))

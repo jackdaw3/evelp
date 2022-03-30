@@ -16,7 +16,7 @@ mv sde/fsd/typeIDs.yaml .
 mv sde/fsd/factions.yaml .
 mv sde/fsd/npcCorporations.yaml .
 
-echo "load the yaml files completed"
+echo "loading the yaml files completed"
 rm -rf sde
 rm sde.zip
 
@@ -31,6 +31,6 @@ echo "download csv files from remote"
 curl -O https://www.fuzzwork.co.uk/dump/latest/industryActivityProducts.csv
 curl -O https://www.fuzzwork.co.uk/dump/latest/industryActivityMaterials.csv
 
-echo "load the csv files completed"
+echo "loading the csv files completed"
 
 ls -lh

@@ -34,7 +34,7 @@ func GetFactions() (*Factions, error) {
 
 func SaveFaction(faction *Faction) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&faction).Error; err != nil {
-		return errors.Wrap(err, "save faction to DB failed")
+		return errors.Wrapf(err, "failed to save faction %d to DB", faction.FactionId)
 	}
 	return nil
 }

@@ -22,20 +22,20 @@ type bluePrintData struct {
 }
 
 func (b *bluePrintData) Refresh() error {
-	log.Infof("start load bluePrints %s and %s", b.productFilePath, b.materialFilePath)
+	log.Infof("start to load bluePrints %s and %s", b.productFilePath, b.materialFilePath)
 	b.bluePrintsMap = make(map[int]*model.BluePrint)
 
 	bluePrints, err := b.loadBluePrints()
 	if err != nil {
 		return err
 	}
-	log.Info("load bluePrints finished")
+	log.Info("loading bluePrints finished")
 
-	log.Info("start save bluePrints to DB")
+	log.Info("start to save bluePrints to DB")
 	if err := model.SaveBluePrints(bluePrints); err != nil {
 		return err
 	}
-	log.Info("bluePrints have saved to DB")
+	log.Info("bluePrints saved to DB")
 
 	return nil
 }

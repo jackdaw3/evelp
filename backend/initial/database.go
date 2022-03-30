@@ -17,7 +17,7 @@ import (
 func database() error {
 	password, err := crypto.Decrypt(global.Conf.MySQL.Password, global.Conf.Crypto.KeyPath)
 	if err != nil {
-		return errors.WithMessage(err, "decode database password failed")
+		return errors.WithMessage(err, "decode database password error")
 	}
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true&loc=%s",
@@ -61,7 +61,7 @@ func autoMigrate() error {
 
 	for _, m := range models {
 		if err := global.DB.AutoMigrate(m); err != nil {
-			return errors.Wrap(err, "auto migrate db tables failed")
+			return errors.Wrap(err, "auto migrate db tables error")
 		}
 	}
 

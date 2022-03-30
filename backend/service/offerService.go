@@ -42,7 +42,7 @@ func (o *OfferSerivce) Offer(offerId int) (*dto.OfferDTO, error) {
 	}
 
 	if err != nil {
-		return nil, errors.WithMessagef(err, "get offer %d failed", offer.OfferId)
+		return nil, errors.WithMessagef(err, "failed to get offer %d", offer.OfferId)
 	}
 
 	return offerDTO, nil
@@ -84,7 +84,7 @@ func (o *OfferSerivce) Offers(corporationId int) (*dto.OfferDTOs, error) {
 			}
 
 			if err != nil {
-				log.Errorf(err, "get offer %d failed", offer.OfferId)
+				log.Errorf(err, "failed to get offer %d", offer.OfferId)
 				return
 			}
 
@@ -139,7 +139,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 			offerDTO.ErrorMessage = errorMessage
 		}
 
-		log.Debugf("get %s price of item %v in region %v failed: %v", o.productPrice, oos.itemId, oos.regionId, err)
+		log.Debugf("failed to get %s price of item %v in region %v: %v", o.productPrice, oos.itemId, oos.regionId, err)
 	}
 	offerDTO.Price = price
 	offerDTO.Income = offerDTO.Price * ((100 - o.tax) / 100) * float64(offer.Quantity)
@@ -152,7 +152,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 	ihs := NewItemHistoryService(offerDTO.ItemId, o.regionId, offerDTO.IsBluePrint)
 	volume, err := ihs.AverageVolume(o.days)
 	if err != nil {
-		log.Warnf("get volume of item %v region %v failed: %v", oos.itemId, oos.regionId, err)
+		log.Warnf("failed to get volume of item %v region %v: %v", oos.itemId, oos.regionId, err)
 	}
 	offerDTO.Volume = volume
 	offerDTO.GenerateSaleIndex()
@@ -165,7 +165,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 
 	bluePrint, err := model.GetBluePrint(offer.ItemId)
 	if err != nil {
-		return nil, errors.WithMessagef(err, "get blue print %d failed", offer.ItemId)
+		return nil, errors.WithMessagef(err, "failed to get blue print %d", offer.ItemId)
 	}
 	if len(bluePrint.Products) == 0 {
 		return nil, errors.Errorf("offer %d's bluePrint %d have no product", offer.OfferId, bluePrint.BlueprintId)
@@ -209,7 +209,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 		} else {
 			offerDTO.ErrorMessage = errorMessage
 		}
-		log.Debugf("get %s price of item %v in region %v failed: %v", o.productPrice, oos.itemId, oos.regionId, err)
+		log.Debugf("failed to get %s price of item %v in region %v: %v", o.productPrice, oos.itemId, oos.regionId, err)
 	}
 	offerDTO.Price = price
 	offerDTO.Income = offerDTO.Price * ((100 - o.tax) / 100) * float64(offer.Quantity)
@@ -222,7 +222,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	ihs := NewItemHistoryService(offerDTO.ItemId, o.regionId, offerDTO.IsBluePrint)
 	volume, err := ihs.AverageVolume(o.days)
 	if err != nil {
-		log.Warnf("get volume of item %v region %v failed: %v", oos.itemId, oos.regionId, err)
+		log.Warnf("failed to get volume of item %v region %v: %v", oos.itemId, oos.regionId, err)
 	}
 	offerDTO.Volume = volume
 	offerDTO.GenerateSaleIndex()
@@ -238,7 +238,7 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems, offerDTO *dto.Offe
 		var material dto.MaterialDTO
 		mi, err := model.GetItem(r.ItemId)
 		if err != nil {
-			log.Errorf(err, "get item %v failed", r.ItemId)
+			log.Errorf(err, "failed to get item %v", r.ItemId)
 			continue
 		}
 
@@ -269,7 +269,7 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems, offerDTO *dto.Offe
 			}
 			material.Error = true
 			material.ErrorMessage = errorMessage
-			log.Debugf("get %s price of item %v in region %v failed: %v", o.materialPrice, mos.itemId, mos.regionId, err)
+			log.Debugf("failed to get %s price of item %v in region %v: %v", o.materialPrice, mos.itemId, mos.regionId, err)
 		}
 		material.Price = price
 		material.Cost = material.Price * float64(material.Quantity)
@@ -286,7 +286,7 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 		var material dto.MaterialDTO
 		mi, err := model.GetItem(m.ItemId)
 		if err != nil {
-			log.Errorf(err, "get item %v failed", m.ItemId)
+			log.Errorf(err, "failed to get item %v", m.ItemId)
 			continue
 		}
 
@@ -316,7 +316,7 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 			}
 			material.Error = true
 			material.ErrorMessage = errorMessage
-			log.Debugf("get %s price of item %v in region %v failed: %v", o.materialPrice, mos.itemId, mos.regionId, err)
+			log.Debugf("failed to get %s price of item %v in region %v: %v", o.materialPrice, mos.itemId, mos.regionId, err)
 		}
 		material.Price = price
 		material.Cost = material.Price * float64(material.Quantity)

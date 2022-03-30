@@ -19,20 +19,20 @@ type starSystemData struct {
 }
 
 func (s *starSystemData) Refresh() error {
-	log.Infof("start load starSystems from %s", global.Conf.Data.Remote.Address)
+	log.Infof("start to load starSystems from %s", global.Conf.Data.Remote.Address)
 	s.getAllStarSystems()
 	sort.Sort(s.starSystems)
 
 	for _, starSystem := range *s.starSystems {
 		exist, err := starSystem.IsExist()
 		if err != nil {
-			log.Errorf(err, "check starSystem %d exist failed", starSystem.SystemId)
+			log.Errorf(err, "failed to check starSystem %d exist", starSystem.SystemId)
 		}
 
 		if exist {
 			valid, err := starSystem.IsVaild()
 			if err != nil {
-				log.Errorf(err, "check starSystem %d valid failed", starSystem.SystemId)
+				log.Errorf(err, "failed to check starSystem %d valid", starSystem.SystemId)
 			}
 
 			if valid {
@@ -45,7 +45,7 @@ func (s *starSystemData) Refresh() error {
 	}
 
 	wg.Wait()
-	log.Info("starSystems have loaded and saved to DB")
+	log.Info("starSystems loaded and saved to DB")
 
 	return nil
 }
@@ -58,18 +58,18 @@ func (s *starSystemData) getAllStarSystems() {
 
 	resp, err := net.GetWithRetries(client, req)
 	if err != nil {
-		log.Errorf(err, "get starSystems failed")
+		log.Errorf(err, "failed to get starSystems")
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Errorf(err, "get starSystems' body failed")
+		log.Errorf(err, "failed to get starSystems' body")
 	}
 
 	var idArray []int
 
 	if err = json.Unmarshal(body, &idArray); err != nil {
-		log.Errorf(err, "unmarshal starSystems json failed")
+		log.Errorf(err, "failed to unmarshal starSystems json")
 	}
 
 	var starSystems model.StarSystems
@@ -95,23 +95,23 @@ func (s *starSystemData) getStarSystem(starSystem *model.StarSystem, wg *sync.Wa
 
 			resp, err := net.GetWithRetries(client, req)
 			if err != nil {
-				log.Errorf(err, "get starSystem %d failed", starSystem.SystemId)
+				log.Errorf(err, "failed to get starSystem %d", starSystem.SystemId)
 			}
 
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
-				log.Errorf(err, "get starSystem %d's body failed", starSystem.SystemId)
+				log.Errorf(err, "failed to get starSystem %d's body", starSystem.SystemId)
 			}
 
 			var resultMap map[string]interface{}
 
 			if err = json.Unmarshal(body, &resultMap); err != nil {
-				log.Errorf(err, "unmarshal starSystem %d json failed", starSystem.SystemId)
+				log.Errorf(err, "failed to unmarshal starSystem %d json", starSystem.SystemId)
 			}
 
 			name, ok := resultMap["name"].(string)
 			if !ok {
-				log.Error(errors.New(fmt.Sprintf("starSystem %d %v cast to string failed", starSystem.SystemId, resultMap["name"])))
+				log.Error(errors.New(fmt.Sprintf("failed to cast starSystem %d %v to string ", starSystem.SystemId, resultMap["name"])))
 				continue
 			}
 
@@ -132,7 +132,7 @@ func (s *starSystemData) getStarSystem(starSystem *model.StarSystem, wg *sync.Wa
 		}
 
 		if err := model.SaveStarSystem(starSystem); err != nil {
-			log.Errorf(err, "starSystem %d save to DB failed", starSystem.SystemId)
+			log.Errorf(err, "failed to starSystem %d save to DB", starSystem.SystemId)
 		}
 	}
 }

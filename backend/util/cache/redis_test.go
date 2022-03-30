@@ -87,7 +87,7 @@ func TestGet(t *testing.T) {
 	assert.Equal(t, order, result)
 
 	err = Get(not_exist_key, result)
-	assert.Equal(t, fmt.Sprintf("redis get %s failed: redis: nil", not_exist_key), err.Error())
+	assert.Equal(t, fmt.Sprintf("redis get %s error: redis: nil", not_exist_key), err.Error())
 }
 
 func TestSet(t *testing.T) {

@@ -16,7 +16,7 @@ const (
 )
 
 func LocalData() error {
-	log.Info("start refresh static data to DB")
+	log.Info("start to refresh static data to DB")
 	start := time.Now()
 
 	var localDataPath = global.Conf.Data.Local.Path

@@ -35,7 +35,7 @@ func GetRegions() (*Regions, error) {
 
 func SaveRegion(region *Region) error {
 	if err := global.DB.Clauses(clause.OnConflict{UpdateAll: true}).Create(&region).Error; err != nil {
-		return errors.Wrap(err, "save region to DB failed")
+		return errors.Wrapf(err, "failed to save region %d to DB", region.RegionId)
 	}
 	return nil
 }

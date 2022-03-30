@@ -15,11 +15,11 @@ var ctx = context.Background()
 func Set(key string, value interface{}, expirationTime time.Duration) error {
 	val, err := json.Marshal(value)
 	if err != nil {
-		return errors.Wrapf(err, "redis marshal value %v failed", value)
+		return errors.Wrapf(err, "redis marshal value %v error", value)
 	}
 
 	if err := global.Redis.Set(ctx, key, val, expirationTime).Err(); err != nil {
-		return errors.Wrapf(err, "redis set key %v value %v failed", key, val)
+		return errors.Wrapf(err, "redis set key %v value %v error", key, val)
 	}
 
 	return nil
@@ -28,10 +28,10 @@ func Set(key string, value interface{}, expirationTime time.Duration) error {
 func Get(key string, dest interface{}) error {
 	val, err := global.Redis.Get(ctx, key).Result()
 	if err != nil {
-		return errors.Wrapf(err, "redis get %v failed", key)
+		return errors.Wrapf(err, "redis get %v error", key)
 	}
 	if err := json.Unmarshal([]byte(val), dest); err != nil {
-		return errors.Wrapf(err, "redis unmarshal value %v failed", val)
+		return errors.Wrapf(err, "redis unmarshal value %v error", val)
 	}
 	return nil
 }

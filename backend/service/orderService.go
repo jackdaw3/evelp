@@ -85,7 +85,7 @@ func (o *OrderService) Orders(isBuyOrder bool, lang string) (*dto.OrderDTOs, err
 
 		system, err := model.GetStarSystem(order.SystemId)
 		if err != nil {
-			log.Errorf(err, "get star system %v failed", order.SystemId)
+			log.Errorf(err, "failed to get star system %v", order.SystemId)
 			continue
 		}
 		orderDTO.SystemName = system.Name.Lang(lang)
@@ -109,7 +109,7 @@ func (o *OrderService) ordersFromCache() (*model.Orders, error) {
 	if o.isBluePrint {
 		bluePrint, err := model.GetBluePrint(o.itemId)
 		if err != nil {
-			return nil, errors.WithMessagef(err, "get blue print %d failed", o.itemId)
+			return nil, errors.WithMessagef(err, "failed to get blue print %d", o.itemId)
 		}
 		if len(bluePrint.Products) == 0 {
 			return nil, errors.Errorf("offer %d's bluePrint %d have no product", o.itemId, bluePrint.BlueprintId)

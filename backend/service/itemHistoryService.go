@@ -61,7 +61,7 @@ func (ih *ItemHistoryService) historyFromCache() (*model.ItemHistorys, error) {
 	if ih.isBluePrint {
 		bluePrint, err := model.GetBluePrint(ih.itemId)
 		if err != nil {
-			return nil, errors.WithMessagef(err, "get blue print %d failed", ih.itemId)
+			return nil, errors.WithMessagef(err, "failed to get blue print %d", ih.itemId)
 		}
 		if len(bluePrint.Products) == 0 {
 			return nil, errors.Errorf("offer %d's bluePrint %d have no product", ih.itemId, bluePrint.BlueprintId)

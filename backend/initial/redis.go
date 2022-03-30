@@ -15,7 +15,7 @@ var ctx = context.Background()
 func initRedis() error {
 	password, err := crypto.Decrypt(global.Conf.Redis.Password, global.Conf.Crypto.KeyPath)
 	if err != nil {
-		return errors.WithMessage(err, "decode redis password failed")
+		return errors.WithMessage(err, "decode redis password error")
 	}
 
 	rdb := redis.NewClient(&redis.Options{

@@ -15,17 +15,17 @@ type typeIDData struct {
 }
 
 func (t *typeIDData) Refresh() error {
-	log.Info("Start load items", t.filePath)
+	log.Info("start to load items", t.filePath)
 	if err := t.load(); err != nil {
 		return err
 	}
-	log.Info("Load ", t.filePath, " finished.")
+	log.Infof("loading %s completed", t.filePath)
 
-	log.Info("Start save types to DB.")
+	log.Info("start to save types to DB.")
 	if err := model.SaveItems(t.items); err != nil {
 		return err
 	}
-	log.Info("Types have saved to DB.")
+	log.Info("types saved to DB")
 
 	return nil
 }
