@@ -9,12 +9,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type typeIdsData struct {
+type typeIDData struct {
 	filePath string
 	items    *model.Items
 }
 
-func (t *typeIdsData) Refresh() error {
+func (t *typeIDData) Refresh() error {
 	log.Info("Start load items", t.filePath)
 	if err := t.load(); err != nil {
 		return err
@@ -30,7 +30,7 @@ func (t *typeIdsData) Refresh() error {
 	return nil
 }
 
-func (t *typeIdsData) load() error {
+func (t *typeIDData) load() error {
 	file, err := ioutil.ReadFile(t.filePath)
 	if err != nil {
 		return err

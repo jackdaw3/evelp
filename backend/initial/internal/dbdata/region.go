@@ -14,11 +14,11 @@ import (
 	"github.com/pkg/errors"
 )
 
-type reginosData struct {
+type reginoData struct {
 	regions *model.Regions
 }
 
-func (r *reginosData) Refresh() error {
+func (r *reginoData) Refresh() error {
 	log.Infof("start load regions from %s", global.Conf.Data.Remote.Address)
 	r.getAllRegions()
 	sort.Sort(r.regions)
@@ -52,7 +52,7 @@ func (r *reginosData) Refresh() error {
 	return nil
 }
 
-func (r *reginosData) getAllRegions() {
+func (r *reginoData) getAllRegions() {
 	req := fmt.Sprintf("%s/universe/regions/?datasource=%s",
 		global.Conf.Data.Remote.Address,
 		global.Conf.Data.Remote.DataSource,
@@ -83,7 +83,7 @@ func (r *reginosData) getAllRegions() {
 	r.regions = &regions
 }
 
-func (r *reginosData) getRegion(region *model.Region, wg *sync.WaitGroup) func() {
+func (r *reginoData) getRegion(region *model.Region, wg *sync.WaitGroup) func() {
 	return func() {
 		defer wg.Done()
 

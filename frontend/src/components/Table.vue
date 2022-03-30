@@ -37,7 +37,7 @@
                 <span v-else>{{ tableLabel.material.lpStoreMaterail }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="Name" :label="tableLabel.material.name" min-width="27%">
+            <el-table-column prop="MaterialName" :label="tableLabel.material.name" min-width="27%">
               <template slot-scope="scope">
                 <el-image
                   style="height: 22px; vertical-align: middle"
@@ -49,7 +49,7 @@
                     <i class="el-icon-picture-outline"></i>
                   </div>
                 </el-image>
-                <span>{{ scope.row.Name }}</span>
+                <span>{{ scope.row.MaterialName }}</span>
               </template>
             </el-table-column>
             <el-table-column prop="Quantity" :label="tableLabel.material.quantity" min-width="10%"></el-table-column>
@@ -93,7 +93,7 @@
           </el-table>
         </template>
       </el-table-column>
-      <el-table-column prop="Name" min-width="20%" :label="tableLabel.name">
+      <el-table-column prop="ItemName" min-width="20%" :label="tableLabel.name">
         <template slot-scope="scope">
           <el-image
             style="height: 22px; vertical-align: middle"
@@ -105,7 +105,7 @@
               <i class="el-icon-picture-outline"></i>
             </div>
           </el-image>
-          <span>{{ scope.row.Name }}</span>
+          <span>{{ scope.row.ItemName }}</span>
         </template>
       </el-table-column>
       <el-table-column

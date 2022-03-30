@@ -74,8 +74,8 @@ func TestOffers(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(*offers))
-	assert.Equal(t, "System Scanner I Blueprint", (*offers)[0].Name)
-	assert.Equal(t, "Imperial Navy Slicer", (*offers)[1].Name)
+	assert.Equal(t, "System Scanner I Blueprint", (*offers)[0].ItemName)
+	assert.Equal(t, "Imperial Navy Slicer", (*offers)[1].ItemName)
 	assert.Equal(t, int(expectedUnitProfit1), (*offers)[0].UnitProfit)
 	assert.Equal(t, int(expectedUnitProfit2), (*offers)[1].UnitProfit)
 }

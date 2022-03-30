@@ -15,17 +15,17 @@ const (
 	reactActivity   = 11
 )
 
-type bluePrintsData struct {
+type bluePrintData struct {
 	productFilePath  string
 	materialFilePath string
 	bluePrintsMap    map[int]*model.BluePrint
 }
 
-func (b *bluePrintsData) Refresh() error {
+func (b *bluePrintData) Refresh() error {
 	log.Infof("start load bluePrints %s and %s", b.productFilePath, b.materialFilePath)
 	b.bluePrintsMap = make(map[int]*model.BluePrint)
 
-	bluePrints, err := b.load()
+	bluePrints, err := b.loadBluePrints()
 	if err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ func (b *bluePrintsData) Refresh() error {
 	return nil
 }
 
-func (b *bluePrintsData) load() (*model.BluePrints, error) {
+func (b *bluePrintData) loadBluePrints() (*model.BluePrints, error) {
 	products, err := readCsv(b.productFilePath)
 	if err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func (b *bluePrintsData) load() (*model.BluePrints, error) {
 
 }
 
-func (b *bluePrintsData) covertProducts(products [][]string) error {
+func (b *bluePrintData) covertProducts(products [][]string) error {
 	for _, product := range products {
 		bluePrintId, err := strconv.Atoi(product[0])
 		if err != nil {
@@ -106,7 +106,7 @@ func (b *bluePrintsData) covertProducts(products [][]string) error {
 	return nil
 }
 
-func (b *bluePrintsData) covertMaterials(materails [][]string) error {
+func (b *bluePrintData) covertMaterials(materails [][]string) error {
 	for _, materail := range materails {
 		bluePrintId, err := strconv.Atoi(materail[0])
 		if err != nil {

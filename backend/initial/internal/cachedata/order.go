@@ -19,19 +19,19 @@ var (
 	mu sync.Mutex
 )
 
-type ordersData struct {
+type orderData struct {
 	orders         map[string]*model.Orders
 	expirationTime time.Duration
 	items          map[int]interface{}
 }
 
-func (o *ordersData) Refresh() error {
+func (o *orderData) Refresh() error {
 	go func() {
 		for {
 			log.Debugf("start load orders to redis")
 
 			log.Debugf("start load %d region's orders", the_forge)
-			if err := o.loadOrdersByRegion(the_forge); err != nil {
+			if err := o.ordersByRegion(the_forge); err != nil {
 				log.Errorf(err, "load %d region orders failed", the_forge)
 				o.clearMap()
 				continue
@@ -52,22 +52,22 @@ func (o *ordersData) Refresh() error {
 	return nil
 }
 
-func (o *ordersData) loadOrdersByRegion(regionId int) error {
-	pages, err := o.getOrdersPage(regionId)
+func (o *orderData) ordersByRegion(regionId int) error {
+	pages, err := o.marketPages(regionId)
 	if err != nil {
 		return err
 	}
 
 	for i := 1; i <= pages; i++ {
 		wg.Add(1)
-		global.Ants.Submit(o.loadOrdersByRegionPage(regionId, i))
+		global.Ants.Submit(o.ordersByRegionPage(regionId, i))
 	}
 
 	wg.Wait()
 	return nil
 }
 
-func (o *ordersData) loadOrdersByRegionPage(regionId int, page int) func() {
+func (o *orderData) ordersByRegionPage(regionId int, page int) func() {
 	return func() {
 		defer wg.Done()
 
@@ -107,7 +107,7 @@ func (o *ordersData) loadOrdersByRegionPage(regionId int, page int) func() {
 	}
 }
 
-func (o *ordersData) getOrdersPage(regionId int) (int, error) {
+func (o *orderData) marketPages(regionId int) (int, error) {
 	req := fmt.Sprintf("%s/markets/%d/orders/?datasource=%s&order_type=all&page=%d",
 		global.Conf.Data.Remote.Address,
 		regionId,
@@ -129,7 +129,7 @@ func (o *ordersData) getOrdersPage(regionId int) (int, error) {
 
 }
 
-func (o *ordersData) syncPutToMap(key string, order *model.Order) {
+func (o *orderData) syncPutToMap(key string, order *model.Order) {
 	defer mu.Unlock()
 	mu.Lock()
 
@@ -144,7 +144,7 @@ func (o *ordersData) syncPutToMap(key string, order *model.Order) {
 	}
 }
 
-func (o *ordersData) clearMap() {
+func (o *orderData) clearMap() {
 	for k := range o.orders {
 		delete(o.orders, k)
 	}

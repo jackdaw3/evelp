@@ -15,7 +15,7 @@ import (
 
 var mu sync.Mutex
 
-type offersData struct {
+type offerData struct {
 	offersMap map[int]*model.Offer
 }
 
@@ -24,7 +24,7 @@ type offersWrapper struct {
 	corporationId int
 }
 
-func (o *offersData) Refresh() error {
+func (o *offerData) Refresh() error {
 	log.Infof("start load offers from %s", global.Conf.Data.Remote.Address)
 	o.offersMap = make(map[int]*model.Offer)
 	if err := o.getOffersMap(); err != nil {
@@ -46,7 +46,7 @@ func (o *offersData) Refresh() error {
 	return nil
 }
 
-func (o *offersData) getOffersMap() error {
+func (o *offerData) getOffersMap() error {
 	corporations, err := model.GetCorporations()
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func (o *offersData) getOffersMap() error {
 	return nil
 }
 
-func (o *offersData) covertOffersWrapper(offersWrapper offersWrapper) {
+func (o *offerData) covertOffersWrapper(offersWrapper offersWrapper) {
 	defer mu.Unlock()
 	mu.Lock()
 
@@ -93,7 +93,7 @@ func (o *offersData) covertOffersWrapper(offersWrapper offersWrapper) {
 	}
 }
 
-func (o *offersData) getOffers(corporationId int, wg *sync.WaitGroup) func() {
+func (o *offerData) getOffers(corporationId int, wg *sync.WaitGroup) func() {
 	return func() {
 		defer wg.Done()
 

@@ -22,7 +22,7 @@ func (c *CorporationSerivce) Corporation() (*dto.CorporationDTO, error) {
 
 	var corporationDTO dto.CorporationDTO
 	corporationDTO.CorporationId = c.corporationId
-	corporationDTO.CorporationName = corporation.Name.Val(c.lang)
+	corporationDTO.CorporationName = corporation.Name.Lang(c.lang)
 
 	return &corporationDTO, nil
 }

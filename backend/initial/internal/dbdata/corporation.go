@@ -9,14 +9,14 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type corporationsData struct {
+type corporationData struct {
 	filePath     string
 	corporations *model.Corporations
 }
 
-func (cd *corporationsData) Refresh() error {
+func (cd *corporationData) Refresh() error {
 	log.Info("start load corporations", cd.filePath)
-	if err := cd.load(); err != nil {
+	if err := cd.loadCorporations(); err != nil {
 		return err
 	}
 	log.Info("load ", cd.filePath, " finished")
@@ -30,7 +30,7 @@ func (cd *corporationsData) Refresh() error {
 	return nil
 }
 
-func (cd *corporationsData) load() error {
+func (cd *corporationData) loadCorporations() error {
 	file, err := ioutil.ReadFile(cd.filePath)
 	if err != nil {
 		return err

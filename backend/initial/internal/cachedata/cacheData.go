@@ -17,7 +17,7 @@ func CacheData() error {
 	log.Info("start refresh cache data")
 
 	orders := make(map[string]*model.Orders)
-	ordersData := new(ordersData)
+	ordersData := new(orderData)
 	ordersData.orders = orders
 	ordersData.expirationTime = global.Conf.Redis.ExpireTime.Order * time.Minute
 	items, err := model.GetAllItems()

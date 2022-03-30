@@ -17,11 +17,11 @@ func RemoteData() error {
 	log.Info("start load remote data to DB")
 	start := time.Now()
 
-	offersData := new(offersData)
-	regionsData := new(reginosData)
-	starSystemsData := new(starSystemsData)
+	offerData := new(offerData)
+	regionData := new(reginoData)
+	starSystemData := new(starSystemData)
 
-	remoteDataList := []api.Data{offersData, regionsData, starSystemsData}
+	remoteDataList := []api.Data{offerData, regionData, starSystemData}
 	for _, remoteData := range remoteDataList {
 		if err := remoteData.Refresh(); err != nil {
 			return err

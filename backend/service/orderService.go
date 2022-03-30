@@ -66,7 +66,7 @@ func (o *OrderService) Orders(isBuyOrder bool, lang string) (*dto.OrderDTOs, err
 	if err != nil {
 		return nil, err
 	}
-	itemName := item.Name.Val(lang)
+	itemName := item.Name.Lang(lang)
 
 	for _, order := range *orders {
 		if !order.IsBuyOrder == isBuyOrder {
@@ -88,7 +88,7 @@ func (o *OrderService) Orders(isBuyOrder bool, lang string) (*dto.OrderDTOs, err
 			log.Errorf(err, "get star system %v failed", order.SystemId)
 			continue
 		}
-		orderDTO.SystemName = system.Name.Val(lang)
+		orderDTO.SystemName = system.Name.Lang(lang)
 
 		orderDTOs = append(orderDTOs, orderDTO)
 	}

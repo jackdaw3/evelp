@@ -39,7 +39,7 @@ func (n Name) Value() (driver.Value, error) {
 	return string(str), nil
 }
 
-func (n *Name) Val(lang string) string {
+func (n *Name) Lang(lang string) string {
 	var val string
 
 	switch lang {

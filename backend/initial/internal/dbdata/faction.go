@@ -9,14 +9,14 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type factionsData struct {
+type factionData struct {
 	filePath string
 	factions *model.Factions
 }
 
-func (fd *factionsData) Refresh() error {
+func (fd *factionData) Refresh() error {
 	log.Info("start load factions", fd.filePath)
-	if err := fd.load(); err != nil {
+	if err := fd.loadFactions(); err != nil {
 		return err
 	}
 	log.Info("load ", fd.filePath, " finished")
@@ -30,7 +30,7 @@ func (fd *factionsData) Refresh() error {
 	return nil
 }
 
-func (fd *factionsData) load() error {
+func (fd *factionData) loadFactions() error {
 	file, err := ioutil.ReadFile(fd.filePath)
 	if err != nil {
 		return err

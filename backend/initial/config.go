@@ -21,7 +21,7 @@ func config() error {
 		return err
 	}
 
-	ginMode()
+	initGinMode()
 	log.SetLevel(global.Conf.App.LogLevel)
 
 	return nil
@@ -62,7 +62,7 @@ func initViper() error {
 	return nil
 }
 
-func ginMode() {
+func initGinMode() {
 	if global.Env == "local" {
 		gin.SetMode(gin.DebugMode)
 	}

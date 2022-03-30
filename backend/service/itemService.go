@@ -22,8 +22,7 @@ func (is *ItemService) Item(itemId int) (*dto.ItemDTO, error) {
 	}
 
 	itemDTO.ItemId = item.ItemId
-	itemDTO.ItemName = item.Name.Val(is.lang)
+	itemDTO.ItemName = item.Name.Lang(is.lang)
 
-	
 	return &itemDTO, nil
 }

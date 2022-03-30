@@ -20,20 +20,20 @@ func LocalData() error {
 	start := time.Now()
 
 	var localDataPath = global.Conf.Data.Local.Path
-	typeIDsData := new(typeIdsData)
-	typeIDsData.filePath = localDataPath + typeIdsFile
+	typeIDData := new(typeIDData)
+	typeIDData.filePath = localDataPath + typeIdsFile
 
-	factionsData := new(factionsData)
-	factionsData.filePath = localDataPath + factionFile
+	factionData := new(factionData)
+	factionData.filePath = localDataPath + factionFile
 
-	corporationsData := new(corporationsData)
-	corporationsData.filePath = localDataPath + corporationsFile
+	corporationData := new(corporationData)
+	corporationData.filePath = localDataPath + corporationsFile
 
-	bluePrintsData := new(bluePrintsData)
-	bluePrintsData.productFilePath = localDataPath + bluePrintProductsFile
-	bluePrintsData.materialFilePath = localDataPath + bluePrintMaterialsFile
+	bluePrintData := new(bluePrintData)
+	bluePrintData.productFilePath = localDataPath + bluePrintProductsFile
+	bluePrintData.materialFilePath = localDataPath + bluePrintMaterialsFile
 
-	localDataList := []api.Data{typeIDsData, factionsData, corporationsData, bluePrintsData}
+	localDataList := []api.Data{typeIDData, factionData, corporationData, bluePrintData}
 	for _, localData := range localDataList {
 		if err := localData.Refresh(); err != nil {
 			return err

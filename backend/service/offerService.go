@@ -110,7 +110,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 
 	offerDTO.OfferId = offer.OfferId
 	offerDTO.ItemId = item.ItemId
-	offerDTO.Name = item.Name.Val(o.lang)
+	offerDTO.ItemName = item.Name.Lang(o.lang)
 	offerDTO.IsBluePrint = false
 	offerDTO.Quantity = offer.Quantity
 	offerDTO.IskCost = offer.IskCost
@@ -130,7 +130,7 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 	if err != nil {
 		offerDTO.Error = true
 		errorMessage := fmt.Sprintf("failed to get %s price for product %s in The Forge: %s",
-			o.productPrice, offerDTO.Name,
+			o.productPrice, offerDTO.ItemName,
 			errors.Cause(err).Error(),
 		)
 		if len(offerDTO.ErrorMessage) > 0 {
@@ -201,7 +201,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 		offerDTO.Error = true
 		errorMessage := fmt.Sprintf("failed to get %s price for blueprint %s product in The Forge: %s",
 			o.productPrice,
-			bluePrintItem.Name.Val(o.lang),
+			bluePrintItem.Name.Lang(o.lang),
 			errors.Cause(err).Error(),
 		)
 		if len(offerDTO.ErrorMessage) > 0 {
@@ -226,7 +226,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	}
 	offerDTO.Volume = volume
 	offerDTO.GenerateSaleIndex()
-	offerDTO.Name = bluePrintItem.Name.Val(o.lang)
+	offerDTO.ItemName = bluePrintItem.Name.Lang(o.lang)
 
 	return &offerDTO, nil
 }
@@ -243,7 +243,7 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems, offerDTO *dto.Offe
 		}
 
 		material.ItemId = mi.ItemId
-		material.Name = mi.Name.Val(o.lang)
+		material.MaterialName = mi.Name.Lang(o.lang)
 
 		material.Quantity = r.Quantity
 		material.IsBluePrint = false
@@ -259,7 +259,7 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems, offerDTO *dto.Offe
 			offerDTO.Error = true
 			errorMessage := fmt.Sprintf("failed to get %s price for exchange material %s in The Forge: %s",
 				o.materialPrice,
-				material.Name,
+				material.MaterialName,
 				errors.Cause(err).Error(),
 			)
 			if len(offerDTO.ErrorMessage) > 0 {
@@ -291,7 +291,7 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 		}
 
 		material.ItemId = mi.ItemId
-		material.Name = mi.Name.Val(o.lang)
+		material.MaterialName = mi.Name.Lang(o.lang)
 		material.IsBluePrint = true
 		material.Quantity = m.Quantity * int64(offerDTO.Quantity)
 
@@ -306,7 +306,7 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 			offerDTO.Error = true
 			errorMessage := fmt.Sprintf("failed to get %s price for manufact material %s in The Forge: %s",
 				o.materialPrice,
-				material.Name,
+				material.MaterialName,
 				errors.Cause(err).Error(),
 			)
 			if len(offerDTO.ErrorMessage) > 0 {

@@ -14,11 +14,11 @@ import (
 	"github.com/pkg/errors"
 )
 
-type starSystemsData struct {
+type starSystemData struct {
 	starSystems *model.StarSystems
 }
 
-func (s *starSystemsData) Refresh() error {
+func (s *starSystemData) Refresh() error {
 	log.Infof("start load starSystems from %s", global.Conf.Data.Remote.Address)
 	s.getAllStarSystems()
 	sort.Sort(s.starSystems)
@@ -50,7 +50,7 @@ func (s *starSystemsData) Refresh() error {
 	return nil
 }
 
-func (s *starSystemsData) getAllStarSystems() {
+func (s *starSystemData) getAllStarSystems() {
 	req := fmt.Sprintf("%s/universe/systems/?datasource=%s",
 		global.Conf.Data.Remote.Address,
 		global.Conf.Data.Remote.DataSource,
@@ -81,7 +81,7 @@ func (s *starSystemsData) getAllStarSystems() {
 	s.starSystems = &starSystems
 }
 
-func (s *starSystemsData) getStarSystem(starSystem *model.StarSystem, wg *sync.WaitGroup) func() {
+func (s *starSystemData) getStarSystem(starSystem *model.StarSystem, wg *sync.WaitGroup) func() {
 	return func() {
 		defer wg.Done()
 

@@ -26,7 +26,7 @@ func (f *FactionSerivce) Factions() (*dto.FactionDTOs, error) {
 	for _, faction := range *factions {
 		var factionDTO dto.FactionDTO
 		factionDTO.FactionId = faction.FactionId
-		factionDTO.FactionName = faction.Name.Val(f.lang)
+		factionDTO.FactionName = faction.Name.Lang(f.lang)
 
 		var corporationDTOs dto.CorporationDTOs
 		corportations, err := model.GetCorporationsByFaction(factionDTO.FactionId)
@@ -38,7 +38,7 @@ func (f *FactionSerivce) Factions() (*dto.FactionDTOs, error) {
 		for _, corportation := range *corportations {
 			var corporationDTO dto.CorporationDTO
 			corporationDTO.CorporationId = corportation.CorporationId
-			corporationDTO.CorporationName = corportation.Name.Val(f.lang)
+			corporationDTO.CorporationName = corportation.Name.Lang(f.lang)
 			corporationDTOs = append(corporationDTOs, &corporationDTO)
 		}
 		sort.Sort(corporationDTOs)

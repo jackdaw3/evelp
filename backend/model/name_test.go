@@ -16,10 +16,10 @@ func TestVal(t *testing.T) {
 		Zh: "中文",
 	}
 
-	assert.Equal(t, "Deutsch", name.Val("de"))
-	assert.Equal(t, "English", name.Val("en"))
-	assert.Equal(t, "Français", name.Val("fr"))
-	assert.Equal(t, "日本語", name.Val("ja"))
-	assert.Equal(t, "Pусский", name.Val("ru"))
-	assert.Equal(t, "中文", name.Val("zh"))
+	assert.Equal(t, "Deutsch", name.Lang("de"))
+	assert.Equal(t, "English", name.Lang("en"))
+	assert.Equal(t, "Français", name.Lang("fr"))
+	assert.Equal(t, "日本語", name.Lang("ja"))
+	assert.Equal(t, "Pусский", name.Lang("ru"))
+	assert.Equal(t, "中文", name.Lang("zh"))
 }

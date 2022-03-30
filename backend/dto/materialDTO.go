@@ -2,7 +2,7 @@ package dto
 
 type MaterialDTO struct {
 	ItemId       int
-	Name         string
+	MaterialName string
 	Quantity     int64
 	Price        float64
 	Cost         float64

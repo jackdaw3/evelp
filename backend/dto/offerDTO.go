@@ -5,7 +5,7 @@ import "math"
 type OfferDTO struct {
 	OfferId      int
 	ItemId       int
-	Name         string
+	ItemName     string
 	Quantity     int
 	IskCost      float64
 	LpCost       int

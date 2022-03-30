@@ -33,9 +33,16 @@ type Offer struct {
 	IsBluePrint    bool           `gorm:"type:bool;default:false" json:"is_blue_print"`
 }
 
+type RequireItem struct {
+	ItemId   int   `gorm:"type:int;not null" json:"type_id"`
+	Quantity int64 `gorm:"type:int;not null" json:"quantity"`
+}
+
 type Offers []*Offer
 
 type CorporationIds []int
+
+type RequireItems []RequireItem
 
 func (o Offers) Len() int { return len(o) }
 
@@ -68,6 +75,28 @@ func (c *CorporationIds) Scan(value interface{}) error {
 
 func (c CorporationIds) Value() (driver.Value, error) {
 	str, err := json.Marshal(c)
+	if err != nil {
+		return nil, nil
+	}
+
+	return string(str), nil
+}
+
+func (r *RequireItems) Scan(value interface{}) error {
+	if value == nil {
+		return nil
+	}
+
+	str, ok := value.([]byte)
+	if !ok {
+		return errors.Errorf("%v is not []byte", value)
+	}
+
+	return json.Unmarshal(str, &r)
+}
+
+func (r RequireItems) Value() (driver.Value, error) {
+	str, err := json.Marshal(r)
 	if err != nil {
 		return nil, nil
 	}
