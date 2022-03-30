@@ -1,5 +1,5 @@
 app:
-  serverPort: :9000
+  serverPort: :9090
   logLevel: debug
 
 mysql:
@@ -18,7 +18,7 @@ mysql:
 redis:
   address: 127.0.0.1:6379
   password: co9NAIXA4OHSHcSFdrSrK2fZ2yFGjKZasn0VTb1PQenoTcxB6EJNQl705DVbbWyR45X9/z3+2RtO/PZVKMVdwOGCvme4xGZB0+t+cvrCspQjcer8epmEihfJrzzSepflIE4SsWZHr/iBz90HDEz8wk0Jqqd2DhgT38vV5nt3mWE=
-  database: 0
+  database: 1
   refresh: false
   expireTime:
     history: -1
@@ -30,8 +30,8 @@ data:
     path: C://Users//Administrator//dev//data//
     refresh: false
   remote: 
-    address: https://esi.evetech.net/latest
-    datasource: tranquility
+    address: https://esi.evepc.163.com/latest
+    datasource: serenity
     refresh: false
 
 crypto:
