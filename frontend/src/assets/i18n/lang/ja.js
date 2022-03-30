@@ -3,7 +3,7 @@ const ja = {
     header: {
       menu: "メニュー",
       home: "ホームページ",
-      serverName: "Tranquility",
+      serverName: "Serenity",
       market: "ザ・フォージ",
     },
     corporation: {

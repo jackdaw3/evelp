@@ -3,7 +3,7 @@ const de = {
     header: {
       menu: "Speisekarte",
       home: "Startseite",
-      serverName: "Tranquility",
+      serverName: "Serenity",
       market: "The Forge",
     },
     corporation: {

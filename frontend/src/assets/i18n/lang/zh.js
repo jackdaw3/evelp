@@ -3,7 +3,7 @@ const zh = {
     header: {
       menu: "菜单",
       home: "主页",
-      serverName: "宁静",
+      serverName: "晨曦",
       market: "吉他",
     },
     corporation: {

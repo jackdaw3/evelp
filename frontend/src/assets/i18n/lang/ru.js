@@ -3,7 +3,7 @@ const ru = {
     header: {
       menu: "Меню",
       home: "Домой",
-      serverName: "Tranquility",
+      serverName: "Serenity",
       market: "The Forge",
     },
     corporation: {

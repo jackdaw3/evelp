@@ -3,7 +3,7 @@ const fr = {
     header: {
       menu: "Menu",
       home: "Home",
-      serverName: "Tranquility",
+      serverName: "Serenity",
       market: "The Forge",
     },
     corporation: {
