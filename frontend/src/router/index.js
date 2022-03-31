@@ -19,7 +19,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  base: '/serenity',
+  routes,
 })
 
 export default router

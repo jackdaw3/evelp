@@ -42,11 +42,11 @@
 <script>
 export default {
   mounted() {
-    if (localStorage.lang == null) {
-      localStorage.lang = "en";
+    if (localStorage.serenitylang == null) {
+      localStorage.serenitylang = "zh";
     }
-    if (localStorage.lang) {
-      this.$i18n.locale = localStorage.lang;
+    if (localStorage.serenitylang) {
+      this.$i18n.locale = localStorage.serenitylang;
     }
     this.language = this.langLabel(this.$i18n.locale);
   },
@@ -79,7 +79,7 @@ export default {
   },
   watch: {
     "$i18n.locale"() {
-      localStorage.lang = this.$i18n.locale;
+      localStorage.serenitylang = this.$i18n.locale;
       this.headerLabel = this.$t("message.header");
       this.language = this.langLabel(this.$i18n.locale);
     },

@@ -36,7 +36,7 @@ import Dialog from "@/components/Dialog.vue";
 import Header from "@/components/Header.vue";
 import Table from "@/components/Table.vue";
 
-const backend = "https://eve-lp.com/api/";
+const backend = "https://eve-lp.com/serenity/api/";
 const the_forge = "10000002";
 
 export default {
@@ -47,14 +47,14 @@ export default {
     Table,
   },
   created() {
-    if (localStorage.lang == null) {
-      localStorage.lang = "en";
+    if (localStorage.serenitylang == null) {
+      localStorage.serenitylang = "zh";
     }
-    if (localStorage.lang) {
-      this.$i18n.locale = localStorage.lang;
+    if (localStorage.serenitylang) {
+      this.$i18n.locale = localStorage.serenitylang;
     }
-    if (localStorage.form) {
-      this.$store.dispatch("setForm", JSON.parse(localStorage.form));
+    if (localStorage.serenityform) {
+      this.$store.dispatch("setForm", JSON.parse(localStorage.serenityform));
     }
     this.loadFactions();
   },

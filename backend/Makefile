@@ -1,4 +1,4 @@
-APP=evelp
+APP=serenity
 .PHONY: clean test run build
 
 clean:

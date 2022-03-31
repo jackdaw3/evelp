@@ -90,12 +90,12 @@ export default {
       this.form.tax = 0;
     },
     closeDialog() {
-      if (!localStorage.form) {
+      if (!localStorage.serenityform) {
         this.$store.dispatch("setForm", this.form);
-        localStorage.form = JSON.stringify(this.form);
+        localStorage.serenityform = JSON.stringify(this.form);
         this.$emit("form-change");
       } else {
-        const old = JSON.parse(localStorage.form);
+        const old = JSON.parse(localStorage.serenityform);
         if (
           this.form.materialPrice != old.materialPrice ||
           this.form.productPrice != old.productPrice ||
@@ -103,7 +103,7 @@ export default {
           this.form.tax != old.tax
         ) {
           this.$store.dispatch("setForm", this.form);
-          localStorage.form = JSON.stringify(this.form);
+          localStorage.serenityform = JSON.stringify(this.form);
           this.$emit("form-change");
         }
       }

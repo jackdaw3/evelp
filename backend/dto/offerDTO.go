@@ -25,7 +25,7 @@ type OfferDTO struct {
 const (
 	k1 = 100000000
 	k2 = 100
-	k3 = 45
+	k3 = 85
 )
 
 type OfferDTOs []OfferDTO
