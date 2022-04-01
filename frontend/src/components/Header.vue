@@ -21,11 +21,11 @@
     </el-dropdown>
 
     <el-divider direction="vertical"></el-divider>
-    <span style="color: #ecf0f1">EVE-LP</span>
+    <span style="color: #D0D3D4">EVE-LP</span>
     <el-divider direction="vertical"></el-divider>
-    <span style="color: #ecf0f1">{{ headerLabel.serverName }}</span>
+    <span style="color: #D0D3D4">{{ headerLabel.serverName }}</span>
     <el-divider direction="vertical"></el-divider>
-    <span style="color: #ecf0f1">{{ headerLabel.market }}</span>
+    <span style="color: #D0D3D4">{{ headerLabel.market }}</span>
 
     <el-dropdown
       @command="langChange"

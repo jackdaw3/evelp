@@ -15,7 +15,7 @@
           v-loading="corporation.loading"
           :placeholder="corporation.placeholder"
           :options="corporation.lists"
-          element-loading-background="rgba(0, 0, 0, 0.8)"
+          element-loading-background="rgba(0, 0, 0, 0)"
           clearable
           filterable
           @change="loadTable"

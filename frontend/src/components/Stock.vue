@@ -198,7 +198,7 @@ export default {
             type: "column",
             data: this.history.volume,
             yAxis: 1,
-            color: "#003333",
+            color: "#1F5460",
           },
         ],
       },
