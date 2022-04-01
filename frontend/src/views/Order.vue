@@ -1,17 +1,31 @@
 <template>
   <div class="order">
     <Header />
-    <hr />
-    <div style="margin-top: -11px">
-      <el-alert
-        :title="order.itemName"
-        type="info"
-        :closable="false"
-        :description="order.corporationName"
-      ></el-alert>
+    <div style="margin-top: -13px">
+      <el-divider></el-divider>
     </div>
+    <h3
+      style="
+        color: #D0D3D4;
+        font-size: 16px;
+        text-align: center;
+        margin-top: -5px;
+      "
+    >
+      {{ order.itemName }}
+    </h3>
+    <h4
+      style="
+        color: #D0D3D4;
+        font-size: 14px;
+        text-align: center;
+        margin-top: -5px;
+      "
+    >
+      {{ order.corporationName }}
+    </h4>
 
-    <el-tabs type="card">
+    <el-tabs type="card" style="margin-top: -38px">
       <el-tab-pane :label="orderLabel.buyOrder">
         <el-row :gutter="35">
           <el-col :span="12">
@@ -68,7 +82,7 @@ export default {
   },
   computed: {
     stockHeight() {
-      return window.screen.height * 0.68 + "px";
+      return window.screen.height * 0.688 + "px";
     },
   },
   data() {

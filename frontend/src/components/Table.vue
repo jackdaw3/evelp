@@ -12,7 +12,7 @@
       "
       id="table"
       :cell-style="tableStyle"
-      stripe
+      :header-row-style="{ color: '#B3B6B7' }"
       @sort-change="sort_change"
       style="width: 100%"
       :row-class-name="handelRowDetail"
@@ -25,19 +25,26 @@
             style="width: 55%"
             :row-class-name="handelMaterailRowDetail"
             :span-method="objectSpanMethod"
+            :header-row-style="{ color: '#B3B6B7' }"
             :header-cell-style="{ padding: '0' }"
           >
-            <el-table-column :label="tableLabel.material.type" min-width="12%" align="center">
+            <el-table-column
+              :label="tableLabel.material.type"
+              min-width="12%"
+              align="center"
+            >
               <template slot-scope="scope">
                 <span v-if="scope.row.IsBluePrint === true">
-                  {{
-                  tableLabel.material.bluePrintMaterial
-                  }}
+                  {{ tableLabel.material.bluePrintMaterial }}
                 </span>
                 <span v-else>{{ tableLabel.material.lpStoreMaterail }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="MaterialName" :label="tableLabel.material.name" min-width="27%">
+            <el-table-column
+              prop="MaterialName"
+              :label="tableLabel.material.name"
+              min-width="27%"
+            >
               <template slot-scope="scope">
                 <el-image
                   style="height: 22px; vertical-align: middle"
@@ -52,7 +59,11 @@
                 <span>{{ scope.row.MaterialName }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="Quantity" :label="tableLabel.material.quantity" min-width="10%"></el-table-column>
+            <el-table-column
+              prop="Quantity"
+              :label="tableLabel.material.quantity"
+              min-width="10%"
+            ></el-table-column>
             <el-table-column
               prop="Price"
               :label="tableLabel.material.price"
@@ -69,25 +80,23 @@
               <template v-slot:header>
                 <el-button
                   size="mini"
-                  type="primary"
                   plain
                   @click="copyAllMaterials(props.row.Matertials)"
-                >{{ tableLabel.material.copy }}</el-button>
+                  >{{ tableLabel.material.copy }}</el-button
+                >
               </template>
               <template v-slot="scope">
-                <el-button
-                  size="mini"
-                  type="primary"
-                  plain
-                  @click="copyMaterial(scope.row)"
-                >{{ tableLabel.material.copy }}</el-button>
+                <el-button size="mini" plain @click="copyMaterial(scope.row)">{{
+                  tableLabel.material.copy
+                }}</el-button>
                 <el-button
                   v-if="scope.row.Error === true"
                   size="mini"
-                  type="warning"
+                  style="margin-left: 0px"
                   plain
                   @click="errorMessage(scope.row.ErrorMessage)"
-                >{{ tableLabel.material.error }}</el-button>
+                  >{{ tableLabel.material.error }}</el-button
+                >
               </template>
             </el-table-column>
           </el-table>
@@ -177,28 +186,30 @@
       ></el-table-column>
       <el-table-column :label="tableLabel.operation" min-width="10%">
         <template v-slot:header>
-          <el-input v-model="search" size="mini" :placeholder="tableLabel.lookUp" />
+          <el-input
+            v-model="search"
+            size="mini"
+            :placeholder="tableLabel.lookUp"
+          />
         </template>
         <template v-slot="scope">
-          <el-button size="mini" type="primary" plain @click="orders(scope)">
-            {{
-            tableLabel.orders
-            }}
+          <el-button size="mini" plain @click="orders(scope)">
+            {{ tableLabel.orders }}
           </el-button>
           <el-button
             v-if="scope.row.Error === true"
             size="mini"
-            type="warning"
             plain
+            style="margin-left: 0px"
             @click="errorMessage(scope.row.ErrorMessage)"
-          >{{ tableLabel.error }}</el-button>
+            >{{ tableLabel.error }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
     <br />
     <el-pagination
       align="center"
-      background
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
@@ -312,6 +323,7 @@ export default {
       this.$message({
         message: message,
         type: "warning",
+        style: "backgound-color:red",
         showClose: true,
         duration: 5000,
       });
@@ -675,6 +687,6 @@ export default {
   display: none;
 }
 .el-table .warning-row {
-  background: oldlace;
+  background: #251b07;
 }
 </style>

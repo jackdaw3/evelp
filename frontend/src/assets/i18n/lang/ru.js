@@ -5,6 +5,7 @@ const ru = {
       home: "Домой",
       serverName: "Serenity",
       market: "The Forge",
+      serenity: "Serenity",
     },
     corporation: {
       placeholder: "Пожалуйста выберите или введите фракцию и корпорацию",

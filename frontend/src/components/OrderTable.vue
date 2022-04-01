@@ -1,8 +1,21 @@
 <template>
   <div class="OrderTable">
-    <el-table :data="data" stripe :cell-style="tableStyle" style="width: 100%">
-      <el-table-column prop="OrderId" :label="orderLabel.orderId" min-width="15%"></el-table-column>
-      <el-table-column prop="SystemName" :label="orderLabel.systemName" min-width="15%"></el-table-column>
+    <el-table
+      :data="data"
+      :cell-style="tableStyle"
+      style="width: 100%"
+      :header-row-style="{ color: '#B3B6B7' }"
+    >
+      <el-table-column
+        prop="OrderId"
+        :label="orderLabel.orderId"
+        min-width="15%"
+      ></el-table-column>
+      <el-table-column
+        prop="SystemName"
+        :label="orderLabel.systemName"
+        min-width="15%"
+      ></el-table-column>
       <el-table-column
         :label="orderLabel.volume"
         :formatter="volumeFormat"
@@ -16,8 +29,16 @@
         sortable
         min-width="18%"
       ></el-table-column>
-      <el-table-column prop="Expiration" :label="orderLabel.expiration" min-width="22%"></el-table-column>
-      <el-table-column prop="LastUpdated" :label="orderLabel.lastUpdated" min-width="15%"></el-table-column>
+      <el-table-column
+        prop="Expiration"
+        :label="orderLabel.expiration"
+        min-width="22%"
+      ></el-table-column>
+      <el-table-column
+        prop="LastUpdated"
+        :label="orderLabel.lastUpdated"
+        min-width="15%"
+      ></el-table-column>
     </el-table>
   </div>
 </template>

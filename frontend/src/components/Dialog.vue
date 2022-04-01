@@ -1,18 +1,25 @@
 <template>
   <div class="Dialog">
-    <el-button icon="el-icon-setting" circle size="medium" @click="dialogVisible = true"></el-button>&nbsp;
+    <el-button
+      icon="el-icon-setting"
+      circle
+      size="medium"
+      @click="dialogVisible = true"
+    ></el-button
+    >&nbsp;
     <el-dialog
       :title="dialogLabel.title"
       :visible.sync="dialogVisible"
       @close="closeDialog"
       width="32%"
+      style="background-color:rgba(0, 0, 0, 0.7)"
     >
       <el-form label-width="20%" style="margin-top: -3%" v-model="form">
         <el-form-item :label="dialogLabel.materialPrice">
           <el-select
             :placeholder="dialogLabel.materialPlaceholder"
             v-model="form.materialPrice"
-            style="width:90%"
+            style="width: 90%"
           >
             <el-option :label="dialogLabel.buyPrice" value="buy"></el-option>
             <el-option :label="dialogLabel.sellPrice" value="sell"></el-option>
@@ -22,7 +29,7 @@
           <el-select
             :placeholder="dialogLabel.productPlaceholder"
             v-model="form.productPrice"
-            style="width:90%"
+            style="width: 90%"
           >
             <el-option :label="dialogLabel.buyPrice" value="buy"></el-option>
             <el-option :label="dialogLabel.sellPrice" value="sell"></el-option>
@@ -32,7 +39,7 @@
           <el-select
             :placeholder="dialogLabel.scopePlaceholder"
             v-model="form.scope"
-            style="width:90%"
+            style="width: 90%"
           >
             <el-option label="1%" value="0.01"></el-option>
             <el-option label="5%" value="0.05"></el-option>
@@ -44,7 +51,7 @@
           <el-select
             :placeholder="dialogLabel.daysPlaceholder"
             v-model="form.days"
-            style="width:90%"
+            style="width: 90%"
           >
             <el-option :label="dialogLabel.week" value="7"></el-option>
             <el-option :label="dialogLabel.month" value="30"></el-option>
@@ -57,13 +64,17 @@
             :max="20"
             show-input
             :format-tooltip="taxFormat"
-            style="width:90%"
+            style="width: 90%"
           ></el-slider>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="reset" size="medium">{{ dialogLabel.reset }}</el-button>
-        <el-button @click="dialogVisible = false" size="medium">{{ dialogLabel.close }}</el-button>
+        <el-button @click="reset" size="medium">{{
+          dialogLabel.reset
+        }}</el-button>
+        <el-button @click="dialogVisible = false" size="medium">{{
+          dialogLabel.close
+        }}</el-button>
       </span>
     </el-dialog>
   </div>

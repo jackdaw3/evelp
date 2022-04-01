@@ -5,6 +5,7 @@ const zh = {
       home: "主页",
       serverName: "晨曦",
       market: "吉他",
+      serenity: "国服",
     },
     corporation: {
       placeholder: "请选择或输入势力和公司",
@@ -40,7 +41,7 @@ const zh = {
       volume: "交易量",
       saleIndex: "出货指数",
       unitProfit: "LP比例",
-      lookUp: "物品名关键字搜索",
+      lookUp: "物品搜索",
       orders: "订单",
       operation: "操作",
       error: "错误",
