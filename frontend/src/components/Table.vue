@@ -6,7 +6,7 @@
         tableData
           .filter(
             (data) =>
-              !search || data.Name.toLowerCase().includes(search.toLowerCase())
+              !search || data.ItemName.toLowerCase().includes(search.toLowerCase())
           )
           .slice((currentPage - 1) * pageSize, currentPage * pageSize)
       "
