@@ -1,8 +1,10 @@
 <template>
   <div class="home">
     <Header />
-    <hr />
-    <div style="display: flex">
+    <div style="margin-top: -13px">
+      <el-divider></el-divider>
+    </div>
+    <div style="display: flex; margin-top: -8px">
       <div>
         <Dialog @form-change="formChange" />
       </div>
@@ -13,6 +15,7 @@
           v-loading="corporation.loading"
           :placeholder="corporation.placeholder"
           :options="corporation.lists"
+          element-loading-background="rgba(0, 0, 0, 0.8)"
           clearable
           filterable
           @change="loadTable"
@@ -24,10 +27,10 @@
         circle
         size="medium"
         @click="exportExcel"
-        style="height: 50%;float: right;margin-right: 15px;cursor: pointer"
+        style="height: 50%; float: right; margin-right: 15px; cursor: pointer"
       ></el-button>
     </div>
-    <Table ref="Table" />
+    <Table ref="Table" style="margin-top: -10px" />
   </div>
 </template>
 
@@ -198,7 +201,7 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #ccc;
+  border-top: 0px solid #ccc;
   margin: 0.618em 0;
   padding: 0;
 }

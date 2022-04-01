@@ -1,6 +1,10 @@
 <template>
   <div class="Stock">
-    <highcharts class="stock" :constructor-type="'stockChart'" :options="chartOptions"></highcharts>
+    <highcharts
+      class="stock"
+      :constructor-type="'stockChart'"
+      :options="chartOptions"
+    ></highcharts>
   </div>
 </template>
 
@@ -13,7 +17,7 @@ export default {
     return {
       chartOptions: {
         chart: {
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "rgba(0,0,0,0)",
           alignTicks: false,
           marginRight: this.history.borderWidth,
         },
@@ -24,56 +28,120 @@ export default {
           series: {
             color: "#3498DB",
           },
+          xAxis: {
+            gridLineWidth: 0,
+            minorGridLineWidth: 0,
+          },
+          yAxis: {
+            gridLineWidth: 0,
+            minorGridLineWidth: 0,
+          },
+        },
+        exporting: {
+          enabled: false,
         },
         rangeSelector: {
           allButtonsEnabled: true,
           selected: 0,
+          inputEnabled: false,
+          buttonTheme: {
+            fill: "none",
+            stroke: "none",
+            "stroke-width": 0,
+            r: 8,
+            style: {
+              color: "#ECF0F1",
+              fontWeight: "bold",
+            },
+            states: {
+              hover: {
+                fill: "#1C2937",
+                style: {
+                  color: "#ECF0F1",
+                },
+              },
+              select: {
+                fill: "#1C2937",
+                style: {
+                  color: "#ECF0F1",
+                },
+              },
+            },
+          },
         },
-        title: {
-          text: this.history.title,
+        xAxis: {
+          gridLineColor: "#505053",
+          lineColor: "#505053",
+          labels: {
+            style: {
+              color: "#ECF0F1",
+            },
+          },
         },
         yAxis: [
           {
+            gridLineWidth: 0,
+            minorGridLineWidth: 0,
             startOnTick: false,
             endOnTick: false,
             labels: {
               align: "right",
               x: -3,
+              style: {
+                color: "#ECF0F1",
+              },
             },
             title: {
               text: this.history.label.price,
+              style: {
+                color: "#ECF0F1",
+              },
             },
             height: "60%",
             lineWidth: 2,
+            lineColor: "#505053",
             resize: {
               enabled: true,
             },
           },
           {
+            gridLineWidth: 0,
+            minorGridLineWidth: 0,
             labels: {
               align: "right",
               x: -3,
+              style: {
+                color: "#ECF0F1",
+              },
             },
             title: {
               text: this.history.label.volume,
+              style: {
+                color: "#ECF0F1",
+              },
             },
             top: "65%",
             height: "35%",
             offset: 0,
             lineWidth: 2,
+            lineColor: "#505053",
           },
         ],
         tooltip: {
           split: false,
+          backgroundColor: "rgba(0,0,0,0.8)",
           shared: true,
           valueDecimals: 0,
+          style: {
+            color: "#D0D3D4",
+          },
         },
         series: [
           {
             name: this.history.label.average,
             data: this.history.average,
             yAxis: 0,
-            color: "#F1C40F",
+            color: "#D68910",
             lineWidth: 0,
             zIndex: 9,
             marker: {
@@ -127,7 +195,7 @@ export default {
             type: "column",
             data: this.history.volume,
             yAxis: 1,
-            color: "#3498DB",
+            color: "#34495E",
           },
         ],
       },

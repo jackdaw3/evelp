@@ -1,13 +1,12 @@
 <template>
   <div class="StatisTable">
-    <el-table :data="data" stripe :cell-style="tableStyle" style="width: 100%">
+    <el-table :data="data" :cell-style="tableStyle" style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-table
             :data="props.row.Orderwrappers"
             :cell-style="tableStyle"
             :header-cell-style="{
-                background:'#F2F3F4',
                 padding: '0'
               }"
           >
@@ -54,12 +53,12 @@
           </el-table>
         </template>
       </el-table-column>
-      <el-table-column prop="UnitProfitRange" :label="statisLabel.lpRange"></el-table-column>
-      <el-table-column prop="Quantity" :label="statisLabel.number"></el-table-column>
-      <el-table-column prop="Income" :label="statisLabel.income" :formatter="stateFormat" sortable></el-table-column>
-      <el-table-column prop="Cost" :label="statisLabel.cost" :formatter="stateFormat" sortable></el-table-column>
-      <el-table-column prop="Profit" :label="statisLabel.profit" :formatter="stateFormat" sortable></el-table-column>
-      <el-table-column prop="AveUnitProfit" :label="statisLabel.aveLpPrice" sortable></el-table-column>
+      <el-table-column prop="UnitProfitRange" :label="statisLabel.lpRange"  min-width="25%"></el-table-column>
+      <el-table-column prop="Quantity" :label="statisLabel.number"  min-width="11%"></el-table-column>
+      <el-table-column prop="Income" :label="statisLabel.income" :formatter="stateFormat" sortable min-width="16%"></el-table-column>
+      <el-table-column prop="Cost" :label="statisLabel.cost" :formatter="stateFormat" sortable min-width="16%"></el-table-column>
+      <el-table-column prop="Profit" :label="statisLabel.profit" :formatter="stateFormat" sortable min-width="16%"></el-table-column>
+      <el-table-column prop="AveUnitProfit" :label="statisLabel.aveLpPrice" sortable min-width="16%"></el-table-column>
     </el-table>
   </div>
 </template>

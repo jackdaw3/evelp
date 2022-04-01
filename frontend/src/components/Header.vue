@@ -1,7 +1,9 @@
 <template>
   <div class="header">
     <el-dropdown>
-      <el-button type="primary" size="small" icon="el-icon-menu">{{ headerLabel.menu }}</el-button>
+      <el-button size="small" icon="el-icon-menu" plain>{{
+        headerLabel.menu
+      }}</el-button>
       <el-dropdown-menu slot="dropdown">
         <router-link to="/">
           <el-dropdown-item>
@@ -13,15 +15,15 @@
     </el-dropdown>
 
     <el-divider direction="vertical"></el-divider>
-    <span>EVE-LP</span>
+    <span style="color: #ECF0F1">EVE-LP</span>
     <el-divider direction="vertical"></el-divider>
-    <span>{{ headerLabel.serverName }}</span>
+    <span style="color: #ECF0F1">{{ headerLabel.serverName }}</span>
     <el-divider direction="vertical"></el-divider>
-    <span>{{ headerLabel.market }}</span>
+    <span style="color: #ECF0F1">{{ headerLabel.market }}</span>
 
     <el-dropdown
       @command="langChange"
-      style="float: right;margin-right: 15px;margin-top:8px;cursor: pointer"
+      style="float: right; margin-right: 15px; margin-top: 8px; cursor: pointer"
     >
       <span class="el-dropdown-link">
         {{ language }}
