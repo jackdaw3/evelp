@@ -55,7 +55,7 @@ export default {
             },
             states: {
               hover: {
-                fill: "#1C2937",
+                fill: "#0D4579",
                 style: {
                   color: "#ECF0F1",
                 },
