@@ -5,7 +5,7 @@ const ja = {
       home: "ホームページ",
       serverName: "Serenity",
       market: "ザ・フォージ",
-      serenity: "Serenity",
+      tranquility: "Tranquility",
     },
     corporation: {
       placeholder: "勢力とコーポレーションを選択または入力します",
