@@ -4,7 +4,7 @@
       :data="data"
       :cell-style="tableStyle"
       style="width: 100%"
-      header-row-style="color:#B3B6B7"
+      :header-row-style="{ color: '#B3B6B7' }"
     >
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -14,7 +14,7 @@
             :header-cell-style="{
               padding: '0',
             }"
-            header-row-style="color:#B3B6B7"
+            :header-row-style="{ color: '#B3B6B7' }"
           >
             <el-table-column
               prop="OrderDTO.SystemName"

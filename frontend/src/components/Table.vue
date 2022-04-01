@@ -12,7 +12,7 @@
       "
       id="table"
       :cell-style="tableStyle"
-      header-row-style="color:#B3B6B7"
+      :header-row-style="{ color: '#B3B6B7' }"
       @sort-change="sort_change"
       style="width: 100%"
       :row-class-name="handelRowDetail"
@@ -25,7 +25,7 @@
             style="width: 55%"
             :row-class-name="handelMaterailRowDetail"
             :span-method="objectSpanMethod"
-            header-row-style="color:#B3B6B7"
+            :header-row-style="{ color: '#B3B6B7' }"
             :header-cell-style="{ padding: '0' }"
           >
             <el-table-column

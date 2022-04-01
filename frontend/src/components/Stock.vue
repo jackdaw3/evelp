@@ -61,7 +61,7 @@ export default {
                 },
               },
               select: {
-                fill: "#1C2937",
+                fill: "#0D4579",
                 style: {
                   color: "#ECF0F1",
                 },
@@ -136,6 +136,7 @@ export default {
           shared: true,
           valueDecimals: 0,
           style: {
+            fontSize: 13,
             color: "#D0D3D4",
           },
         },
@@ -198,7 +199,7 @@ export default {
             type: "column",
             data: this.history.volume,
             yAxis: 1,
-            color: "#1F5460",
+            color: "#0F5C70",
           },
         ],
       },

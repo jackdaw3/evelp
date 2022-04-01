@@ -41,7 +41,7 @@ const ja = {
       volume: "販売量",
       saleIndex: "取引指数",
       unitProfit: "Isk/Lp",
-      lookUp: "アイテム名キーワード検索",
+      lookUp: "物品検索",
       orders: "注文",
       operation: "操作する",
       error: "間違い",

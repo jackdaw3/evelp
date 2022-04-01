@@ -41,7 +41,7 @@ const zh = {
       volume: "交易量",
       saleIndex: "出货指数",
       unitProfit: "LP比例",
-      lookUp: "物品名关键字搜索",
+      lookUp: "物品搜索",
       orders: "订单",
       operation: "操作",
       error: "错误",

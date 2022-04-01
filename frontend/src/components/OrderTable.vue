@@ -4,7 +4,7 @@
       :data="data"
       :cell-style="tableStyle"
       style="width: 100%"
-      header-row-style="color:#B3B6B7"
+      :header-row-style="{ color: '#B3B6B7' }"
     >
       <el-table-column
         prop="OrderId"
