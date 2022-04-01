@@ -70,6 +70,7 @@ export default {
           },
         },
         xAxis: {
+          gridLineWidth: 0,
           gridLineColor: "#505053",
           lineColor: "#505053",
           labels: {
@@ -80,7 +81,8 @@ export default {
         },
         yAxis: [
           {
-            gridLineWidth: 0,
+            gridLineWidth: 0.3,
+            gridLineColor: "#505053",
             minorGridLineWidth: 0,
             startOnTick: false,
             endOnTick: false,
@@ -105,7 +107,8 @@ export default {
             },
           },
           {
-            gridLineWidth: 0,
+            gridLineWidth: 0.3,
+            gridLineColor: "#505053",
             minorGridLineWidth: 0,
             labels: {
               align: "right",
@@ -195,7 +198,7 @@ export default {
             type: "column",
             data: this.history.volume,
             yAxis: 1,
-            color: "#34495E",
+            color: "#003333",
           },
         ],
       },

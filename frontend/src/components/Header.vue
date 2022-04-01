@@ -7,19 +7,25 @@
       <el-dropdown-menu slot="dropdown">
         <router-link to="/">
           <el-dropdown-item>
-            <i class="el-icon-s-home"></i>
+            <i class="el-icon-arrow-right"></i>
             <span>{{ headerLabel.home }}</span>
           </el-dropdown-item>
         </router-link>
+        <a href="https://eve-lp.com/serenity/">
+          <el-dropdown-item>
+            <i class="el-icon-arrow-right"></i>
+            <span>{{ headerLabel.serenity }}</span>
+          </el-dropdown-item>
+        </a>
       </el-dropdown-menu>
     </el-dropdown>
 
     <el-divider direction="vertical"></el-divider>
-    <span style="color: #ECF0F1">EVE-LP</span>
+    <span style="color: #ecf0f1">EVE-LP</span>
     <el-divider direction="vertical"></el-divider>
-    <span style="color: #ECF0F1">{{ headerLabel.serverName }}</span>
+    <span style="color: #ecf0f1">{{ headerLabel.serverName }}</span>
     <el-divider direction="vertical"></el-divider>
-    <span style="color: #ECF0F1">{{ headerLabel.market }}</span>
+    <span style="color: #ecf0f1">{{ headerLabel.market }}</span>
 
     <el-dropdown
       @command="langChange"

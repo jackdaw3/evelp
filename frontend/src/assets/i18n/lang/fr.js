@@ -5,6 +5,7 @@ const fr = {
       home: "Home",
       serverName: "Tranquility",
       market: "The Forge",
+      serenity: "Serenity",
     },
     corporation: {
       placeholder: "Veuillez sélectionner ou saisir la faction et la société",
