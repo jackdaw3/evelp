@@ -3,15 +3,11 @@ package dbdata
 import (
 	"evelp/initial/internal/api"
 	"evelp/log"
-	"net/http"
 	"sync"
 	"time"
 )
 
-var (
-	wg     sync.WaitGroup
-	client = &http.Client{}
-)
+var wg sync.WaitGroup
 
 func RemoteData() error {
 	log.Info("start to load remote data to DB")

@@ -58,7 +58,7 @@ func (r *reginoData) getAllRegions() {
 		global.Conf.Data.Remote.DataSource,
 	)
 
-	resp, err := net.GetWithRetries(client, req)
+	resp, err := net.GetWithRetries(req)
 	if err != nil {
 		log.Errorf(err, "failed to get regions")
 	}
@@ -95,7 +95,7 @@ func (r *reginoData) getRegion(region *model.Region, wg *sync.WaitGroup) func() 
 				lang,
 			)
 
-			resp, err := net.GetWithRetries(client, req)
+			resp, err := net.GetWithRetries(req)
 			if err != nil {
 				log.Errorf(err, "failed to get region %d", region.RegionId)
 			}

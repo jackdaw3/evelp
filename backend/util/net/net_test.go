@@ -37,8 +37,9 @@ func setUpServer() {
 func TestGetWithRetries(t *testing.T) {
 	go setUpServer()
 
-	client := &http.Client{Timeout: 1 * time.Second}
-	resp, err := GetWithRetries(client, request)
+	c := &http.Client{Timeout: 1 * time.Second}
+	client = c
+	resp, err := GetWithRetries(request)
 	assert.NoError(t, err)
 
 	body, err := ioutil.ReadAll(resp.Body)

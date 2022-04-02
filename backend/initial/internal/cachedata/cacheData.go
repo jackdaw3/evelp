@@ -5,11 +5,8 @@ import (
 	"evelp/initial/internal/api"
 	"evelp/log"
 	"evelp/model"
-	"net/http"
 	"time"
 )
-
-var client = &http.Client{}
 
 const the_forge = 10000002
 

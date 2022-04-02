@@ -78,7 +78,7 @@ func (o *orderData) ordersByRegionPage(regionId int, page int) func() {
 			page,
 		)
 
-		resp, err := net.GetWithRetries(client, req)
+		resp, err := net.GetWithRetries(req)
 		if err != nil {
 			log.Errorf(err, "failed to get %d region %d page's orders", regionId, page)
 			return
@@ -115,7 +115,7 @@ func (o *orderData) marketPages(regionId int) (int, error) {
 		1,
 	)
 
-	resp, err := net.GetWithRetries(client, req)
+	resp, err := net.GetWithRetries(req)
 	if err != nil {
 		return 0, err
 	}
