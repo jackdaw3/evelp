@@ -8,7 +8,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-var client = &http.Client{Timeout: 30 * time.Second}
+var client = &http.Client{Timeout: 60 * time.Second}
 
 var backoffSchedule = []time.Duration{
 	1 * time.Second,
