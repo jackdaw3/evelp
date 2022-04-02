@@ -8,21 +8,27 @@ import (
 	"github.com/pkg/errors"
 )
 
+var client = &http.Client{Timeout: 10 * time.Second}
+
 var backoffSchedule = []time.Duration{
 	1 * time.Second,
 	2 * time.Second,
 	3 * time.Second,
 }
 
-func GetWithRetries(client *http.Client, request string) (*http.Response, error) {
+func GetWithRetries(request string) (*http.Response, error) {
 	var resp *http.Response
 	var err error
 
 	for _, backoff := range backoffSchedule {
-		resp, err = Get(client, request)
+		resp, err = Get(request)
+		code := resp.StatusCode
+
+		if code == http.StatusNotFound {
+			return nil, err
+		}
 
 		if err == nil {
-			code := resp.StatusCode
 			if code == http.StatusOK {
 				break
 			}
@@ -40,7 +46,7 @@ func GetWithRetries(client *http.Client, request string) (*http.Response, error)
 	return resp, nil
 }
 
-func Get(client *http.Client, request string) (*http.Response, error) {
+func Get(request string) (*http.Response, error) {
 	resp, err := client.Get(request)
 	if err != nil {
 		return nil, errors.WithStack(err)

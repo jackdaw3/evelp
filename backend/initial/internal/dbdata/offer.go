@@ -103,7 +103,7 @@ func (o *offerData) getOffers(corporationId int, wg *sync.WaitGroup) func() {
 			global.Conf.Data.Remote.DataSource,
 		)
 
-		resp, err := net.GetWithRetries(client, req)
+		resp, err := net.GetWithRetries(req)
 		if err != nil {
 			log.Errorf(err, "get corporation %d's failed", corporationId)
 		}
