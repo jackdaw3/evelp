@@ -8,7 +8,12 @@ import (
 	"github.com/pkg/errors"
 )
 
-var client = &http.Client{Timeout: 60 * time.Second}
+var client = &http.Client{
+	Transport: &http.Transport{
+		MaxIdleConnsPerHost: 3,
+	},
+	Timeout: 100 * time.Second,
+}
 
 var backoffSchedule = []time.Duration{
 	1 * time.Second,
@@ -28,9 +33,11 @@ func GetWithRetries(request string) (*http.Response, error) {
 			if code == http.StatusOK {
 				break
 			}
+
 			if code == http.StatusNotFound {
-				return nil, err
+				return nil, errors.Errorf("http request %s 404 not found error", request)
 			}
+
 			err = errors.Errorf("http request %s error status code %d", request, code)
 		}
 
