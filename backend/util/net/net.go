@@ -35,7 +35,7 @@ func GetWithRetries(request string) (*http.Response, error) {
 			}
 
 			if code == http.StatusNotFound {
-				return nil, errors.Errorf("404 not found: %s", request)
+				return nil, errors.Errorf("http request %s 404 not found error", request)
 			}
 
 			err = errors.Errorf("http request %s error status code %d", request, code)
