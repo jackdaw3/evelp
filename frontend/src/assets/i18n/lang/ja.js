@@ -78,7 +78,7 @@ const ja = {
       cost: "費用",
       income: "収入",
       profit: "利得",
-      aveLpPrice: "平均Isk/Lp範囲",
+      aveLpPrice: "平均Isk/Lp",
       unitProfit: "Isk/Lp",
     },
     stock: {

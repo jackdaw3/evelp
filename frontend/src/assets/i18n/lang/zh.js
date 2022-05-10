@@ -79,7 +79,7 @@ const zh = {
       income: "收入",
       profit: "利润",
       aveLpPrice: "平均LP比例",
-      unitProfit: "Lp比例",
+      unitProfit: "LP比例",
     },
     stock: {
       average: "平均价格",
