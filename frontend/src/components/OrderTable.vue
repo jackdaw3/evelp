@@ -19,7 +19,6 @@
       <el-table-column
         :label="orderLabel.volume"
         :formatter="volumeFormat"
-        sortable
         min-width="15%"
       ></el-table-column>
       <el-table-column
