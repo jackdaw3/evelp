@@ -329,7 +329,7 @@ export default {
       });
     },
     copyMaterial(row) {
-      var value = row.Quantity + " " + row.Name + "\n";
+      var value = row.Quantity + " " + row.MaterialName + "\n";
       this.$copyText(value).then(
         () => {
           this.$message({
@@ -351,7 +351,7 @@ export default {
     copyAllMaterials(list) {
       let value = "";
       for (let i = 0; i < list.length; ++i) {
-        value += list[i].Quantity + " " + list[i].Name + "\n";
+        value += list[i].Quantity + " " + list[i].MaterialName + "\n";
       }
 
       this.$copyText(value).then(
