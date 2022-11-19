@@ -52,11 +52,6 @@ func SaveStarSystem(starSystem *StarSystem) error {
 		return errors.Wrapf(err, "failed to save star system %d to DB", starSystem.SystemId)
 	}
 
-	key := cache.Key(system_key, strconv.Itoa(starSystem.SystemId))
-	if err := cache.Set(key, *starSystem, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
-		return err
-	}
-
 	return nil
 }
 

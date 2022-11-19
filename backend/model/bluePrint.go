@@ -118,11 +118,6 @@ func SaveBluePrint(bluePrint *BluePrint) error {
 		return errors.Wrapf(err, "failed to save blueprint %d to DB", bluePrint.BlueprintId)
 	}
 
-	key := cache.Key(blue_print_key, strconv.Itoa(bluePrint.BlueprintId))
-	if err := cache.Set(key, *bluePrint, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
-		return err
-	}
-
 	return nil
 }
 

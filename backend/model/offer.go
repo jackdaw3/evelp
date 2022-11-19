@@ -157,11 +157,6 @@ func SaveOffer(offer *Offer) error {
 		return errors.Wrapf(err, "failed to save offer %d to DB", offer.ItemId)
 	}
 
-	key := cache.Key(offer_key, strconv.Itoa(offer.OfferId))
-	if err := cache.Set(key, *offer, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
-		return err
-	}
-
 	return nil
 }
 

@@ -48,11 +48,6 @@ func SaveItem(item *Item) error {
 		return errors.Wrapf(err, "failed to save item %d to DB", item.ItemId)
 	}
 
-	key := cache.Key(item_key, strconv.Itoa(item.ItemId))
-	if err := cache.Set(key, *item, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
-		return err
-	}
-
 	return nil
 }
 

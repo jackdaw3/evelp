@@ -85,11 +85,6 @@ func SaveCorporation(corporation *Corporation) error {
 		return errors.Wrap(err, "failed to save corporation to DB ")
 	}
 
-	key := cache.Key(corporation_key, strconv.Itoa(corporation.CorporationId))
-	if err := cache.Set(key, *corporation, global.Conf.Redis.ExpireTime.Model*time.Minute); err != nil {
-		return err
-	}
-
 	return nil
 }
 
