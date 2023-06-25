@@ -195,6 +195,10 @@ export default {
       }
     },
     reloadQuickbar(){
+      if (this.form.corporations === undefined) {
+        return;
+      }
+
       if(this.form.corporations.length > 0){
         var faction = new Object();
         faction.value = 1;
