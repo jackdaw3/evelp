@@ -28,6 +28,10 @@ const zh = {
       sellPrice: "卖价",
       reset: "重置",
       close: "关闭",
+      dataTitle: "数据配置",
+      quickbarTitle: "Quickbar",
+      sourceList: "所有公司",
+      targetList: "Quickbar",
     },
     table: {
       name: "物品",

@@ -28,6 +28,10 @@ const fr = {
       sellPrice: "Vente Prix",
       reset: "Réinitialiser",
       close: "Fermer",
+      dataTitle: "Données",
+      quickbarTitle: "Quickbar",
+      sourceList: "Toute",
+      targetList: "Quickbar",
     },
     table: {
       name: "Nom",

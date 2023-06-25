@@ -93,6 +93,7 @@ export default {
     },
     loadCorporations(list) {
       var factions = new Array();
+      var corporationData = new Array();
       for (let i = 0; i < list.length; ++i) {
         var faction = new Object();
         faction.value = list[i].FactionId;
@@ -105,12 +106,19 @@ export default {
             corporation.value = corporationList[j].CorporationId;
             corporation.label = corporationList[j].CorporationName;
             corporations.push(corporation);
+            var obj = new Object();
+            obj.key = corporation.value;
+            obj.label =  corporation.label;
+            corporationData.push(obj);
           }
         }
         faction.children = corporations;
         factions.push(faction);
       }
       this.corporation.lists = factions;
+      const sortedCorporationData = corporationData.sort((a, b) => a.key - b.key);
+      this.$store.dispatch("setCorporationData", sortedCorporationData);
+      this.reloadQuickbar();
     },
     loadTable(value) {
       if (value == "" || value == null) {
@@ -171,6 +179,7 @@ export default {
         });
     },
     formChange() {
+      this.reloadQuickbar();
       this.reloadTable();
     },
     exportExcel() {
@@ -184,6 +193,40 @@ export default {
         facAndcorp[1] = cascaderValue.value;
         this.loadTable(facAndcorp);
       }
+    },
+    reloadQuickbar(){
+      if(this.form.corporations.length > 0){
+        var faction = new Object();
+        faction.value = 1;
+        faction.label = 'Quickbar';
+        var corporations = new Array();
+        for (let i = 0; i < this.form.corporations.length; ++i) {
+            var corporation = new Object();
+            corporation.value = this.form.corporations[i];
+            corporation.label = this.getCorporationName(corporation.value);
+            corporations.push(corporation);
+        }
+        corporations.sort(function(a, b) {return a.value - b.value});
+        faction.children = corporations;
+        if(this.corporation.lists[0].value == 1 ){
+          this.corporation.lists.shift();
+        }
+        this.corporation.lists.unshift(faction);
+      }else if(this.form.corporations.length == 0 && this.corporation.lists[0].value == 1 ){
+        this.corporation.lists.shift();
+      }
+    },
+    getCorporationName(itemId){
+      var element;
+      for (let i = 0; i < this.corporation.lists.length; ++i) {
+        var faction = this.corporation.lists[i];
+          for (let j = 0; j < faction.children.length; ++j) {
+            if(faction.children[j].value == itemId){
+              element = faction.children[j];
+            }
+          }
+      }
+      return element.label;
     },
   },
   watch: {

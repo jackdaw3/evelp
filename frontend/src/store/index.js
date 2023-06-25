@@ -12,7 +12,9 @@ export default new Vuex.Store({
       days: "7",
       scope: "0.05",
       tax: 0,
+      corporations: [],
     },
+    corporationData: [],
     corporationId: "",
     corporationName: "",
   },
@@ -22,6 +24,9 @@ export default new Vuex.Store({
     },
     setForm(state, value) {
       state.form = value;
+    },
+    setCorporationData(state, value){
+      state.corporationData = value;
     },
     setCorporationId(state, value) {
       state.corporationId = value;
@@ -36,6 +41,9 @@ export default new Vuex.Store({
     },
     setForm(context, value) {
       context.commit("setForm", value);
+    },
+    setCorporationData(context, value) {
+      context.commit("setCorporationData", value);
     },
     setCorporationId(context, value) {
       context.commit("setCorporationId", value);

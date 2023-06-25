@@ -28,6 +28,10 @@ const de = {
       sellPrice: "Verkaufs Preis",
       reset: "Zurücksetzen",
       close: "Nah Dran",
+      dataTitle: "Daten",
+      quickbarTitle: "Quickbar",
+      sourceList: "Alle",
+      targetList: "Quickbar",
     },
     table: {
       name: "Name",

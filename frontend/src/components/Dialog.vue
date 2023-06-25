@@ -11,10 +11,12 @@
       :title="dialogLabel.title"
       :visible.sync="dialogVisible"
       @close="closeDialog"
-      width="32%"
+      width="38%"
       style="background-color:rgba(0, 0, 0, 0.7)"
     >
-      <el-form label-width="20%" style="margin-top: -3%" v-model="form">
+    <el-tabs v-model="activeName" type="card">
+    <el-tab-pane :label="dialogLabel.dataTitle" name="first">
+      <el-form label-width="20%" style="margin-top: 2.5%" v-model="form">
         <el-form-item :label="dialogLabel.materialPrice">
           <el-select
             :placeholder="dialogLabel.materialPlaceholder"
@@ -68,6 +70,18 @@
           ></el-slider>
         </el-form-item>
       </el-form>
+    </el-tab-pane>
+    <el-tab-pane :label="dialogLabel.quickbarTitle" name="second">
+      <el-transfer
+      style="display: flex; align-items: center; justify-content: center; margin-top: 2.5%"
+      :render-content="renderFunc"
+      filterable
+      v-model="form.corporations"
+      :titles="[dialogLabel.sourceList, dialogLabel.targetList]"
+      :data="corporationData">
+    </el-transfer>
+    </el-tab-pane>
+  </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="reset" size="medium">{{
           dialogLabel.reset
@@ -85,11 +99,18 @@ export default {
     form: function () {
       return this.$store.state.form;
     },
+    corporationData: function () {
+      return this.$store.state.corporationData;
+    },
   },
   data() {
     return {
       dialogVisible: false,
       dialogLabel: this.$t("message.dialog"),
+      activeName: 'first',
+      renderFunc(h, option) {
+          return <span title={option.label}>{option.label}</span>;
+      },
     };
   },
   methods: {
@@ -99,6 +120,7 @@ export default {
       this.form.days = "7";
       this.form.scope = "0.05";
       this.form.tax = 0;
+      this.form.corporations = [];
     },
     closeDialog() {
       if (!localStorage.form) {
@@ -111,7 +133,7 @@ export default {
           this.form.materialPrice != old.materialPrice ||
           this.form.productPrice != old.productPrice ||
           this.form.days != old.days ||
-          this.form.tax != old.tax
+          this.form.tax != old.tax || this.form.corporations != old.corporations
         ) {
           this.$store.dispatch("setForm", this.form);
           localStorage.form = JSON.stringify(this.form);

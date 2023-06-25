@@ -28,6 +28,10 @@ const ru = {
       sellPrice: "Цена продажи",
       reset: "сброс",
       close: "закрывать",
+      dataTitle: "данные",
+      quickbarTitle: "Quickbar",
+      sourceList: "все",
+      targetList: "Quickbar",
     },
     table: {
       name: "Имя",
