@@ -129,11 +129,12 @@ export default {
         this.$emit("form-change");
       } else {
         const old = JSON.parse(localStorage.form);
+        var is_same = (this.form.corporations.length == old.corporations.length) && this.form.corporations.every(el => old.corporations.includes(el));
         if (
           this.form.materialPrice != old.materialPrice ||
           this.form.productPrice != old.productPrice ||
           this.form.days != old.days ||
-          this.form.tax != old.tax || this.form.corporations != old.corporations
+          this.form.tax != old.tax || !is_same
         ) {
           this.$store.dispatch("setForm", this.form);
           localStorage.form = JSON.stringify(this.form);
