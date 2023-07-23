@@ -132,7 +132,7 @@
       ></el-table-column>
       <el-table-column
         prop="IskCost"
-        min-width="8%"
+        min-width="7%"
         :label="tableLabel.iskCost"
         :formatter="stateFormat"
         sortable="custom"
@@ -175,7 +175,7 @@
       <el-table-column
         :label="tableLabel.saleIndex"
         prop="SaleIndex"
-        min-width="6%"
+        min-width="7%"
         sortable="custom"
       ></el-table-column>
       <el-table-column

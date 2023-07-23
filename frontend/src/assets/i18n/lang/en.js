@@ -34,7 +34,7 @@ const en = {
       targetList: "Quickbar",
     },
     table: {
-      name: "Name",
+      name: "Item",
       quantity: "Quantity",
       lpCost: "LP Cost",
       iskCost: "ISK Cost",
@@ -43,7 +43,7 @@ const en = {
       income: "Income",
       profit: "Profit",
       volume: "Volume",
-      saleIndex: "Index",
+      saleIndex: "Sales Index",
       unitProfit: "ISK/LP",
       lookUp: "Item Name Lookup",
       orders: "Orders",

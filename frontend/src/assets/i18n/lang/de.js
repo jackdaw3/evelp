@@ -43,7 +43,7 @@ const de = {
       income: "Einkommen",
       profit: "Profit",
       volume: "Volumen",
-      saleIndex: "Index",
+      saleIndex: "Verkaufsindex",
       unitProfit: "Isk/Lp",
       lookUp: "Suche nach artikelnamen",
       orders: "Bestellung",

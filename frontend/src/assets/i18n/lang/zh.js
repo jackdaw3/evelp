@@ -29,9 +29,9 @@ const zh = {
       reset: "重置",
       close: "关闭",
       dataTitle: "数据配置",
-      quickbarTitle: "Quickbar",
+      quickbarTitle: "快捷栏配置",
       sourceList: "所有公司",
-      targetList: "Quickbar",
+      targetList: "快捷栏",
     },
     table: {
       name: "物品",

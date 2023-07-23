@@ -63,6 +63,7 @@ export default {
   },
   data() {
     return {
+      quickbar: this.$t("message.dialog.targetList"),
       corporation: {
         value: "",
         loading: "",
@@ -202,7 +203,7 @@ export default {
       if(this.form.corporations.length > 0){
         var faction = new Object();
         faction.value = 1;
-        faction.label = 'Quickbar';
+        faction.label = this.quickbar;
         var corporations = new Array();
         for (let i = 0; i < this.form.corporations.length; ++i) {
             var corporation = new Object();
@@ -236,6 +237,7 @@ export default {
   watch: {
     "$i18n.locale"() {
       this.corporation.placeholder = this.$t("message.corporation.placeholder");
+      this.quickbar = this.$t("message.dialog.targetList");
       this.loadFactions(this.facList);
       this.reloadTable();
     },
