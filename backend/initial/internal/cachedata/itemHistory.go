@@ -42,7 +42,7 @@ func (i *itemHistroy) invoke() func() {
 				p,
 			)
 
-			resp, err := net.GetWithRetries(req)
+			resp, err := net.Get(req)
 			if err != nil {
 				log.Errorf(err, "failed to get item %d histroy", p)
 				continue

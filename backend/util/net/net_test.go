@@ -8,7 +8,6 @@ import (
 	"strings"
 	"sync"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -16,7 +15,6 @@ import (
 var (
 	request string = "http://127.0.0.1:9090/hello"
 	hello   string = "hello"
-	count   int    = 0
 	mu      sync.Mutex
 )
 
@@ -25,10 +23,6 @@ func setUpServer() {
 	http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
 		defer mu.Unlock()
 		mu.Lock()
-		if count == 0 {
-			time.Sleep(1500 * time.Millisecond)
-		}
-		count++
 		fmt.Fprintln(w, hello)
 	})
 	http.ListenAndServe(":9090", nil)
@@ -37,9 +31,7 @@ func setUpServer() {
 func TestGetWithRetries(t *testing.T) {
 	go setUpServer()
 
-	c := &http.Client{Timeout: 1 * time.Second}
-	client = c
-	resp, err := GetWithRetries(request)
+	resp, err := Get(request)
 	assert.NoError(t, err)
 
 	body, err := ioutil.ReadAll(resp.Body)

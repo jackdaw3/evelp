@@ -2,11 +2,23 @@ package net
 
 import (
 	"evelp/log"
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/pkg/errors"
 )
+
+type RetryStrategy struct {
+	MaxRetries int
+	Interval   time.Duration
+	Factor     float64
+}
+
+type RetryableHttpClient struct {
+	Client  *http.Client
+	Retryer *RetryStrategy
+}
 
 var client = &http.Client{
 	Transport: &http.Transport{
@@ -15,48 +27,43 @@ var client = &http.Client{
 	Timeout: 100 * time.Second,
 }
 
-var backoffSchedule = []time.Duration{
-	1 * time.Second,
-	2 * time.Second,
-	3 * time.Second,
+var retryer = &RetryStrategy{
+	MaxRetries: 5,
+	Interval:   time.Second,
+	Factor:     3,
 }
 
-func GetWithRetries(request string) (*http.Response, error) {
-	var resp *http.Response
-	var err error
+var retryableClient = &RetryableHttpClient{
+	Client:  client,
+	Retryer: retryer,
+}
 
-	for _, backoff := range backoffSchedule {
-		resp, err = Get(request)
+func Get(req string) (*http.Response, error) {
+	retries := 0
+	interval := retryableClient.Retryer.Interval
 
-		if err == nil {
-			code := resp.StatusCode
-			if code == http.StatusOK {
-				break
-			}
+	for {
+		resp, err := retryableClient.Client.Get(req)
 
-			if code == http.StatusNotFound {
-				return nil, errors.Errorf("http request %s 404 not found error", request)
-			}
-
-			err = errors.Errorf("http request %s error status code %d", request, code)
+		if err != nil {
+			return nil, errors.WithStack(err)
 		}
 
-		log.Debugf("http request %s failed: %+v \nretrying in %v", request, err.Error(), backoff)
-		time.Sleep(backoff)
+		if err == nil && resp.StatusCode >= 500 && resp.StatusCode < 600 {
+			resp.Body.Close()
+
+			if retries >= retryableClient.Retryer.MaxRetries {
+				return nil, fmt.Errorf("max retries reached: %d", retries)
+			}
+
+			log.Infof("retrying request after %v, retry count: %d\n", interval, retries)
+			time.Sleep(interval)
+			retries++
+			interval = time.Duration(float64(interval) * retryableClient.Retryer.Factor)
+
+			continue
+		}
+
+		return resp, err
 	}
-
-	if err != nil {
-		return nil, errors.WithMessage(err, "http all request retries failed")
-	}
-
-	return resp, nil
-}
-
-func Get(request string) (*http.Response, error) {
-	resp, err := client.Get(request)
-	if err != nil {
-		return nil, errors.WithStack(err)
-	}
-
-	return resp, nil
 }

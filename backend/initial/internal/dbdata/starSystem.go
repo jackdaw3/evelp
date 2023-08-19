@@ -56,7 +56,7 @@ func (s *starSystemData) getAllStarSystems() {
 		global.Conf.Data.Remote.DataSource,
 	)
 
-	resp, err := net.GetWithRetries(req)
+	resp, err := net.Get(req)
 	if err != nil {
 		log.Errorf(err, "failed to get starSystems")
 	}
@@ -93,7 +93,7 @@ func (s *starSystemData) getStarSystem(starSystem *model.StarSystem, wg *sync.Wa
 				lang,
 			)
 
-			resp, err := net.GetWithRetries(req)
+			resp, err := net.Get(req)
 			if err != nil {
 				log.Errorf(err, "failed to get starSystem %d", starSystem.SystemId)
 			}
