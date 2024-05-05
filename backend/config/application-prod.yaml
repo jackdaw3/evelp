@@ -18,7 +18,7 @@ mysql:
 redis:
   address: 127.0.0.1:6379
   password: aXsRmLMLWygWtIgDMNjCZNoy9w4X/rihrGMDwDexF+SQ5yjLPFfxvJBL0exAsWr1dzylhJljDgUZOu9k6F9WjzWcohkBkHB3wvaQrxHiwbuNv0ybMjQAZ56nKcZUbq275UNCBwiCm2+KoQjxqqJwdIOH+IJnyYKkJ3bTfDEwkHw=
-  database: 0
+  database: 1
   refresh: true
   expireTime:
     history: 51840
@@ -30,8 +30,8 @@ data:
     path: /home/ubuntu/data
     refresh: false
   remote: 
-    address: https://esi.evetech.net/latest
-    datasource: tranquility
+    address: https://ali-esi.evepc.163.com/latest
+    datasource: serenity
     refresh: false
     
 crypto:

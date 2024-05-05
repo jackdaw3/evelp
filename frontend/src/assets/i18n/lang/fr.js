@@ -3,9 +3,9 @@ const fr = {
     header: {
       menu: "Menu",
       home: "Home",
-      serverName: "Tranquility",
+      serverName: "Serenity",
       market: "The Forge",
-      serenity: "Serenity",
+      tranquility: "Tranquility",
     },
     corporation: {
       placeholder: "Veuillez sélectionner ou saisir la faction et la société",

@@ -11,10 +11,10 @@
             <span>{{ headerLabel.home }}</span>
           </el-dropdown-item>
         </router-link>
-        <a href="https://eve-lp.com/serenity/">
+        <a href="https://eve-lp.com/">
           <el-dropdown-item>
             <i class="el-icon-arrow-right"></i>
-            <span>{{ headerLabel.serenity }}</span>
+            <span>{{ headerLabel.tranquility }}</span>
           </el-dropdown-item>
         </a>
       </el-dropdown-menu>

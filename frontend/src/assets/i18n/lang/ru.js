@@ -3,9 +3,9 @@ const ru = {
     header: {
       menu: "Меню",
       home: "Домой",
-      serverName: "Tranquility",
+      serverName: "Serenity",
       market: "The Forge",
-      serenity: "Serenity",
+      tranquility: "Tranquility",
     },
     corporation: {
       placeholder: "Пожалуйста выберите или введите фракцию и корпорацию",

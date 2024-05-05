@@ -3,9 +3,9 @@ const zh = {
     header: {
       menu: "菜单",
       home: "主页",
-      serverName: "宁静",
+      serverName: "晨曦",
       market: "吉他",
-      serenity: "国服",
+      tranquility: "欧服",
     },
     corporation: {
       placeholder: "请选择或输入势力和公司",
