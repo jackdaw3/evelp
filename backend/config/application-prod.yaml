@@ -30,7 +30,7 @@ data:
     path: /home/ubuntu/data
     refresh: false
   remote: 
-    address: https://esi.evepc.163.com/latest
+    address: https://ali-esi.evepc.163.com/latest
     datasource: serenity
     refresh: false
     
