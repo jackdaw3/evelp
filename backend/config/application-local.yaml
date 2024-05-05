@@ -7,7 +7,7 @@ mysql:
   port: 3306
   database: eve
   username: root
-  password: co9NAIXA4OHSHcSFdrSrK2fZ2yFGjKZasn0VTb1PQenoTcxB6EJNQl705DVbbWyR45X9/z3+2RtO/PZVKMVdwOGCvme4xGZB0+t+cvrCspQjcer8epmEihfJrzzSepflIE4SsWZHr/iBz90HDEz8wk0Jqqd2DhgT38vV5nt3mWE=
+  password: PTb+OMw67UKgiDKO34IkYEo1jnh0U7Iq7aiulo6cxY58ihvc9e+BUw6uboOWjzO8ZYa8IFlp8X2RInC7KZ0cT6X88+uwQ+pRPgEvO74k30aDnrRZREn5iUY/apC0tqIVW44NEAbpcYOpqLA3p2a1ZpgQ1s2PYPPF9d7IEY2FASY=
   charset: utf8
   loc: Asia/Shanghai
   maxIdleConn: 10
@@ -17,9 +17,9 @@ mysql:
 
 redis:
   address: 127.0.0.1:6379
-  password: co9NAIXA4OHSHcSFdrSrK2fZ2yFGjKZasn0VTb1PQenoTcxB6EJNQl705DVbbWyR45X9/z3+2RtO/PZVKMVdwOGCvme4xGZB0+t+cvrCspQjcer8epmEihfJrzzSepflIE4SsWZHr/iBz90HDEz8wk0Jqqd2DhgT38vV5nt3mWE=
+  password: aXsRmLMLWygWtIgDMNjCZNoy9w4X/rihrGMDwDexF+SQ5yjLPFfxvJBL0exAsWr1dzylhJljDgUZOu9k6F9WjzWcohkBkHB3wvaQrxHiwbuNv0ybMjQAZ56nKcZUbq275UNCBwiCm2+KoQjxqqJwdIOH+IJnyYKkJ3bTfDEwkHw=
   database: 0
-  refresh: false
+  refresh: true
   expireTime:
     history: -1
     order: -1
@@ -27,7 +27,7 @@ redis:
 
 data: 
   local:  
-    path: C://Users//Administrator//dev//data//
+    path: C://Dev//projects//evelp//
     refresh: false
   remote: 
     address: https://esi.evetech.net/latest
@@ -35,4 +35,4 @@ data:
     refresh: false
 
 crypto:
-  keyPath: C://Users//71832//dev//certs//private_key.pem
+  keyPath: C://Users//Alex//Downloads//private_key_prod.pem
