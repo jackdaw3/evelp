@@ -4,26 +4,24 @@
     <div style="margin-top: -13px">
       <el-divider></el-divider>
     </div>
-    <h3
-      style="
-        color: #D0D3D4;
-        font-size: 16px;
-        text-align: center;
-        margin-top: -5px;
-      "
-    >
-      {{ order.itemName }}
-    </h3>
-    <h4
-      style="
-        color: #D0D3D4;
-        font-size: 14px;
-        text-align: center;
-        margin-top: -5px;
-      "
-    >
-      {{ order.corporationName }}
-    </h4>
+
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <el-image style="height: 48px; vertical-align: middle; margin-top: -22px;" :src="getIcon()" fit="contain" lazy>
+        <div slot="error" class="image-slot">
+          <i class="el-icon-picture-outline"></i>
+        </div>
+      </el-image>
+      &nbsp;
+      &nbsp;
+      <div>
+        <h3 style="color: #D0D3D4; font-size: 16px; text-align: center; margin-top: -5px;">
+          {{ order.itemName }}
+        </h3>
+        <h4 style="color: #D0D3D4; font-size: 14px; text-align: center; margin-top: -5px;">
+          {{ order.corporationName }}
+        </h4>
+      </div>
+    </div>
 
     <el-tabs type="card" style="margin-top: -38px">
       <el-tab-pane :label="orderLabel.buyOrder">
@@ -61,6 +59,7 @@ import StatisTable from "@/components/StatisTable.vue";
 import Stock from "@/components/Stock.vue";
 
 const backend = "https://eve-lp.com/api/";
+const iconServer = "https://imageserver.eveonline.com/";
 const the_forge = "10000002";
 
 export default {
@@ -247,6 +246,9 @@ export default {
           this.history.borderWidth =
             document.documentElement.clientWidth * 0.0388;
         });
+    },
+    getIcon() {
+      return iconServer + "Type/" + this.order.itemId + "_64.png";
     },
   },
   watch: {

@@ -9,26 +9,19 @@
         <Dialog @form-change="formChange" />
       </div>
       <div style="width: 100%; margin-left: 5px">
-        <el-cascader
-          v-model="corporation.value"
-          style="width: 25%"
-          v-loading="corporation.loading"
-          :placeholder="corporation.placeholder"
-          :options="corporation.lists"
-          element-loading-background="rgba(0, 0, 0, 0)"
-          clearable
-          filterable
-          @change="loadTable"
-          ref="cascader"
-        ></el-cascader>
+        <el-cascader v-model="corporation.value" style="width: 25%" v-loading="corporation.loading"
+          :placeholder="corporation.placeholder" :options="corporation.lists"
+          element-loading-background="rgba(0, 0, 0, 0)" clearable filterable @change="loadTable" ref="cascader">
+          <template #default="{ node, data }">
+            <span>
+              <img style="height: 22px; vertical-align: middle; margin-top: -3px;" :src="data.imageUrl" loading="lazy">
+              &nbsp;
+              {{ node.label }}
+            </span>
+          </template></el-cascader>
       </div>
-      <el-button
-        icon="el-icon-download"
-        circle
-        size="medium"
-        @click="exportExcel"
-        style="height: 50%; float: right; margin-right: 15px; cursor: pointer"
-      ></el-button>
+      <el-button icon="el-icon-download" circle size="medium" @click="exportExcel"
+        style="height: 50%; float: right; margin-right: 15px; cursor: pointer"></el-button>
     </div>
     <Table ref="Table" style="margin-top: -10px" />
   </div>
@@ -40,6 +33,7 @@ import Header from "@/components/Header.vue";
 import Table from "@/components/Table.vue";
 
 const backend = "https://eve-lp.com/api/";
+const iconServer = "https://imageserver.eveonline.com/";
 const the_forge = "10000002";
 
 export default {
@@ -99,6 +93,7 @@ export default {
         var faction = new Object();
         faction.value = list[i].FactionId;
         faction.label = list[i].FactionName;
+        faction.imageUrl = this.getIcon(faction.value);
         if (list.length > 0) {
           var corporations = new Array();
           var corporationList = list[i].Corporations;
@@ -106,10 +101,11 @@ export default {
             var corporation = new Object();
             corporation.value = corporationList[j].CorporationId;
             corporation.label = corporationList[j].CorporationName;
+            corporation.imageUrl = this.getIcon(corporation.value);
             corporations.push(corporation);
             var obj = new Object();
             obj.key = corporation.value;
-            obj.label =  corporation.label;
+            obj.label = corporation.label;
             corporationData.push(obj);
           }
         }
@@ -153,7 +149,7 @@ export default {
               continue;
             }
             let count = 0;
-            for (let j = 0; j + count < matertials.length; ) {
+            for (let j = 0; j + count < matertials.length;) {
               if (count == 0) {
                 matertials[j].length = 1;
                 ++count;
@@ -195,44 +191,49 @@ export default {
         this.loadTable(facAndcorp);
       }
     },
-    reloadQuickbar(){
+    reloadQuickbar() {
       if (this.form.corporations === undefined) {
         return;
       }
 
-      if(this.form.corporations.length > 0){
+      if (this.form.corporations.length > 0) {
         var faction = new Object();
         faction.value = 1;
         faction.label = this.quickbar;
+        faction.imageUrl = "quickBar.png";
         var corporations = new Array();
         for (let i = 0; i < this.form.corporations.length; ++i) {
-            var corporation = new Object();
-            corporation.value = this.form.corporations[i];
-            corporation.label = this.getCorporationName(corporation.value);
-            corporations.push(corporation);
+          var corporation = new Object();
+          corporation.value = this.form.corporations[i];
+          corporation.label = this.getCorporationName(corporation.value);
+          corporation.imageUrl = this.getIcon(corporation.value);
+          corporations.push(corporation);
         }
-        corporations.sort(function(a, b) {return a.value - b.value});
+        corporations.sort(function (a, b) { return a.value - b.value });
         faction.children = corporations;
-        if(this.corporation.lists[0].value == 1 ){
+        if (this.corporation.lists[0].value == 1) {
           this.corporation.lists.shift();
         }
         this.corporation.lists.unshift(faction);
-      }else if(this.form.corporations.length == 0 && this.corporation.lists[0].value == 1 ){
+      } else if (this.form.corporations.length == 0 && this.corporation.lists[0].value == 1) {
         this.corporation.lists.shift();
       }
     },
-    getCorporationName(itemId){
+    getCorporationName(itemId) {
       var element;
       for (let i = 0; i < this.corporation.lists.length; ++i) {
         var faction = this.corporation.lists[i];
-          for (let j = 0; j < faction.children.length; ++j) {
-            if(faction.children[j].value == itemId){
-              element = faction.children[j];
-            }
+        for (let j = 0; j < faction.children.length; ++j) {
+          if (faction.children[j].value == itemId) {
+            element = faction.children[j];
           }
+        }
       }
       return element.label;
     },
+    getIcon(id) {
+      return iconServer + "Corporation/" + id + "_32.png";
+    }
   },
   watch: {
     "$i18n.locale"() {

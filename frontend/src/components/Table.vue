@@ -235,6 +235,7 @@ export default {
       pageSize: 25,
       search: "",
       tableLabel: this.$t("message.table"),
+      taxLabel: this.$t("message.dialog.tax"),
     };
   },
   computed: {
@@ -321,11 +322,12 @@ export default {
     },
     errorMessage(message) {
       this.$message({
+        dangerouslyUseHTMLString: true,
         message: message,
         type: "warning",
         style: "backgound-color:red",
         showClose: true,
-        duration: 5000,
+        duration: 6000,
       });
     },
     copyMaterial(row) {
@@ -385,13 +387,7 @@ export default {
       this.pageSize = 500;
       this.currentPage = 1;
       let date = new Date();
-      let name =
-        this.corporationName +
-        "-" +
-        this.dateFormat("YYYY_mm_dd-HH_MM_SS", date) +
-        "-" +
-        this.form.tax +
-        "%";
+      let name = this.corporationName + "-" + this.dateFormat("YYYYmmdd_HHMMSS", date) + "-" + this.form.tax + "%" + this.taxLabel;
       this.$nextTick(function () {
         let wb = XLSX.utils.table_to_book(document.getElementById("table"));
         let wbout = XLSX.write(wb, {

@@ -1,10 +1,6 @@
 <template>
   <div class="Stock">
-    <highcharts
-      class="stock"
-      :constructor-type="'stockChart'"
-      :options="chartOptions"
-    ></highcharts>
+    <highcharts class="stock" :constructor-type="'stockChart'" :options="chartOptions"></highcharts>
   </div>
 </template>
 
@@ -17,12 +13,22 @@ export default {
     return {
       chartOptions: {
         chart: {
-          backgroundColor: "rgba(0,0,0,0)",
+          backgroundColor: "#202124",
           alignTicks: false,
           marginRight: this.history.borderWidth,
         },
         scrollbar: {
           enabled: false,
+        },
+        legend: {
+          enabled: true,
+          align: 'center',
+          verticalAlign: 'top',
+          backgroundColor: "#202124",
+          layout: 'horizontal',
+          itemStyle: {
+            color: '#D0D3D4'
+          },
         },
         navigator: {
           series: {
@@ -31,19 +37,95 @@ export default {
           xAxis: {
             gridLineWidth: 0,
             minorGridLineWidth: 0,
+            dateTimeLabelFormats: {
+              millisecond: '%Y.%m.%d',
+              second: '%Y.%m.%d',
+              minute: '%Y.%m.%d',
+              hour: '%Y.%m.%d',
+              day: '%Y.%m.%d',
+              week: '%Y.%m.%d',
+              month: '%Y.%m.%d',
+              year: '%Y.%m.%d'
+            },
           },
           yAxis: {
             gridLineWidth: 0,
             minorGridLineWidth: 0,
           },
         },
+        navigation: {
+          buttonOptions: {
+            theme: {
+              states: {
+                hover: {
+                  fill: '#0D4579'
+                },
+                select: {
+                  stroke: '#0D4579',
+                  fill: '#0D4579'
+                }
+              }
+            }
+          },
+          menuItemHoverStyle: {
+            background: '#0D4579',
+            color: '#D0D3D4',
+          },
+          menuItemStyle: {
+            color: '#D0D3D4',
+          },
+          menuStyle: {
+            background: '#202124',
+          },
+        },
         exporting: {
-          enabled: false,
+          enabled: true,
+          buttons: {
+            contextButton: {
+              menuItems: ['viewFullscreen'],
+              symbolStroke: '#D0D3D4',
+              theme: {
+                fill: '#202124'
+              }
+            },
+          },
         },
         rangeSelector: {
+          inputDateFormat: '%Y.%m.%d',
+          inputEditDateFormat: '%Y.%m.%d',
           allButtonsEnabled: true,
           selected: 0,
-          inputEnabled: false,
+          inputEnabled: true,
+          inputStyle: {
+            color: '#D0D3D4'
+          },
+          labelStyle: {
+            color: '#D0D3D4',
+            fontWeight: 'bold'
+          },
+          buttons: [{
+            type: 'month',
+            count: 1,
+            text: this.history.label.rangeSelector.month,
+          }, {
+            type: 'month',
+            count: 3,
+            text: this.history.label.rangeSelector.threeMonths,
+          }, {
+            type: 'month',
+            count: 6,
+            text: this.history.label.rangeSelector.halfYear,
+          }, {
+            type: 'ytd',
+            text: this.history.label.rangeSelector.yearToDay,
+          }, {
+            type: 'year',
+            count: 1,
+            text: this.history.label.rangeSelector.year,
+          }, {
+            type: 'all',
+            text: this.history.label.rangeSelector.all,
+          }],
           buttonTheme: {
             fill: "none",
             stroke: "none",
@@ -77,6 +159,16 @@ export default {
             style: {
               color: "#ECF0F1",
             },
+          },
+          dateTimeLabelFormats: {
+            millisecond: '%Y.%m.%d',
+            second: '%Y.%m.%d',
+            minute: '%Y.%m.%d',
+            hour: '%Y.%m.%d',
+            day: '%Y.%m.%d',
+            week: '%Y.%m.%d',
+            month: '%Y.%m.%d',
+            year: '%Y.%m.%d'
           },
         },
         yAxis: [
@@ -132,6 +224,7 @@ export default {
         ],
         tooltip: {
           split: false,
+          xDateFormat: "%Y.%m.%d",
           backgroundColor: "rgba(0,0,0,0.8)",
           shared: true,
           valueDecimals: 0,
@@ -139,6 +232,7 @@ export default {
             fontSize: 13,
             color: "#D0D3D4",
           },
+          headerFormat: '<span style="font-size: 12px">{point.key}</span><br/>',
         },
         series: [
           {
@@ -159,9 +253,9 @@ export default {
             type: "columnrange",
             yAxis: 0,
             zIndex: 8,
-            color: "#3498DB",
+            color: "#A6ACAF",
             opacity: 0.6,
-            pointWidth: 4.5,
+            pointWidth: 3,
           },
           {
             name: this.history.label.average5d,
@@ -212,7 +306,8 @@ export default {
   width: 100%;
   height: 100%;
 }
+
+input.highcharts-range-selector:focus {
+  background-color: #0D4579;
+}
 </style>
-
-
-

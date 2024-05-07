@@ -87,12 +87,20 @@ const ja = {
     },
     stock: {
       average: "平均値",
-      minAndmax: "最小-最大",
+      minAndmax: "最小/最大",
       average5d: "移動平均(5日)",
       average20d: "移動平均(20日)",
-      minAndmax5d: "最小-最大(5日)",
-      volume: "販売量",
+      minAndmax5d: "最小/最大(5日)",
+      volume: "数量",
       price: "価格",
+      rangeSelector: {
+        month: "月",
+        threeMonths: "季度",
+        halfYear: "半年",
+        yearToDay: "YTD",
+        year: "年",
+        all: "所有",
+      },
     },
   },
 };
