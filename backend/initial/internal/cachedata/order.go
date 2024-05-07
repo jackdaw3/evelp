@@ -46,6 +46,7 @@ func (o *orderData) Refresh() error {
 
 			o.clearMap()
 			log.Debugf("orders saved to reids")
+			time.Sleep(3 * time.Minute)
 		}
 	}()
 

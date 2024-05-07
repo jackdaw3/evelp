@@ -7,7 +7,7 @@ import (
 )
 
 func initAnts() error {
-	pool, err := ants.NewPool(3)
+	pool, err := ants.NewPool(1)
 	if err != nil {
 		return err
 	}
