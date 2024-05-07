@@ -120,6 +120,9 @@ func (o *OrderService) ordersFromCache() (*model.Orders, error) {
 	}
 
 	if err := cache.Get(key, &orders); err != nil {
+		if errors.Cause(err).Error() == "redis: nil" {
+			return nil, errors.New("no order found in the market")
+		}
 		return nil, err
 	}
 

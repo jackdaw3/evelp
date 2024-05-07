@@ -49,7 +49,11 @@ func Get(req string) (*http.Response, error) {
 			return nil, errors.WithStack(err)
 		}
 
-		if err == nil && resp.StatusCode >= 500 && resp.StatusCode < 600 {
+		if resp == nil {
+			return nil, errors.New("response is nil")
+		}
+
+		if resp.StatusCode >= 500 && resp.StatusCode < 600 {
 			resp.Body.Close()
 
 			if retries >= retryableClient.Retryer.MaxRetries {

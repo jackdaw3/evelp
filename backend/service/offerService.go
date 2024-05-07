@@ -129,12 +129,12 @@ func (o *OfferSerivce) convertOffer(offer *model.Offer) (*dto.OfferDTO, error) {
 	}
 	if err != nil {
 		offerDTO.Error = true
-		errorMessage := fmt.Sprintf("failed to get %s price for product %s in The Forge: %s",
+		errorMessage := fmt.Sprintf("failed to get %s price for <b>%s</b> in The Forge: %s",
 			o.productPrice, offerDTO.ItemName,
 			errors.Cause(err).Error(),
 		)
 		if len(offerDTO.ErrorMessage) > 0 {
-			offerDTO.ErrorMessage += ".\n" + errorMessage
+			offerDTO.ErrorMessage += "<br>" + errorMessage
 		} else {
 			offerDTO.ErrorMessage = errorMessage
 		}
@@ -165,7 +165,7 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 
 	bluePrint, err := model.GetBluePrint(offer.ItemId)
 	if err != nil {
-		return nil, errors.WithMessagef(err, "failed to get blue print %d", offer.ItemId)
+		return nil, errors.WithMessagef(err, "failed to get bluePrint %d", offer.ItemId)
 	}
 	if len(bluePrint.Products) == 0 {
 		return nil, errors.Errorf("offer %d's bluePrint %d have no product", offer.OfferId, bluePrint.BlueprintId)
@@ -199,13 +199,13 @@ func (o *OfferSerivce) convertBluePrint(offer *model.Offer) (*dto.OfferDTO, erro
 	}
 	if err != nil {
 		offerDTO.Error = true
-		errorMessage := fmt.Sprintf("failed to get %s price for blueprint %s product in The Forge: %s",
+		errorMessage := fmt.Sprintf("failed to get %s price for blueprint <b>%s</b> product in The Forge: %s",
 			o.productPrice,
 			bluePrintItem.Name.Lang(o.lang),
 			errors.Cause(err).Error(),
 		)
 		if len(offerDTO.ErrorMessage) > 0 {
-			offerDTO.ErrorMessage += ".\n" + errorMessage
+			offerDTO.ErrorMessage += "<br>" + errorMessage
 		} else {
 			offerDTO.ErrorMessage = errorMessage
 		}
@@ -257,13 +257,13 @@ func (o *OfferSerivce) conertMaterials(rs model.RequireItems, offerDTO *dto.Offe
 		}
 		if err != nil {
 			offerDTO.Error = true
-			errorMessage := fmt.Sprintf("failed to get %s price for exchange material %s in The Forge: %s",
+			errorMessage := fmt.Sprintf("failed to get %s price for requirement <b>%s</b> in The Forge: %s",
 				o.materialPrice,
 				material.MaterialName,
 				errors.Cause(err).Error(),
 			)
 			if len(offerDTO.ErrorMessage) > 0 {
-				offerDTO.ErrorMessage += ".\n" + errorMessage
+				offerDTO.ErrorMessage += "<br>" + errorMessage
 			} else {
 				offerDTO.ErrorMessage = errorMessage
 			}
@@ -304,13 +304,13 @@ func (o *OfferSerivce) conertManufactMaterials(ms model.ManufactMaterials, offer
 		}
 		if err != nil {
 			offerDTO.Error = true
-			errorMessage := fmt.Sprintf("failed to get %s price for manufact material %s in The Forge: %s",
+			errorMessage := fmt.Sprintf("failed to get %s price for production material <b>%s</b> in The Forge: %s",
 				o.materialPrice,
 				material.MaterialName,
 				errors.Cause(err).Error(),
 			)
 			if len(offerDTO.ErrorMessage) > 0 {
-				offerDTO.ErrorMessage += ".\n" + errorMessage
+				offerDTO.ErrorMessage += "<br>" + errorMessage
 			} else {
 				offerDTO.ErrorMessage = errorMessage
 			}
