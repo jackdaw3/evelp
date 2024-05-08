@@ -235,6 +235,7 @@ export default {
       pageSize: 25,
       search: "",
       tableLabel: this.$t("message.table"),
+      errLabel: this.$t("message.err"),
       taxLabel: this.$t("message.dialog.tax"),
     };
   },
@@ -321,6 +322,20 @@ export default {
       }
     },
     errorMessage(message) {
+      const lan  = localStorage.getItem('$i18n.locale');
+      if (lan != 'en') {
+        message = message
+          .replace(/failed to get buy price for <b>(.*?)<\/b> in The Forge/, this.errLabel.produceBuy)
+          .replace(/failed to get sell price for <b>(.*?)<\/b> in The Forge/, this.errLabel.produceSell)
+          .replace(/failed to get buy price for production material <b>(.*?)<\/b> in The Forge/, this.errLabel.materialBuy)
+          .replace(/failed to get sell price for production material <b>(.*?)<\/b> in The Forge/, this.errLabel.materialSell)
+          .replace(/failed to get sell price for requirement <b>(.*?)<\/b> in The Forge/, this.errLabel.requirementBuy)
+          .replace(/failed to get sell price for requirement <b>(.*?)<\/b> in The Forge/, this.errLabel.requirementSell)
+          .replace('no buy order found in the market', this.errLabel.buyOrder)
+          .replace('no sell order found in the market', this.errLabel.sellOrder)
+          .replace('no order found in the market', this.errLabel.order);
+      }
+
       this.$message({
         dangerouslyUseHTMLString: true,
         message: message,
@@ -650,19 +665,23 @@ export default {
       }
     },
     orders(scope) {
-      let routeUrl = this.$router.resolve({
-        name: "Order",
-        query: {
+      let queryParams = {
+        blueprint: scope.row.IsBluePrint,
+        material_price: this.form.materialPrice,
+        weighted_price: this.form.scope,
+        tax: this.form.tax
+      };
+
+      let routeData = this.$router.resolve({
+        name: 'Order',
+        params: {
           itemId: scope.row.ItemId,
           offerId: scope.row.OfferId,
-          isBluePrint: scope.row.IsBluePrint,
-          corporationId: this.corporationId,
-          materialPrice: this.form.materialPrice,
-          scope: this.form.scope,
-          tax: this.form.tax,
+          corporationId: this.corporationId
         },
+        query: queryParams
       });
-      window.open(routeUrl.href, "_blank");
+      window.open(routeData.href, '_blank');
     },
   },
   watch: {

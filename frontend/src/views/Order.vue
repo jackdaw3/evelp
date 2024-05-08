@@ -118,12 +118,13 @@ export default {
   },
   methods: {
     getParams() {
-      this.order.itemId = this.$route.query.itemId;
-      this.order.offerId = this.$route.query.offerId;
-      this.order.isBluePrint = this.$route.query.isBluePrint;
-      this.order.corporationId = this.$route.query.corporationId;
-      this.order.materialPrice = this.$route.query.materialPrice;
-      this.order.scope = this.$route.query.scope;
+      this.order.itemId = this.$route.params.itemId;
+      this.order.offerId = this.$route.params.offerId;
+      this.order.corporationId = this.$route.params.corporationId;
+
+      this.order.isBluePrint = this.$route.query.blueprint;
+      this.order.materialPrice = this.$route.query.material_price;
+      this.order.weightedPrice = this.$route.query.weighted_price;
       this.order.tax = this.$route.query.tax;
     },
     getItemName(itemId) {
@@ -156,7 +157,6 @@ export default {
       this.getParams();
       this.getItemName(this.order.itemId);
       this.getCorporationName(this.order.corporationId);
-
       this.getOrders(true);
       this.getStatis(true);
       this.getOrders(false);

@@ -8,7 +8,7 @@ const en = {
       serenity: "Serenity",
     },
     corporation: {
-      placeholder: "Please select or enter a faction and a corporation",
+      placeholder: "Please select or enter corp",
     },
     dialog: {
       title: "Configuration",
@@ -18,7 +18,7 @@ const en = {
       productPlaceholder: "Please select a type",
       scope: "Weighted Price",
       scopePlaceholder: "Please select a percentage",
-      days: "Quantity Range",
+      days: "Date Range",
       daysPlaceholder: "Please select a date range",
       tax: "Tax",
       week: "7d",
@@ -32,6 +32,26 @@ const en = {
       quickbarTitle: "Quickbar",
       sourceList: "All",
       targetList: "Quickbar",
+      desc: {
+        title: "Description",
+        dataDesc: "Configuration Description",
+        tableDesc: "Table Description",
+        claim: "Copyright Notice",
+        materialContent: "Price type for all materials(requirements, blueprint materials)",
+        productPriceContent: "Price type for all LP store items",
+        scopeContent: "Price calculation for all items. Low-priced and high-volume orders are already filtered out in backend. And the sell and buy prices are the average prices of the lowest or highest x% quantity prices.",
+        daysContent: "The volume column in the table is the average of the total volume during the Date Range",
+        taxContent: "Income and profit will be taxed at the configuration ratio",
+        costContent: "Total price of all materials(requirements, blueprint materials)",
+        incomeContent: "Price of item price multiplied by quantity after tax",
+        volumeContent: " Average volume on the Date Range",
+        saleIndexContent: "This value is designed to highlight items that are easy to sell and have a high ISK/LP ratio. It's calculated by multiplying the scores of three indicators: item daily transaction ISK amount, Avg daily volume and ISK/LP",
+        unitProfitContent: "ISK profit after tax per LP point",
+        claimContent: "EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. "+
+        "All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos "+
+        "and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, "+
+        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. CCP hf."
+      },
     },
     table: {
       name: "Item",
@@ -65,12 +85,12 @@ const en = {
       },
     },
     order: {
-      sellOrder: "Sell Orders",
-      buyOrder: "Buy Orders",
+      sellOrder: "Sell Order",
+      buyOrder: "Buy Order",
       history: "History",
       orderId: "OrderId",
       systemName: "Location",
-      volume: "Quantity",
+      volume: "Volume",
       price: "Price",
       unitProfit: "ISK/LP",
       expiration: "Expiration",
@@ -91,7 +111,7 @@ const en = {
       average5d: "Moving Avg(5d)",
       average20d: "Moving Avg(20d)",
       minAndmax5d: "Min/Max(5d)",
-      volume: "Quanity",
+      volume: "Volume",
       price: "Price",
       rangeSelector: {
         month: "1m",
@@ -101,6 +121,17 @@ const en = {
         year: "1y",
         all: "All",
       },
+    },
+    err: {
+      produceBuy:"failed to get buy price for <b>$1</b> in The Forge",
+      productSell:"failed to get sell price for <b>$1</b> in The Forge",
+      materialBuy:"failed to get buy price for production material <b>$1</b> in The Forge",
+      materialSell:"failed to get sell price for production material <b>$1</b> in The Forge",
+      requirementBuy:"failed to get sell price for requirement <b>$1</b> in The Forge",
+      requirementSell:"failed to get sell price for requirement <b>$1</b> in The Forge",
+      buyOrder:"no buy order found in the market",
+      sellOrder:"no sell order found in the market",
+      order:"no order found in the market"
     },
   },
 };

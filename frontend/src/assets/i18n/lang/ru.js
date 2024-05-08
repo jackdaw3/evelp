@@ -32,6 +32,26 @@ const ru = {
       quickbarTitle: "Быстрая панель",
       sourceList: "все",
       targetList: "Быстрая панель",
+      desc: {
+        title: "Описание",
+        dataDesc: "Настройки конфигурации",
+        tableDesc: "Описание таблицы",
+        claim: "Заявление",
+        materialContent: "Тип цены для всех материалов (материалы обмена, материалы чертежей)",
+        productPriceContent: "Тип цены для всех товаров LP-магазина",
+        scopeContent: "Расчет цены для всех товаров. Низкоценовые и крупнооптовые заказы исключаются. Продажная и покупная цены - это средняя цена самых низких или самых высоких x% ценовых диапазонов.",
+        daysContent: "Средний (дневной) объем торгов в таблице - это средний объем торгов за день торговли",
+        taxContent: "Выручка и прибыль - это значения, рассчитанные после уплаты налогов по этому соотношению",
+        costContent: "Общая цена всех материалов (материалы обмена, материалы чертежей)",
+        incomeContent: "Цена товара после уплаты налогов, умноженная на количество",
+        volumeContent: "Средний дневной объем торгов за день торговли",
+        saleIndexContent: "Этот показатель используется для отображения товаров, которые легко продаются и имеют высокое соотношение LP. Он вычисляется путем умножения показателей трех индикаторов: общий дневной объем продаж товара, дневной объем торгов и соотношение LP",
+        unitProfitContent: "Прибыль ISK после уплаты налогов за 1 LP-пункт",
+        claimContent: "EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. "+
+        "All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos "+
+        "and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, "+
+        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. CCP hf."
+      },
     },
     table: {
       name: "Имя",
@@ -70,7 +90,7 @@ const ru = {
       history: "История",
       orderId: "Номер заказа",
       systemName: "Место",
-      volume: "Количество",
+      volume: "Объем",
       price: "Цена",
       unitProfit: "ISK/LP",
       expiration: "Срок действия",
@@ -91,7 +111,7 @@ const ru = {
       average5d: "Скользящее среднее(5д)",
       average20d: "Скользящее среднее(20д)",
       minAndmax5d: "Мин/Макс(5д)",
-      volume: "Количество",
+      volume: "Объем",
       price: "Цена",
       rangeSelector: {
         month: "1м",
@@ -101,6 +121,17 @@ const ru = {
         year: "1г",
         all: "Все",
       },
+    },
+    err: {
+      produceBuy:"Ошибка при получении цены покупки <b>$1</b>",
+      productSell:"Ошибка при получении цены продажи <b>$1</b>",
+      materialBuy:"Ошибка при получении цены покупки материала для изготовления <b>$1</b>",
+      materialSell:"Ошибка при получении цены продажи материала для изготовления <b>$1</b>",
+      requirementBuy:"Ошибка при получении цены покупки обменного материала <b>$1</b>",
+      requirementSell:"Ошибка при получении цены продажи обменного материала <b>$1</b>",
+      buyOrder:"На рынке не найдено ордеров на покупку",
+      sellOrder:"На рынке не найдено ордеров на продажу",
+      order:"На рынке нет ордеров"
     },
   },
 };

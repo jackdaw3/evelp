@@ -32,6 +32,26 @@ const de = {
       quickbarTitle: "Quickbar",
       sourceList: "Alle",
       targetList: "Quickbar",
+      desc: {
+        title: "Beschreibung",
+        dataDesc: "Konfigurationseinstellungen",
+        tableDesc: "Tabellenlegende",
+        claim: "Erklärung",
+        materialContent: "Preiskategorie für alle Materialien (Tauschmaterialien, Blaupausenmaterialien)",
+        productPriceContent: "Preiskategorie für alle LP-Store-Gegenstände",
+        scopeContent: "Preisberechnung für alle Gegenstände. Niedrigpreisige und großvolumige Bestellungen werden herausgefiltert. Verkaufspreise und Einkaufspreise sind der Durchschnittspreis der niedrigsten oder höchsten x% Preisspanne.",
+        daysContent: "Das (tägliche) Durchschnittshandelsvolumen in der Tabelle ist der Durchschnitt des gesamten Handelsvolumens am Handelstag",
+        taxContent: "Umsatz und Gewinn sind die nach Steuer berechneten Werte dieses Verhältnisses",
+        costContent: "Gesamtpreis aller Materialien (Tauschmaterialien, Blaupausenmaterialien)",
+        incomeContent: "Nach Steuer berechneter Preis des Artikels multipliziert mit der Menge",
+        volumeContent: "Täglicher Durchschnitt des Handelsvolumens am Handelstag",
+        saleIndexContent: "Dieser Wert dient dazu, leicht verkäufliche Gegenstände mit hohem LP-Verhältnis anzuzeigen. Er wird durch die Multiplikation der Punktzahlen von drei Indikatoren berechnet: täglicher Gesamtumsatz des Artikels, tägliches Handelsvolumen und LP-Verhältnis",
+        unitProfitContent: "Nach Steuer berechneter ISK-Gewinn pro LP-Punkt",
+        claimContent: "EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. "+
+        "All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos "+
+        "and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, "+
+        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. CCP hf."
+      },
     },
     table: {
       name: "Name",
@@ -70,7 +90,7 @@ const de = {
       history: "Geschichte",
       orderId: "BestellungId",
       systemName: "Standort",
-      volume: "Menge",
+      volume: "Volumen",
       price: "Preis",
       unitProfit: "ISK/LP",
       expiration: "Ablauf",
@@ -91,7 +111,7 @@ const de = {
       average5d: "Moving Avg(5d)",
       average20d: "Moving Avg(20d)",
       minAndmax5d: "Min/Max(5d)",
-      volume: "Menge",
+      volume: "Volumen",
       price: "Preis",
       rangeSelector: {
         month: "1m",
@@ -101,6 +121,17 @@ const de = {
         year: "1J",
         all: "Alle",
       },
+    },
+    err: {
+      produceBuy:"Fehler beim Abrufen des Kaufpreises von <b>$1</b>",
+      productSell:"Fehler beim Abrufen des Verkaufspreises von <b>$1</b>",
+      materialBuy:"Fehler beim Abrufen des Kaufpreises von Herstellungsmaterial <b>$1</b>",
+      materialSell:"Fehler beim Abrufen des Verkaufspreises von Herstellungsmaterial <b>$1</b>",
+      requirementBuy:"Fehler beim Abrufen des Kaufpreises von Tauschmaterial <b>$1</b>",
+      requirementSell:"Fehler beim Abrufen des Verkaufspreises von Tauschmaterial <b>$1</b>",
+      buyOrder:"Keine Kaufaufträge auf dem Markt gefunden",
+      sellOrder:"Keine Verkaufsaufträge auf dem Markt gefunden",
+      order:"Es gibt keine Aufträge auf dem Markt"
     },
   },
 };

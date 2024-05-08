@@ -12,13 +12,18 @@ const routes = [
     component: Home
   },
   {
-    path: '/order',
+    path: '/order/:corporationId/:offerId/:itemId',
     name: 'Order',
-    component: Order
+    component: Order,
+    props: (route) => ({
+      ...route.params,
+      ...route.query
+    })
   },
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 

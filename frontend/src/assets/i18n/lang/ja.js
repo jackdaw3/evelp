@@ -32,6 +32,26 @@ const ja = {
       quickbarTitle: "クイックバー",
       sourceList: "全て",
       targetList: "クイックバー",
+      desc: {
+        title: "説明",
+        dataDesc: "設定説明",
+        tableDesc: "テーブル説明",
+        claim: "聲明",
+        materialContent: "すべての材料（交換材料、青写真材料）の価格タイプ",
+        productPriceContent: "すべてのLPストアアイテムの価格タイプ",
+        scopeContent: "すべてのアイテムの価格計算。低価格で大量の注文は除外されます。売値と買値は、価格の最低または最高のx%数量の価格の平均値です。",
+        daysContent: "表中の（日平均）取引量は、取引日の総取引量の平均値です",
+        taxContent: "収入と利益は、この比率の課税後の値です",
+        costContent: "すべての材料（交換材料、青写真材料）の合計価格",
+        incomeContent: "物品価格×数量の課税後価格",
+        volumeContent: "取引日の取引量の1日平均値",
+        saleIndexContent: "これは、売れやすくLP比率の高いアイテムを表示するためのものです。3つの指標のスコアを乗算して得られます。アイテムの日間取引総額、日取引量、LP/ISK",
+        unitProfitContent: "LPポイントあたりの課税後ISK利益",
+        claimContent: "EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. "+
+        "All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos "+
+        "and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, "+
+        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. CCP hf."
+      },
     },
     table: {
       name: "物品",
@@ -70,7 +90,7 @@ const ja = {
       history: "歴史",
       orderId: "注文番号",
       systemName: "位置",
-      volume: "数量",
+      volume: "セールス",
       price: "単価",
       unitProfit: "ISK/LP",
       expiration: "有効期限",
@@ -91,7 +111,7 @@ const ja = {
       average5d: "移動平均(5日)",
       average20d: "移動平均(20日)",
       minAndmax5d: "最小/最大(5日)",
-      volume: "数量",
+      volume: "セールス",
       price: "価格",
       rangeSelector: {
         month: "月",
@@ -101,6 +121,17 @@ const ja = {
         year: "年",
         all: "所有",
       },
+    },
+    err: {
+      produceBuy:"<b>$1</b> の買入価格の取得に失敗しました",
+      productSell:"<b>$1</b> の売却価格の取得に失敗しました",
+      materialBuy:"製作材料 <b>$1</b> の買入価格の取得に失敗しました",
+      materialSell:"製作材料 <b>$1</b> の売却価格の取得に失敗しました",
+      requirementBuy:"交換材料 <b>$1</b> の買入価格の取得に失敗しました",
+      requirementSell:"交換材料 <b>$1</b> の売却価格の取得に失敗しました",
+      buyOrder:"市場に買い注文が見つかりません",
+      sellOrder:"市場に売り注文が見つかりません",
+      order:"市場に注文がありません"
     },
   },
 };
