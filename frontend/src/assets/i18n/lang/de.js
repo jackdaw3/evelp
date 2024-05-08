@@ -37,6 +37,7 @@ const de = {
         dataDesc: "Konfigurationseinstellungen",
         tableDesc: "Tabellenlegende",
         claim: "Erklärung",
+        blueprint: "Blaupause",
         materialContent: "Preiskategorie für alle Materialien (Tauschmaterialien, Blaupausenmaterialien)",
         productPriceContent: "Preiskategorie für alle LP-Store-Gegenstände",
         scopeContent: "Preisberechnung für alle Gegenstände. Niedrigpreisige und großvolumige Bestellungen werden herausgefiltert. Verkaufspreise und Einkaufspreise sind der Durchschnittspreis der niedrigsten oder höchsten x% Preisspanne.",
@@ -47,10 +48,11 @@ const de = {
         volumeContent: "Täglicher Durchschnitt des Handelsvolumens am Handelstag",
         saleIndexContent: "Dieser Wert dient dazu, leicht verkäufliche Gegenstände mit hohem LP-Verhältnis anzuzeigen. Er wird durch die Multiplikation der Punktzahlen von drei Indikatoren berechnet: täglicher Gesamtumsatz des Artikels, tägliches Handelsvolumen und LP-Verhältnis",
         unitProfitContent: "Nach Steuer berechneter ISK-Gewinn pro LP-Punkt",
+        blueprintContent: "Die Preise für Blaupausen in Tabellen und Bestellungen werden nach den Blaupausenprodukten berechnet",
         claimContent: "EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. "+
         "All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos "+
         "and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, "+
-        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. CCP hf."
+        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf."
       },
     },
     table: {

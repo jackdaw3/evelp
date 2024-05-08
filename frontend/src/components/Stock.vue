@@ -17,6 +17,9 @@ export default {
           alignTicks: false,
           marginRight: this.history.borderWidth,
         },
+        credits: {
+          enabled: false
+        },
         scrollbar: {
           enabled: false,
         },
@@ -32,9 +35,15 @@ export default {
         },
         navigator: {
           series: {
+            data: this.history.average,
             color: "#3498DB",
           },
           xAxis: {
+            labels: {
+              style: {
+                color: '#D0D3D4',
+              }
+            },
             gridLineWidth: 0,
             minorGridLineWidth: 0,
             dateTimeLabelFormats: {
@@ -160,6 +169,9 @@ export default {
               color: "#ECF0F1",
             },
           },
+          crosshair: {
+            dashStyle: 'dot',
+          },
           dateTimeLabelFormats: {
             millisecond: '%Y.%m.%d',
             second: '%Y.%m.%d',
@@ -232,7 +244,7 @@ export default {
             fontSize: 13,
             color: "#D0D3D4",
           },
-          headerFormat: '<span style="font-size: 12px">{point.key}</span><br/>',
+          headerFormat: '<span style="font-size: 13px">{point.key}</span><br/>',
         },
         series: [
           {

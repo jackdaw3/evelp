@@ -81,6 +81,9 @@
                 <br>
                 <span style="font-weight: bold; margin-right: 10px;">{{ tableLabel.unitProfit }}</span>
                 {{ dialogLabel.desc.unitProfitContent }}
+                <br>
+                <span style="font-weight: bold; margin-right: 10px;">{{ dialogLabel.desc.blueprint }}</span>
+                {{ dialogLabel.desc.blueprintContent }}
               </div>
 
             </el-collapse-item>

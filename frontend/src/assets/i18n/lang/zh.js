@@ -37,20 +37,22 @@ const zh = {
         dataDesc: "配置说明",
         tableDesc: "表格说明",
         claim: "声明",
+        blueprint: "蓝图",
         materialContent: "所有材料(兑换材料，蓝图材料)的价格类型",
         productPriceContent: "所有LP商店物品的价格类型",
         scopeContent: "所有物品的价格计算，已过滤低价且量大的订单，卖价和买价取价格最低或最高的前x%数量的价格平均值",
         daysContent: "表格中(日均)交易量为交易日期内总交易量的平均值",
-        taxContent: "收入，利润取该比率的税后值",
+        taxContent: "收入和利润取该比率的税后值",
         costContent: "所有材料(兑换材料，蓝图材料)的总价",
         incomeContent: "物品价格乘以数量的税后价格",
         volumeContent: "交易日期内交易量的日平均值",
         saleIndexContent: "这个值是为了展示易卖且LP比例高的物品，由三项指标得分相乘所得:物品日均交易总额，日均交易量和LP比例",
         unitProfitContent: "单位LP点的税后ISK利润",
+        blueprintContent: "表格和订单中的蓝图价格按照蓝图产品来计算",
         claimContent: "EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. "+
         "All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos "+
         "and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, "+
-        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. CCP hf."
+        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf."
       },
     },
     table: {
@@ -129,8 +131,8 @@ const zh = {
       materialSell:"未能成功获取制造材料 <b>纯超强型撞击感增效体</b> 的卖价",
       requirementBuy:"未能成功获取兑换材料 <b>$1</b> 的买价",
       requirementSell:"未能成功获取兑换材料 <b>$1</b> 的卖价",
-      buyOrder:"市场上没有找到买单",
-      sellOrder:"市场上没有找到卖单",
+      buyOrder:"市场上没有买单",
+      sellOrder:"市场上没有卖单",
       order:"市场上没有任何订单"
     },
   },

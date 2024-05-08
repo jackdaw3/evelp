@@ -37,16 +37,18 @@ const ja = {
         dataDesc: "設定説明",
         tableDesc: "テーブル説明",
         claim: "聲明",
-        materialContent: "すべての材料（交換材料、青写真材料）の価格タイプ",
+        blueprint: "ブループリント",
+        materialContent: "すべての材料（交換材料、ブループリント材料）の価格タイプ",
         productPriceContent: "すべてのLPストアアイテムの価格タイプ",
         scopeContent: "すべてのアイテムの価格計算。低価格で大量の注文は除外されます。売値と買値は、価格の最低または最高のx%数量の価格の平均値です。",
         daysContent: "表中の（日平均）取引量は、取引日の総取引量の平均値です",
         taxContent: "収入と利益は、この比率の課税後の値です",
-        costContent: "すべての材料（交換材料、青写真材料）の合計価格",
+        costContent: "すべての材料（交換材料、ブループリント材料）の合計価格",
         incomeContent: "物品価格×数量の課税後価格",
         volumeContent: "取引日の取引量の1日平均値",
         saleIndexContent: "これは、売れやすくLP比率の高いアイテムを表示するためのものです。3つの指標のスコアを乗算して得られます。アイテムの日間取引総額、日取引量、LP/ISK",
         unitProfitContent: "LPポイントあたりの課税後ISK利益",
+        blueprintContent: "テーブルのブループリントの価格と、ブループリントの出力に基づいた注文",
         claimContent: "EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. "+
         "All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos "+
         "and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, "+

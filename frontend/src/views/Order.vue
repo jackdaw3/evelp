@@ -14,10 +14,10 @@
       &nbsp;
       &nbsp;
       <div>
-        <h3 style="color: #D0D3D4; font-size: 16px; text-align: center; margin-top: -5px;">
+        <h3 style="color: #CDD0D1; font-size: 16px; text-align: center; margin-top: -5px;">
           {{ order.itemName }}
         </h3>
-        <h4 style="color: #D0D3D4; font-size: 14px; text-align: center; margin-top: -5px;">
+        <h4 style="color: #CDD0D1; font-size: 14px; text-align: center; margin-top: -5px;">
           {{ order.corporationName }}
         </h4>
       </div>

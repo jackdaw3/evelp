@@ -37,6 +37,7 @@ const fr = {
         dataDesc: "Description de la configuration",
         tableDesc: "Description du tableau",
         claim: "Déclaration",
+        blueprint: "Plan",
         materialContent: "Type de prix pour tous les matériaux (matériaux d'échange, matériaux de plan)",
         productPriceContent: "Type de prix pour tous les articles de la boutique LP",
         scopeContent: "Calcul du prix pour tous les articles. Les commandes à bas prix et à volume élevé sont filtrées. Les prix de vente et d'achat sont les prix moyens des prix les plus bas ou les plus élevés de x% de quantité.",
@@ -47,10 +48,11 @@ const fr = {
         volumeContent: "Moyenne quotidienne du volume des transactions à la date de la transaction",
         saleIndexContent: "Cette valeur est destinée à montrer les articles faciles à vendre et ayant un ISK/LP élevé. Elle est obtenue en multipliant les scores de trois indicateurs : montant total des transactions quotidiennes des articles, volume des transactions quotidiennes et ISK/LP",
         unitProfitContent: "Profit ISK après impôt par point LP",
+        blueprintContent: "Les prix des plans dans les tableaux et les commandes sont calculés selon les produits des plans",
         claimContent: "EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. "+
         "All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos "+
         "and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, "+
-        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. CCP hf."
+        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf."
       },      
     },
     table: {

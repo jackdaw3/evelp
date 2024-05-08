@@ -12,7 +12,7 @@
       "
       id="table"
       :cell-style="tableStyle"
-      :header-row-style="{ color: '#B3B6B7' }"
+      :header-row-style="{ color: '#B8BBBC' }"
       @sort-change="sort_change"
       style="width: 100%"
       :row-class-name="handelRowDetail"
@@ -20,12 +20,13 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-table
+            class="no-hover-highlight"
             :data="props.row.Matertials"
             :cell-style="tableStyle"
             style="width: 55%"
             :row-class-name="handelMaterailRowDetail"
             :span-method="objectSpanMethod"
-            :header-row-style="{ color: '#B3B6B7' }"
+            :header-row-style="{ color: '#B8BBBC' }"
             :header-cell-style="{ padding: '0' }"
           >
             <el-table-column
@@ -62,6 +63,7 @@
             <el-table-column
               prop="Quantity"
               :label="tableLabel.material.quantity"
+              :formatter="stateFormat"
               min-width="10%"
             ></el-table-column>
             <el-table-column
@@ -703,5 +705,11 @@ export default {
 }
 .el-table .warning-row {
   background: #251b07;
+}
+.el-table .warning-row:hover>td {
+  background: #251b07 !important;
+}
+.no-hover-highlight tbody tr:hover>td {
+  background: transparent !important;
 }
 </style>

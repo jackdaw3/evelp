@@ -37,6 +37,7 @@ const ru = {
         dataDesc: "Настройки конфигурации",
         tableDesc: "Описание таблицы",
         claim: "Заявление",
+        blueprint: "Чертёж",
         materialContent: "Тип цены для всех материалов (материалы обмена, материалы чертежей)",
         productPriceContent: "Тип цены для всех товаров LP-магазина",
         scopeContent: "Расчет цены для всех товаров. Низкоценовые и крупнооптовые заказы исключаются. Продажная и покупная цены - это средняя цена самых низких или самых высоких x% ценовых диапазонов.",
@@ -47,6 +48,7 @@ const ru = {
         volumeContent: "Средний дневной объем торгов за день торговли",
         saleIndexContent: "Этот показатель используется для отображения товаров, которые легко продаются и имеют высокое соотношение LP. Он вычисляется путем умножения показателей трех индикаторов: общий дневной объем продаж товара, дневной объем торгов и соотношение LP",
         unitProfitContent: "Прибыль ISK после уплаты налогов за 1 LP-пункт",
+        blueprintContent: "Цены на чертежи в таблицах и заказах рассчитываются исходя из продукции по чертежам",
         claimContent: "EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. "+
         "All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos "+
         "and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, "+

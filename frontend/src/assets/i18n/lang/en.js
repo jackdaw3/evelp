@@ -37,6 +37,7 @@ const en = {
         dataDesc: "Configuration Description",
         tableDesc: "Table Description",
         claim: "Copyright Notice",
+        blueprint: "Blueprint",
         materialContent: "Price type for all materials(requirements, blueprint materials)",
         productPriceContent: "Price type for all LP store items",
         scopeContent: "Price calculation for all items. Low-priced and high-volume orders are already filtered out in backend. And the sell and buy prices are the average prices of the lowest or highest x% quantity prices.",
@@ -47,10 +48,11 @@ const en = {
         volumeContent: " Average volume on the Date Range",
         saleIndexContent: "This value is designed to highlight items that are easy to sell and have a high ISK/LP ratio. It's calculated by multiplying the scores of three indicators: item daily transaction ISK amount, Avg daily volume and ISK/LP",
         unitProfitContent: "ISK profit after tax per LP point",
+        blueprintContent: "The blueprint price in the table and order based on the blueprint output",
         claimContent: "EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. "+
         "All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos "+
         "and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, "+
-        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. CCP hf."
+        "world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf."
       },
     },
     table: {
