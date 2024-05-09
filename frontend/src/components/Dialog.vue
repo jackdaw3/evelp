@@ -163,6 +163,7 @@ export default {
   watch: {
     "$i18n.locale"() {
       this.dialogLabel = this.$t("message.dialog");
+      this.tableLabel = this.$t("message.table");
     },
   },
 };

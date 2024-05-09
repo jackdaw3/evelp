@@ -23,23 +23,25 @@
       <el-button icon="el-icon-download" circle size="medium" @click="exportExcel"
         style="height: 50%; float: right; margin-right: 15px; cursor: pointer"></el-button>
     </div>
+    <ItemDialog/>
     <Table ref="Table" style="margin-top: -10px" />
   </div>
 </template>
 
 <script>
 import Dialog from "@/components/Dialog.vue";
+import ItemDialog from "@/components/ItemDialog.vue";
 import Header from "@/components/Header.vue";
 import Table from "@/components/Table.vue";
+import { BACKEND_SERVER, ICON_SERVER } from '@/constants';
 
-const backend = "https://eve-lp.com/api/";
-const iconServer = "https://imageserver.eveonline.com/";
 const the_forge = "10000002";
 
 export default {
   name: "Home",
   components: {
     Dialog,
+    ItemDialog,
     Header,
     Table,
   },
@@ -75,7 +77,7 @@ export default {
     loadFactions() {
       this.corporation.loading = true;
       this.axios
-        .get(backend + "faction", {
+        .get(BACKEND_SERVER + "faction", {
           params: {
             lang: this.$i18n.locale,
           },
@@ -129,7 +131,7 @@ export default {
       this.$store.dispatch("setCorporationName", corporationName);
       this.corporation.loading = true;
       this.axios
-        .get(backend + "offer", {
+        .get(BACKEND_SERVER + "offer", {
           params: {
             regionId: the_forge,
             scope: this.form.scope,
@@ -232,7 +234,7 @@ export default {
       return element.label;
     },
     getIcon(id) {
-      return iconServer + "Corporation/" + id + "_32.png";
+      return ICON_SERVER + "Corporation/" + id + "_32.png";
     }
   },
   watch: {

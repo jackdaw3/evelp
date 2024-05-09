@@ -1,39 +1,19 @@
 <template>
   <div class="Table">
-    <el-table
-      ref="tableList"
-      :data="
-        tableData
-          .filter(
-            (data) =>
-              !search || data.ItemName.toLowerCase().includes(search.toLowerCase())
-          )
-          .slice((currentPage - 1) * pageSize, currentPage * pageSize)
-      "
-      id="table"
-      :cell-style="tableStyle"
-      :header-row-style="{ color: '#B8BBBC' }"
-      @sort-change="sort_change"
-      style="width: 100%"
-      :row-class-name="handelRowDetail"
-    >
+    <el-table ref="tableList" :data="tableData
+      .filter(
+        (data) =>
+          !search || data.ItemName.toLowerCase().includes(search.toLowerCase())
+      )
+      .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+      " id="table" :cell-style="tableStyle" :header-row-style="{ color: '#B8BBBC' }" @sort-change="sort_change"
+      style="width: 100%" :row-class-name="handelRowDetail">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table
-            class="no-hover-highlight"
-            :data="props.row.Matertials"
-            :cell-style="tableStyle"
-            style="width: 55%"
-            :row-class-name="handelMaterailRowDetail"
-            :span-method="objectSpanMethod"
-            :header-row-style="{ color: '#B8BBBC' }"
-            :header-cell-style="{ padding: '0' }"
-          >
-            <el-table-column
-              :label="tableLabel.material.type"
-              min-width="12%"
-              align="center"
-            >
+          <el-table class="no-hover-highlight" :data="props.row.Matertials" :cell-style="tableStyle" style="width: 55%"
+            :row-class-name="handelMaterailRowDetail" :span-method="objectSpanMethod"
+            :header-row-style="{ color: '#B8BBBC' }" :header-cell-style="{ padding: '0' }">
+            <el-table-column :label="tableLabel.material.type" min-width="12%" align="center">
               <template slot-scope="scope">
                 <span v-if="scope.row.IsBluePrint === true">
                   {{ tableLabel.material.bluePrintMaterial }}
@@ -41,18 +21,10 @@
                 <span v-else>{{ tableLabel.material.lpStoreMaterail }}</span>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="MaterialName"
-              :label="tableLabel.material.name"
-              min-width="27%"
-            >
+            <el-table-column prop="MaterialName" :label="tableLabel.material.name" min-width="27%">
               <template slot-scope="scope">
-                <el-image
-                  style="height: 22px; vertical-align: middle"
-                  :src="getIcon(scope.row.ItemId)"
-                  fit="contain"
-                  lazy
-                >
+                <el-image style="height: 22px; vertical-align: middle" :src="getIcon(scope.row.ItemId)" fit="contain"
+                  @click="openItemDialog(scope.row)" class="grab-cursor" lazy>
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
                   </div>
@@ -60,45 +32,23 @@
                 <span>{{ scope.row.MaterialName }}</span>
               </template>
             </el-table-column>
-            <el-table-column
-              prop="Quantity"
-              :label="tableLabel.material.quantity"
-              :formatter="stateFormat"
-              min-width="10%"
-            ></el-table-column>
-            <el-table-column
-              prop="Price"
-              :label="tableLabel.material.price"
-              :formatter="stateFormat"
-              min-width="14%"
-            ></el-table-column>
-            <el-table-column
-              prop="Cost"
-              :label="tableLabel.material.cost"
-              min-width="14%"
-              :formatter="stateFormat"
-            ></el-table-column>
+            <el-table-column prop="Quantity" :label="tableLabel.material.quantity" :formatter="stateFormat"
+              min-width="10%"></el-table-column>
+            <el-table-column prop="Price" :label="tableLabel.material.price" :formatter="stateFormat"
+              min-width="14%"></el-table-column>
+            <el-table-column prop="Cost" :label="tableLabel.material.cost" min-width="14%"
+              :formatter="stateFormat"></el-table-column>
             <el-table-column :label="tableLabel.operation" min-width="15%">
               <template v-slot:header>
-                <el-button
-                  size="mini"
-                  plain
-                  @click="copyAllMaterials(props.row.Matertials)"
-                  >{{ tableLabel.material.copy }}</el-button
-                >
+                <el-button size="mini" plain @click="copyAllMaterials(props.row.Matertials)">{{ tableLabel.material.copy
+                  }}</el-button>
               </template>
               <template v-slot="scope">
                 <el-button size="mini" plain @click="copyMaterial(scope.row)">{{
-                  tableLabel.material.copy
-                }}</el-button>
-                <el-button
-                  v-if="scope.row.Error === true"
-                  size="mini"
-                  style="margin-left: 0px"
-                  plain
-                  @click="errorMessage(scope.row.ErrorMessage)"
-                  >{{ tableLabel.material.error }}</el-button
-                >
+      tableLabel.material.copy
+    }}</el-button>
+                <el-button v-if="scope.row.Error === true" size="mini" style="margin-left: 0px" plain
+                  @click="errorMessage(scope.row.ErrorMessage)">{{ tableLabel.material.error }}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -106,12 +56,8 @@
       </el-table-column>
       <el-table-column prop="ItemName" min-width="20%" :label="tableLabel.name">
         <template slot-scope="scope">
-          <el-image
-            style="height: 22px; vertical-align: middle"
-            :src="getIcon(scope.row.ItemId)"
-            fit="contain"
-            lazy
-          >
+          <el-image style="height: 22px; vertical-align: middle" :src="getIcon(scope.row.ItemId)" fit="contain"
+            @click="openItemDialog(scope.row)" class="grab-cursor" lazy>
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>
@@ -119,107 +65,43 @@
           <span>{{ scope.row.ItemName }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        prop="Quantity"
-        min-width="5%"
-        :label="tableLabel.quantity"
-        :formatter="stateFormat"
-      ></el-table-column>
-      <el-table-column
-        prop="LpCost"
-        min-width="7%"
-        :label="tableLabel.lpCost"
-        :formatter="stateFormat"
-        sortable="custom"
-      ></el-table-column>
-      <el-table-column
-        prop="IskCost"
-        min-width="7%"
-        :label="tableLabel.iskCost"
-        :formatter="stateFormat"
-        sortable="custom"
-      ></el-table-column>
-      <el-table-column
-        :label="tableLabel.cost"
-        prop="MaterialCost"
-        min-width="8%"
-        :formatter="stateFormat"
-        sortable="custom"
-      ></el-table-column>
-      <el-table-column
-        :label="tableLabel.price"
-        prop="Price"
-        min-width="8%"
-        :formatter="stateFormat"
-        sortable="custom"
-      ></el-table-column>
-      <el-table-column
-        :label="this.tableLabel.income"
-        prop="Income"
-        min-width="8%"
-        :formatter="stateFormat"
-        sortable="custom"
-      ></el-table-column>
-      <el-table-column
-        :label="tableLabel.profit"
-        prop="Profit"
-        min-width="8%"
-        :formatter="stateFormat"
-        sortable="custom"
-      ></el-table-column>
-      <el-table-column
-        :label="tableLabel.volume"
-        prop="Volume"
-        min-width="6%"
-        :formatter="stateFormat"
-        sortable="custom"
-      ></el-table-column>
-      <el-table-column
-        :label="tableLabel.saleIndex"
-        prop="SaleIndex"
-        min-width="7%"
-        sortable="custom"
-      ></el-table-column>
-      <el-table-column
-        :label="tableLabel.unitProfit"
-        prop="UnitProfit"
-        min-width="6%"
-        sortable="custom"
-      ></el-table-column>
+      <el-table-column prop="Quantity" min-width="5%" :label="tableLabel.quantity"
+        :formatter="stateFormat"></el-table-column>
+      <el-table-column prop="LpCost" min-width="7%" :label="tableLabel.lpCost" :formatter="stateFormat"
+        sortable="custom"></el-table-column>
+      <el-table-column prop="IskCost" min-width="7%" :label="tableLabel.iskCost" :formatter="stateFormat"
+        sortable="custom"></el-table-column>
+      <el-table-column :label="tableLabel.cost" prop="MaterialCost" min-width="8%" :formatter="stateFormat"
+        sortable="custom"></el-table-column>
+      <el-table-column :label="tableLabel.price" prop="Price" min-width="8%" :formatter="stateFormat"
+        sortable="custom"></el-table-column>
+      <el-table-column :label="this.tableLabel.income" prop="Income" min-width="8%" :formatter="stateFormat"
+        sortable="custom"></el-table-column>
+      <el-table-column :label="tableLabel.profit" prop="Profit" min-width="8%" :formatter="stateFormat"
+        sortable="custom"></el-table-column>
+      <el-table-column :label="tableLabel.volume" prop="Volume" min-width="6%" :formatter="stateFormat"
+        sortable="custom"></el-table-column>
+      <el-table-column :label="tableLabel.saleIndex" prop="SaleIndex" min-width="7%"
+        sortable="custom"></el-table-column>
+      <el-table-column :label="tableLabel.unitProfit" prop="UnitProfit" min-width="6%"
+        sortable="custom"></el-table-column>
       <el-table-column :label="tableLabel.operation" min-width="10%">
         <template v-slot:header>
-          <el-input
-            v-model="search"
-            size="mini"
-            :placeholder="tableLabel.lookUp"
-          />
+          <el-input v-model="search" size="mini" :placeholder="tableLabel.lookUp" />
         </template>
         <template v-slot="scope">
           <el-button size="mini" plain @click="orders(scope)">
             {{ tableLabel.orders }}
           </el-button>
-          <el-button
-            v-if="scope.row.Error === true"
-            size="mini"
-            plain
-            style="margin-left: 0px"
-            @click="errorMessage(scope.row.ErrorMessage)"
-            >{{ tableLabel.error }}</el-button
-          >
+          <el-button v-if="scope.row.Error === true" size="mini" plain style="margin-left: 0px"
+            @click="errorMessage(scope.row.ErrorMessage)">{{ tableLabel.error }}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <br />
-    <el-pagination
-      align="center"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="[25, 50, 100, 200, 500]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="tableData.length"
-    ></el-pagination>
+    <el-pagination align="center" @size-change="handleSizeChange" @current-change="handleCurrentChange"
+      :current-page="currentPage" :page-sizes="[25, 50, 100, 200, 500]" :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper" :total="tableData.length"></el-pagination>
     <br />
   </div>
 </template>
@@ -227,8 +109,8 @@
 <script>
 import FileSaver from "file-saver";
 import XLSX from "xlsx";
+import { BACKEND_SERVER, ICON_SERVER } from '@/constants';
 
-const iconServer = "https://imageserver.eveonline.com/";
 export default {
   data() {
     return {
@@ -246,7 +128,7 @@ export default {
       get() {
         return this.$store.state.tableData;
       },
-      set() {},
+      set() { },
     },
     form: function () {
       return this.$store.state.form;
@@ -273,7 +155,7 @@ export default {
       this.currentPage = val;
     },
     getIcon(typeId) {
-      return iconServer + "Type/" + typeId + "_32.png";
+      return ICON_SERVER + "Type/" + typeId + "_32.png";
     },
     stateFormat(row, column, cellValue) {
       cellValue = Math.round(cellValue);
@@ -323,15 +205,16 @@ export default {
         }
       }
     },
-    errorMessage(message) {
-      const lan  = localStorage.getItem('$i18n.locale');
+    errorMessage(errMessage) {
+      var lan = localStorage.lang;
+      var message = errMessage;
       if (lan != 'en') {
         message = message
           .replace(/failed to get buy price for <b>(.*?)<\/b> in The Forge/, this.errLabel.produceBuy)
           .replace(/failed to get sell price for <b>(.*?)<\/b> in The Forge/, this.errLabel.produceSell)
           .replace(/failed to get buy price for production material <b>(.*?)<\/b> in The Forge/, this.errLabel.materialBuy)
           .replace(/failed to get sell price for production material <b>(.*?)<\/b> in The Forge/, this.errLabel.materialSell)
-          .replace(/failed to get sell price for requirement <b>(.*?)<\/b> in The Forge/, this.errLabel.requirementBuy)
+          .replace(/failed to get buy price for requirement <b>(.*?)<\/b> in The Forge/, this.errLabel.requirementBuy)
           .replace(/failed to get sell price for requirement <b>(.*?)<\/b> in The Forge/, this.errLabel.requirementSell)
           .replace('no buy order found in the market', this.errLabel.buyOrder)
           .replace('no sell order found in the market', this.errLabel.sellOrder)
@@ -685,6 +568,45 @@ export default {
       });
       window.open(routeData.href, '_blank');
     },
+    openItemDialog(row) {
+      var URL = BACKEND_SERVER + "itemdetail";
+      this.axios
+        .get(URL, {
+          params: {
+            itemId: row.ItemId,
+            lang: this.$i18n.locale,
+          },
+          timeout: 5000,
+        })
+        .then((response) => {
+          let ItemName = response.data.ItemName;
+          let Volume = response.data.Volume;
+          if (row.Quantity > 1) {
+            ItemName = row.Quantity + "\u2009×\u2009" + ItemName
+            Volume = Volume+"\u2009m³\u2009/\u2009" + Volume*row.Quantity 
+          }
+          Volume = Volume +"\u2009m³";
+          let itemDialogData = {
+            ItemId: response.data.ItemId,
+            ItemName: ItemName,
+            Description: response.data.Description,
+            Volume: Volume
+          };
+          this.$store.dispatch("setItemDialogVisible", true);
+          this.$store.dispatch("setItemDialogData", itemDialogData);
+        })
+        .catch(error => {
+          let params = new URLSearchParams(error.config.params).toString()
+          let fullUrl = error.config.url + (params ? `?${params}` : '');
+          this.$message({
+            dangerouslyUseHTMLString: true,
+            message: `${error.response.data}: ${fullUrl}`,
+            type: "error",
+            showClose: true,
+            duration: 6000,
+          });
+        });
+    },
   },
   watch: {
     "$i18n.locale"() {
@@ -703,13 +625,20 @@ export default {
 .row-expand-cover .el-table__expand-column .cell {
   display: none;
 }
+
 .el-table .warning-row {
   background: #251b07;
 }
+
 .el-table .warning-row:hover>td {
   background: #251b07 !important;
 }
+
 .no-hover-highlight tbody tr:hover>td {
   background: transparent !important;
+}
+
+.grab-cursor:hover {
+  cursor: grab;
 }
 </style>

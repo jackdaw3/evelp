@@ -57,9 +57,8 @@ import Header from "@/components/Header.vue";
 import OrderTable from "@/components/OrderTable.vue";
 import StatisTable from "@/components/StatisTable.vue";
 import Stock from "@/components/Stock.vue";
+import { BACKEND_SERVER, ICON_SERVER } from '@/constants';
 
-const backend = "https://eve-lp.com/api/";
-const iconServer = "https://imageserver.eveonline.com/";
 const the_forge = "10000002";
 
 export default {
@@ -129,7 +128,7 @@ export default {
     },
     getItemName(itemId) {
       this.axios
-        .get(backend + "item", {
+        .get(BACKEND_SERVER + "item", {
           params: {
             itemId: itemId,
             lang: this.$i18n.locale,
@@ -143,7 +142,7 @@ export default {
     },
     getCorporationName(corporationId) {
       this.axios
-        .get(backend + "corporation", {
+        .get(BACKEND_SERVER + "corporation", {
           params: {
             corporationId: corporationId,
             lang: this.$i18n.locale,
@@ -165,7 +164,7 @@ export default {
     },
     getOrders(isBuyOrder) {
       this.axios
-        .get(backend + "order", {
+        .get(BACKEND_SERVER + "order", {
           params: {
             regionId: the_forge,
             scope: this.order.scope,
@@ -186,7 +185,7 @@ export default {
     },
     getStatis(isBuyOrder) {
       this.axios
-        .get(backend + "statis", {
+        .get(BACKEND_SERVER + "statis", {
           params: {
             offerId: this.order.offerId,
             regionId: the_forge,
@@ -207,7 +206,7 @@ export default {
     },
     getHistory() {
       this.axios
-        .get(backend + "history", {
+        .get(BACKEND_SERVER + "history", {
           params: {
             regionId: the_forge,
             itemId: this.order.itemId,
@@ -248,7 +247,7 @@ export default {
         });
     },
     getIcon() {
-      return iconServer + "Type/" + this.order.itemId + "_64.png";
+      return ICON_SERVER + "Type/" + this.order.itemId + "_64.png";
     },
   },
   watch: {

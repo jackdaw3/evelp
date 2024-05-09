@@ -17,6 +17,8 @@ export default new Vuex.Store({
     corporationData: [],
     corporationId: "",
     corporationName: "",
+    itemDialogVisible: false,
+    itemDialogData: [],
   },
   mutations: {
     setTableData(state, value) {
@@ -34,6 +36,12 @@ export default new Vuex.Store({
     setCorporationName(state, value) {
       state.corporationName = value;
     },
+    setItemDialogVisible(state, value) {
+      state.itemDialogVisible = value;
+    },
+    setItemDialogData(state, value) {
+      state.itemDialogData = value;
+    },
   },
   actions: {
     setTableData(context, value) {
@@ -50,6 +58,12 @@ export default new Vuex.Store({
     },
     setCorporationName(context, value) {
       context.commit("setCorporationName", value);
+    },
+    setItemDialogVisible(context, value) {
+      context.commit("setItemDialogVisible", value);
+    },
+    setItemDialogData(context, value) {
+      context.commit("setItemDialogData", value);
     },
   },
 });

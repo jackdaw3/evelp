@@ -48,7 +48,7 @@ const zh = {
         volumeContent: "交易日期内交易量的日平均值",
         saleIndexContent: "这个值是为了展示易卖且LP比例高的物品，由三项指标得分相乘所得:物品日均交易总额，日均交易量和LP比例",
         unitProfitContent: "单位LP点的税后ISK利润",
-        blueprintContent: "表格和订单中的蓝图价格按照蓝图产品来计算",
+        blueprintContent: "表格和订单中的蓝图价格按照蓝图产出来计算",
         claimContent: "EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. "+
         "All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated logos "+
         "and designs are the intellectual property of CCP hf. All artwork, screenshots, characters, vehicles, storylines, "+
@@ -72,7 +72,7 @@ const zh = {
       operation: "操作",
       error: "错误",
       material: {
-        lpStoreMaterail: "兑换材料",
+        lpStoreMaterail: "所需物品",
         bluePrintMaterial: "制造材料",
         name: "物品",
         quantity: "数量",
@@ -129,8 +129,8 @@ const zh = {
       productSell:"未能成功获取 <b>$1</b> 的卖价",
       materialBuy:"未能成功获取制造材料 <b>纯超强型撞击感增效体</b> 的买价",
       materialSell:"未能成功获取制造材料 <b>纯超强型撞击感增效体</b> 的卖价",
-      requirementBuy:"未能成功获取兑换材料 <b>$1</b> 的买价",
-      requirementSell:"未能成功获取兑换材料 <b>$1</b> 的卖价",
+      requirementBuy:"未能成功获取所需物品 <b>$1</b> 的买价",
+      requirementSell:"未能成功获取所需物品 <b>$1</b> 的卖价",
       buyOrder:"市场上没有买单",
       sellOrder:"市场上没有卖单",
       order:"市场上没有任何订单"

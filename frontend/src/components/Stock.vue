@@ -311,6 +311,25 @@ export default {
       },
     };
   },
+  watch: {
+    "$i18n.locale"() {
+      console.log(this.history)
+      this.chartOptions.rangeSelector.buttons[0].text = this.history.label.rangeSelector.month;
+      this.chartOptions.rangeSelector.buttons[1].text = this.history.label.rangeSelector.threeMonths;
+      this.chartOptions.rangeSelector.buttons[2].text = this.history.label.rangeSelector.halfYear;
+      this.chartOptions.rangeSelector.buttons[3].text = this.history.label.rangeSelector.yearToDay;
+      this.chartOptions.rangeSelector.buttons[4].text = this.history.label.rangeSelector.year;
+      this.chartOptions.rangeSelector.buttons[5].text = this.history.label.rangeSelector.all;
+      this.chartOptions.yAxis[0].title.text = this.history.label.price;
+      this.chartOptions.yAxis[1].title.text = this.history.label.volume;
+      this.chartOptions.series[0].name = this.history.label.average;
+      this.chartOptions.series[1].name = this.history.label.minAndmax;
+      this.chartOptions.series[2].name = this.history.label.average5d;
+      this.chartOptions.series[3].name = this.history.label.average20d;
+      this.chartOptions.series[4].name = this.history.label.minAndmax5d;
+      this.chartOptions.series[5].name = this.history.label.volume;
+    }
+  },
 };
 </script>
 <style>
