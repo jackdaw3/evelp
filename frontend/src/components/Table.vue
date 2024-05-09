@@ -625,19 +625,15 @@ export default {
 .row-expand-cover .el-table__expand-column .cell {
   display: none;
 }
-
 .el-table .warning-row {
   background: #251b07;
 }
-
 .el-table .warning-row:hover>td {
   background: #251b07 !important;
 }
-
 .no-hover-highlight tbody tr:hover>td {
   background: transparent !important;
 }
-
 .grab-cursor:hover {
   cursor: grab;
 }
