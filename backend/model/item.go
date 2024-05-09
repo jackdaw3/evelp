@@ -14,9 +14,10 @@ import (
 const item_key = "item"
 
 type Item struct {
-	ItemId int     `gorm:"type:int;not null;primary_key;autoIncrement:false" json:"item_id"`
-	Name   Name    `gorm:"type:text" yaml:"name" json:"name"`
-	Volume float64 `gorm:"type:double" yaml:"volume" json:"volume"`
+	ItemId      int         `gorm:"type:int;not null;primary_key;autoIncrement:false" json:"item_id"`
+	Name        Name        `gorm:"type:text" yaml:"name" json:"name"`
+	Description Description `gorm:"type:text" yaml:"description" json:"description"`
+	Volume      float64     `gorm:"type:double" yaml:"volume" json:"volume"`
 }
 
 type Items []Item
